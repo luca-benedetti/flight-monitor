@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "schema_version": "1.0",
+    "currency": "EUR",
+    "source": "rapidapi_google_flights",
+    "generated_at": "2026-08-29T13:53:04Z"
+  },
+  "flights": [
+    {
+      "flight_id": "BRU-VCE-2026-09-15-001",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2026-09-15",
+      "airline": "Brussels Airlines",
+      "departure": "21:20",
+      "arrival": "23:00",
+      "arrival_day_offset": 0,
+      "duration_min": 100,
+      "stops": 0,
+      "price": 117.0,
+      "currency": "EUR",
+      "is_best": false
+    },
+    {
+      "flight_id": "BRU-VCE-2026-09-15-002",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2026-09-15",
+      "airline": "Brussels Airlines",
+      "departure": "09:55",
+      "arrival": "11:40",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 452.0,
+      "currency": "EUR",
+      "is_best": false
+    }
+  ]
+}
