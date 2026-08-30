@@ -48,10 +48,11 @@
   .bar .count { font-size: 13px; color: var(--muted); }
   .bar .fresh { font-size: 12px; color: var(--muted); margin-left: auto; }
   .warn { font-size: 12px; color: var(--warn); }
-  .bar button { background: var(--accent); color: #0c0f14; border: 0;
+  .bar button, .retry { background: var(--accent); color: #0c0f14; border: 0;
                 border-radius: 6px; padding: 6px 14px; font-size: 13px;
                 font-weight: 700; cursor: pointer; }
   .hint { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
+  .ver { color: var(--accent); font-weight: 700; margin-left: 8px; }
   table { width: 100%; border-collapse: collapse; background: var(--panel);
           border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
   th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line);
@@ -66,7 +67,7 @@
 <body>
 <header>
   <h1>BRU ⇄ VCE · flight search</h1>
-  <p id="meta">loading fares.json…</p>
+  <p id="meta">loading fares.json…<span class="ver" id="ver"></span></p>
 </header>
 
 <main>
@@ -124,26 +125,35 @@
 (function () {
   const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const TOP = 100;
+  const VERSION = "5";
   let fares = null;
 
   const $ = (id) => document.getElementById(id);
 
-  const weekdays = $("weekdays");
-  weekdays.querySelectorAll("button").forEach((b) => {
-    b.addEventListener("click", () => {
-      b.classList.toggle("on");
-      refresh();
+  function wireControls() {
+    const weekdays = $("weekdays");
+    if (weekdays) {
+      weekdays.querySelectorAll("button").forEach((b) => {
+        b.addEventListener("click", () => {
+          b.classList.toggle("on");
+          refresh();
+        });
+      });
+    }
+    document.querySelectorAll("input").forEach((el) => {
+      el.addEventListener("input", refresh);
+      el.addEventListener("change", refresh);
     });
-  });
-
-  document.querySelectorAll("input").forEach((el) => {
-    el.addEventListener("input", refresh);
-    el.addEventListener("change", refresh);
-  });
+    const btn = $("searchBtn");
+    if (btn) btn.addEventListener("click", refresh);
+  }
 
   function readOptions() {
+    const weekdays = $("weekdays");
     const days = [];
-    weekdays.querySelectorAll("button.on").forEach((b) => days.push(Number(b.dataset.d)));
+    if (weekdays) {
+      weekdays.querySelectorAll("button.on").forEach((b) => days.push(Number(b.dataset.d)));
+    }
     return {
       from: "BRU", to: "VCE",
       minNights: int($("minNights").value, 4) || 4,
@@ -169,45 +179,63 @@
 
   function render() {
     if (!fares) return;
-    const opts = readOptions();
-    const trips = Filter.computeTrips(fares.flights || [], opts);
-    $("count").textContent = `${trips.length} round trips match (showing top ${Math.min(TOP, trips.length)})`;
-    $("fresh").textContent = fares.metadata ? `data: ${fares.metadata.generated_at || "?"}` : "";
-    const skipped = (fares.metadata || {}).skipped_days || [];
-    $("warn").textContent = skipped.length
-      ? `${skipped.length} date(s) missing from last scan (partial data)`
-      : "";
+    try {
+      const opts = readOptions();
+      const trips = Filter.computeTrips(fares.flights || [], opts);
+      $("count").textContent = `${trips.length} round trips match (showing top ${Math.min(TOP, trips.length)})`;
+      $("fresh").textContent = fares.metadata ? `data: ${fares.metadata.generated_at || "?"}` : "";
+      const skipped = (fares.metadata || {}).skipped_days || [];
+      $("warn").textContent = skipped.length
+        ? `${skipped.length} date(s) missing from last scan (partial data)`
+        : "";
 
-    if (trips.length === 0) {
-      $("table").innerHTML = '<p class="empty">No trips match these filters.</p>';
-      return;
+      if (trips.length === 0) {
+        $("table").innerHTML = '<p class="empty">No trips match these filters.</p>';
+        return;
+      }
+      const rows = trips.slice(0, TOP).map((c) => {
+        const price = `${c.score.toFixed(0)} €`;
+        const trip = `<td>${fmt(c.outDate)} → ${fmt(c.retDate)}</td><td>${c.nights}n</td>`;
+        const leg = (f) => `${f.departure}-${f.arrival} ${(f.airline || "?")}`;
+        const out = `<td><div>${leg(c.out)}</div><div class="leg">${c.out.origin} → ${c.out.destination}</div></td>`;
+        const back = `<td><div>${leg(c.ret)}</div><div class="leg">${c.ret.origin} → ${c.ret.destination}</div></td>`;
+        const sat = `<td>${c.saturday ? DAY_NAMES[new Date(c.saturday + "T00:00:00Z").getUTCDay()] + " " + fmt(c.saturday) : ""}</td>`;
+        return `<tr><td class="price">${price}</td>${trip}${out}${back}${sat}</tr>`;
+      }).join("");
+      $("table").innerHTML = `<table><thead><tr>
+        <th>Price</th><th>Trip</th><th>Nights</th><th>Outbound</th><th>Return</th><th>Sat night</th>
+      </tr></thead><tbody>${rows}</tbody></table>`;
+    } catch (err) {
+      $("table").innerHTML = `<p class="empty">Error while scoring trips: ${err}</p>`;
     }
-    const rows = trips.slice(0, TOP).map((c) => {
-      const price = `${c.score.toFixed(0)} €`;
-      const trip = `<td>${fmt(c.outDate)} → ${fmt(c.retDate)}</td><td>${c.nights}n</td>`;
-      const leg = (f) => `${f.departure}-${f.arrival} ${(f.airline || "?")}`;
-      const out = `<td><div>${leg(c.out)}</div><div class="leg">${c.out.origin} → ${c.out.destination}</div></td>`;
-      const back = `<td><div>${leg(c.ret)}</div><div class="leg">${c.ret.origin} → ${c.ret.destination}</div></td>`;
-      const sat = `<td>${c.saturday ? DAY_NAMES[new Date(c.saturday + "T00:00:00Z").getUTCDay()] + " " + fmt(c.saturday) : ""}</td>`;
-      return `<tr><td class="price">${price}</td>${trip}${out}${back}${sat}</tr>`;
-    }).join("");
-    $("table").innerHTML = `<table><thead><tr>
-      <th>Price</th><th>Trip</th><th>Nights</th><th>Outbound</th><th>Return</th><th>Sat night</th>
-    </tr></thead><tbody>${rows}</tbody></table>`;
   }
   window.refresh = render;
-  $("searchBtn").addEventListener("click", render);
 
-  fetch("fares.json").then((r) => r.json()).then((d) => {
-    fares = d;
-    $("meta").textContent =
-      `data from ${(d.metadata || {}).source || "?"} · updated ${(d.metadata || {}).generated_at || "?"}`;
-    render();
-  }).catch((err) => {
-    const msg = `Failed to load fares.json (${err}). Is the data published?`;
+  function loadFailed(err) {
+    const msg = `Failed to load fares.json (${err.message || err}).`;
     $("meta").textContent = msg;
-    $("table").innerHTML = `<p class="empty">${msg}</p>`;
-  });
+    $("table").innerHTML =
+      `<p class="empty">${msg}<br><button class="retry" id="retryBtn">Retry</button></p>`;
+    const retry = $("retryBtn");
+    if (retry) retry.addEventListener("click", load);
+  }
+
+  function load() {
+    $("ver").textContent = "v" + VERSION;
+    fetch("fares.json", { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status))))
+      .then((d) => {
+        fares = d;
+        $("meta").textContent =
+          `data from ${(d.metadata || {}).source || "?"} · updated ${(d.metadata || {}).generated_at || "?"}`;
+        $("ver").textContent = "v" + VERSION;
+        render();
+      })
+      .catch(loadFailed);
+  }
+
+  wireControls();
+  load();
 })();
 </script>
 </body>
