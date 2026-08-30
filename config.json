@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "filters": {
+    "minNights": 4,
+    "maxNights": 10,
+    "nonstopOnly": true,
+    "airlines": "",
+    "saturdayIn": true,
+    "earliestDeparture": "",
+    "depWeekdays": [],
+    "depAfterHour": 0,
+    "searchFrom": "",
+    "searchTo": "",
+    "includeFrom": "",
+    "includeTo": ""
+  }
+}
