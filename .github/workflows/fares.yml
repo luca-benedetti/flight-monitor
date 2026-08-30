@@ -49,6 +49,9 @@ jobs:
       - name: Validate fares.json
         run: uv run validate-flight-model docs/fares.json
 
+      - name: Copy web app into the publish directory
+        run: cp -R web/. docs/
+
       - name: Publish to GitHub Pages (gh-pages branch)
         uses: peaceiris/actions-gh-pages@v4
         with:

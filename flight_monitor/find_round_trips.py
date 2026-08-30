@@ -3,39 +3,25 @@
 Enumerate and rank round-trip combinations from a flight dataset (mock or
 fetched) without spending any API requests.
 
-Constraint model
-----------------
-Every trip scores  `score = total_price + early_departure_penalty +
-short_stay_penalty`.  That one formula is the whole tuning surface:
+Mirror of the widget/rank engine (web/filter.js + Scriptable widget): the
+semantics here must match `computeTrips` exactly. Options are flat knobs:
 
-  * HARD constraints remove options before scoring (impossible trips):
-      - nonstop only / airline list
-      - min / max nights between outbound and return
-      - stay must include a Saturday night (--saturday-in)
-      - earliest_departure: legs leaving before HH:MM are dropped
+  HARD filters:
+    --nonstop-only / --airlines            every leg
+    --earliest-departure HH:MM             every leg
+    --dep-weekdays 1,4                     OUTBOUND only (0=Sun..6=Sat)
+    --dep-after-hour 17                    OUTBOUND only
+    --search-from / --search-to            OUTBOUND window ("" = open)
+    --force-include-day YYYY-MM-DD         trip must cover this day
+    --saturday-in                          require a Saturday night
+    --min-nights / --max-nights            trip length range
 
-  * SOFT constraints add a monetary penalty, so behaviour is tuned by weight:
-      - early_departure_penalty  (euro per minute the leg leaves before
-        preferred_departure)
-      - short_stay_penalty       (euro per night below preferred_nights)
+  Ranking: price only (cheapest first; longer trips and earlier departures
+  break ties).
 
-  Give a soft constraint a huge weight and it behaves like a hard one; drop
-  the weight and it just nudges. No code changes needed to change stance.
-
-Periods
--------
-Constraints can differ per calendar window (outbound date decides the period),
-so you can e.g. allow longer stays around the holidays. Provide a config file:
-
-    python find_round_trips.py --config round_trip_config.json
-
-CLI flags override period defaults; period values override the CLI. Without
---config a single period is used, so plain flags work too:
-
-    python find_round_trips.py --min-nights 4 --max-nights 10 \
-        --earliest-departure 09:00 \
-        --preferred-departure 10:00 --early-departure-penalty 1.0 \
-        --preferred-nights 7 --short-stay-penalty 8.0
+Usage:
+    find-round-trips --data fares.json --min-nights 4 --max-nights 10
+    find-round-trips --data fares.json --dep-weekdays 1,4 --dep-after-hour 17
 """
 
 from __future__ import annotations
@@ -49,24 +35,8 @@ from datetime import date, timedelta
 from flight_monitor.flight_model import Flight, FlightDataset
 
 TIME_RE = re.compile(r"^(?:[01]\d|2[0-3]):[0-5]\d$")
-
-PERIOD_KEYS = [
-    "from", "to",
-    "nonstop", "airlines",
-    "min_nights", "max_nights",
-    "earliest_departure",
-    "preferred_departure", "early_departure_penalty",
-    "preferred_nights", "short_stay_penalty",
-]
-
-DEFAULT_PERIOD = {
-    "from": None, "to": None,
-    "nonstop": True, "airlines": "",
-    "min_nights": 4, "max_nights": 12,
-    "earliest_departure": None,
-    "preferred_departure": None, "early_departure_penalty": 0.0,
-    "preferred_nights": None, "short_stay_penalty": 0.0,
-}
+DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+ARGS = None
 
 
 def to_minutes(hhmm: str) -> int:
@@ -74,40 +44,36 @@ def to_minutes(hhmm: str) -> int:
     return int(h) * 60 + int(m)
 
 
-def validate_period(period: dict, index: int) -> None:
-    for key in ("earliest_departure", "preferred_departure"):
-        value = period.get(key)
-        if value and not TIME_RE.match(value):
-            raise ValueError(f"period #{index}: {key} must be HH:MM, got {value!r}")
-    for key in ("min_nights", "max_nights", "preferred_nights"):
-        value = period.get(key)
-        if value is not None and value < 0:
-            raise ValueError(f"period #{index}: {key} must be >= 0")
-    for key in ("early_departure_penalty", "short_stay_penalty"):
-        value = period.get(key)
-        if value is not None and value < 0:
-            raise ValueError(f"period #{index}: {key} must be >= 0")
+def js_weekday_to_python(js_day: int) -> int:
+    """Convert 0=Sun..6=Sat (widget) to python weekday() 0=Mon..6=Sun."""
+    return (js_day + 6) % 7
 
 
-def load_periods(args) -> list[dict]:
-    cli_defaults = {
-        k: getattr(args, k) for k in PERIOD_KEYS
-        if hasattr(args, k) and getattr(args, k) is not None
-    }
+def leg_ok(flight: Flight, opts) -> bool:
+    if opts.nonstop and flight.stops > 0:
+        return False
+    airlines = [a.strip().lower() for a in (opts.airlines or "").split(",") if a.strip()]
+    if airlines and not any(a in flight.airline.lower() for a in airlines):
+        return False
+    if opts.earliest_departure and to_minutes(flight.departure) < to_minutes(opts.earliest_departure):
+        return False
+    return True
 
-    if args.config:
-        with open(args.config) as fh:
-            loaded = json.load(fh)
-        raw_periods = loaded.get("periods") or [loaded]
-    else:
-        raw_periods = [{}]
 
-    periods = []
-    for i, raw in enumerate(raw_periods):
-        period = {**DEFAULT_PERIOD, **cli_defaults, **raw}
-        validate_period(period, i)
-        periods.append(period)
-    return periods
+def out_leg_ok(flight: Flight, opts) -> bool:
+    if not leg_ok(flight, opts):
+        return False
+    if opts.dep_weekdays and date.fromisoformat(flight.date).weekday() not in {
+        js_weekday_to_python(d) for d in opts.dep_weekdays
+    }:
+        return False
+    if opts.dep_after_hour and to_minutes(flight.departure) < opts.dep_after_hour * 60:
+        return False
+    if opts.search_from and flight.date < opts.search_from:
+        return False
+    if opts.search_to and flight.date > opts.search_to:
+        return False
+    return True
 
 
 def has_saturday_night(depart_date: date, return_date: date) -> bool:
@@ -128,44 +94,7 @@ def first_saturday(depart_date: date, return_date: date):
     return None
 
 
-def leg_hard_ok(flight: Flight, period: dict) -> bool:
-    if period["nonstop"] and flight.stops > 0:
-        return False
-    airlines = [a.strip().lower() for a in period["airlines"].split(",") if a.strip()]
-    if airlines and not any(a in flight.airline.lower() for a in airlines):
-        return False
-    if period.get("earliest_departure") and to_minutes(flight.departure) < to_minutes(period["earliest_departure"]):
-        return False
-    return True
-
-
-def leg_early_penalty(flight: Flight, period: dict) -> float:
-    preferred = period.get("preferred_departure")
-    rate = period.get("early_departure_penalty", 0.0)
-    if not preferred or not rate:
-        return 0.0
-    early_minutes = to_minutes(preferred) - to_minutes(flight.departure)
-    return max(0, early_minutes) * rate
-
-
-def short_stay_penalty(nights: int, period: dict) -> float:
-    preferred = period.get("preferred_nights")
-    rate = period.get("short_stay_penalty", 0.0)
-    if not preferred or not rate:
-        return 0.0
-    return max(0, preferred - nights) * rate
-
-
-def in_window(day: date, period: dict) -> bool:
-    if period["from"] and day < date.fromisoformat(period["from"]):
-        return False
-    if period["to"] and day > date.fromisoformat(period["to"]):
-        return False
-    return True
-
-
-def build_combo(of: Flight, rf: Flight, nights: int, saturday: date | None) -> dict:
-    price = round(of.price + rf.price, 2)
+def build_combo(of: Flight, rf: Flight, nights: int, saturday: date | None, price: float) -> dict:
     return {
         "outbound": of.to_dict(),
         "return": rf.to_dict(),
@@ -174,66 +103,59 @@ def build_combo(of: Flight, rf: Flight, nights: int, saturday: date | None) -> d
         "nights": nights,
         "saturday_in": saturday.isoformat() if saturday else None,
         "price": price,
-        "penalties": {"early_departure": 0.0, "short_stay": 0.0},
         "score": price,
     }
 
 
-def penalize(combo: dict, olek: Flight, rlek: Flight, period: dict) -> None:
-    early = leg_early_penalty(olek, period) + leg_early_penalty(rlek, period)
-    short = short_stay_penalty(combo["nights"], period)
-    combo["penalties"] = {"early_departure": round(early, 2), "short_stay": round(short, 2)}
-    combo["score"] = round(combo["price"] + early + short, 2)
+def sort_key(combo: dict):
+    o, r = combo["outbound"], combo["return"]
+    return (
+        combo["score"], -combo["nights"], o["departure"], r["departure"],
+        combo["outbound_date"], combo["return_date"],
+    )
 
 
-def build_combo_candidates(outbound: list[Flight], inbound: list[Flight], period: dict,
-                           saturday_in: bool) -> list[dict]:
+def compute(outbound: list[Flight], inbound: list[Flight], /) -> list[dict]:
+    """Build and rank all combos from the legs. Mirrors Filter.computeTrips."""
     out_by_date: dict[str, list[Flight]] = defaultdict(list)
     ret_by_date: dict[str, list[Flight]] = defaultdict(list)
     for f in outbound:
-        if in_window(date.fromisoformat(f.date), period) and leg_hard_ok(f, period):
+        if out_leg_ok(f, ARGS):
             out_by_date[f.date].append(f)
     for f in inbound:
-        if leg_hard_ok(f, period):
+        if leg_ok(f, ARGS):
             ret_by_date[f.date].append(f)
 
-    valid_leg_pairs_checked = 0
     combos: list[dict] = []
     for out_date_str, out_flights in out_by_date.items():
         out_date = date.fromisoformat(out_date_str)
-        for nights in range(period["min_nights"], period["max_nights"] + 1):
-            ret_date = out_date + timedelta(days=nights)
-            ret_flights = ret_by_date.get(ret_date.isoformat(), [])
+        for nights in range(ARGS.min_nights, ARGS.max_nights + 1):
+            ret_str = (out_date + timedelta(days=nights)).isoformat()
+            if ARGS.force_include_day and not (out_date_str <= ARGS.force_include_day <= ret_str):
+                continue
+            ret_flights = ret_by_date.get(ret_str, [])
             if not ret_flights:
                 continue
-            if saturday_in and not has_saturday_night(out_date, ret_date):
+            ret_date = date.fromisoformat(ret_str)
+            if ARGS.saturday_in and not has_saturday_night(out_date, ret_date):
                 continue
-            saturday = first_saturday(out_date, ret_date) if saturday_in else None
+            saturday = first_saturday(out_date, ret_date) if ARGS.saturday_in else None
             for of in out_flights:
                 for rf in ret_flights:
-                    valid_leg_pairs_checked += 1
-                    combo = build_combo(of, rf, nights, saturday)
-                    penalize(combo, of, rf, period)
-                    combos.append(combo)
-    if valid_leg_pairs_checked == 0:
-        print(f"  (period with no valid combos)")
-    combos.sort(key=lambda c: (c["score"], c["price"], -c["nights"], c["outbound"]["departure"]))
+                    price = round(of.price + rf.price, 2)
+                    combos.append(build_combo(of, rf, nights, saturday, price))
+
+    combos.sort(key=sort_key)
     return combos
 
 
 def describe(combo: dict) -> str:
     o, r = combo["outbound"], combo["return"]
-    base = (
+    return (
         f"out {combo['outbound_date']} {o['departure']}-{o['arrival']} "
-        f"| return {combo['return_date']} {r['departure']}-{r['arrival']} | {combo['nights']}n"
+        f"| return {combo['return_date']} {r['departure']}-{r['arrival']} | "
+        f"{combo['nights']}n | {combo['price']:.2f} €"
     )
-    parts = [f"price {combo['price']:.2f}"]
-    if combo["penalties"]["early_departure"]:
-        parts.append(f"early +{combo['penalties']['early_departure']:.2f}")
-    if combo["penalties"]["short_stay"]:
-        parts.append(f"short +{combo['penalties']['short_stay']:.2f}")
-    parts.append(f"score {combo['score']:.2f} €")
-    return f"{base} | {'  '.join(parts)}"
 
 
 def group_by_weekend(combos: list[dict], top_k: int) -> list[dict]:
@@ -247,31 +169,50 @@ def group_by_weekend(combos: list[dict], top_k: int) -> list[dict]:
 
 
 def main() -> None:
+    global ARGS
     parser = argparse.ArgumentParser(
-        description="Enumerate round trips locally with hard filters and soft-constraint scoring."
+        description="Enumerate round trips locally with flat hard filters (matches the widget)."
     )
-    parser.add_argument("--data", default="mock_flights_BRU_VCE.json", help="Input dataset JSON")
+    parser.add_argument("--data", default="data/fares.json", help="Input dataset JSON")
     parser.add_argument("--origin", default="BRU")
     parser.add_argument("--destination", default="VCE")
-    parser.add_argument("--config", default="", help="JSON config with per-period constraints")
-    parser.add_argument("--min-nights", type=int, default=None)
-    parser.add_argument("--max-nights", type=int, default=None)
-    parser.add_argument("--saturday-in", dest="saturday_in", action="store_true", default=True)
+    parser.add_argument("--min-nights", type=int, default=4)
+    parser.add_argument("--max-nights", type=int, default=10)
+    parser.add_argument("--saturday-in", dest="saturday_in", action="store_true")
     parser.add_argument("--no-saturday-in", dest="saturday_in", action="store_false")
-    parser.add_argument("--airlines", default=None, help="Restrict to airlines (substring, comma-list)")
-    parser.add_argument("--no-nonstop", dest="nonstop", action="store_false", default=None,
-                        help="Also allow connecting flights")
-    parser.add_argument("--earliest-departure", default=None, help="HARD: drop legs leaving before HH:MM")
-    parser.add_argument("--preferred-departure", default=None, help="SOFT: legs before HH:MM incur a penalty")
-    parser.add_argument("--early-departure-penalty", type=float, default=None,
-                        help="euro per minute early vs preferred-departure")
-    parser.add_argument("--preferred-nights", type=int, default=None, help="SOFT target stay length")
-    parser.add_argument("--short-stay-penalty", type=float, default=None,
-                        help="euro per night below preferred-nights")
+    parser.set_defaults(saturday_in=True)
+    parser.add_argument("--nonstop", dest="nonstop", action="store_true")
+    parser.add_argument("--no-nonstop", dest="nonstop", action="store_false")
+    parser.set_defaults(nonstop=True)
+    parser.add_argument("--airlines", default="", help="Restrict to airlines (substring, comma-list)")
+    parser.add_argument("--earliest-departure", default="", help="HARD: drop legs leaving before HH:MM")
+    parser.add_argument("--dep-weekdays", default="",
+                        help="OUTBOUND only: comma list of weekdays 0=Sun..6=Sat, e.g. 1,4")
+    parser.add_argument("--dep-after-hour", type=int, default=0,
+                        help="OUTBOUND only: depart at/after this hour (24h)")
+    parser.add_argument("--search-from", default="", help="OUTBOUND window start (YYYY-MM-DD)")
+    parser.add_argument("--search-to", default="", help="OUTBOUND window end (YYYY-MM-DD)")
+    parser.add_argument("--force-include-day", default="", help="Trip must cover this day (YYYY-MM-DD)")
     parser.add_argument("--top-k", type=int, default=5)
     parser.add_argument("--limit", type=int, default=30)
     parser.add_argument("--out", default="round_trips.json")
     args = parser.parse_args()
+
+    if args.min_nights < 0 or args.max_nights < args.min_nights:
+        parser.error("--min-nights/--max-nights invalid")
+    if args.earliest_departure and not TIME_RE.match(args.earliest_departure):
+        parser.error("--earliest-departure must be HH:MM")
+    for key in ("search_from", "search_to", "force_include_day"):
+        value = getattr(args, key)
+        if value and not DATE_RE.match(value):
+            parser.error(f"--{key.replace('_', '-')} must be YYYY-MM-DD")
+    try:
+        args.dep_weekdays = [int(d) for d in (args.dep_weekdays or "").split(",") if d.strip()]
+        if any(d < 0 or d > 6 for d in args.dep_weekdays):
+            raise ValueError
+    except ValueError:
+        parser.error("--dep-weekdays must be 0..6 (0=Sun..6=Sat)")
+    ARGS = args
 
     with open(args.data) as fh:
         dataset = FlightDataset.from_dict(json.load(fh))
@@ -280,18 +221,7 @@ def main() -> None:
     outbound = [f for f in dataset.flights if f.origin == origin and f.destination == destination]
     inbound = [f for f in dataset.flights if f.origin == destination and f.destination == origin]
 
-    periods = load_periods(args)
-    all_combos: dict[tuple[str, str], dict] = {}
-    for index, period in enumerate(periods):
-        print(f"Period #{index} (outbound {period['from'] or '...'} .. {period['to'] or '...'})")
-        for c in build_combo_candidates(outbound, inbound, period, args.saturday_in):
-            existing = all_combos.get((c["outbound"]["flight_id"], c["return"]["flight_id"]))
-            if existing is None or c["score"] < existing["score"]:
-                all_combos[(c["outbound"]["flight_id"], c["return"]["flight_id"])] = c
-
-    combos = sorted(all_combos.values(),
-                    key=lambda c: (c["score"], c["price"], -c["nights"], c["outbound"]["departure"]))
-
+    combos = compute(outbound, inbound)
     weekend_top = group_by_weekend(combos, args.top_k) if args.saturday_in else []
 
     result = {
@@ -299,7 +229,19 @@ def main() -> None:
             "data_source": dataset.source,
             "origin": origin,
             "destination": destination,
-            "periods": periods,
+            "options": {
+                "min_nights": args.min_nights,
+                "max_nights": args.max_nights,
+                "saturday_in": args.saturday_in,
+                "nonstop": args.nonstop,
+                "airlines": args.airlines,
+                "earliest_departure": args.earliest_departure,
+                "dep_weekdays": args.dep_weekdays,
+                "dep_after_hour": args.dep_after_hour,
+                "search_from": args.search_from,
+                "search_to": args.search_to,
+                "force_include_day": args.force_include_day,
+            },
             "valid_round_trips_found": len(combos),
         },
         "overall_best": combos[:args.limit],
@@ -312,7 +254,7 @@ def main() -> None:
     print(f"Valid round trips: {len(combos)}  (outbound {len(outbound)} legs, return {len(inbound)} legs)")
     print(f"Saved: {args.out}")
     print("-" * 110)
-    print(f"Overall best by score ({len(result['overall_best'])})")
+    print(f"Overall best ({len(result['overall_best'])})")
     for c in result["overall_best"]:
         print(f"  {describe(c)}")
     if weekend_top:

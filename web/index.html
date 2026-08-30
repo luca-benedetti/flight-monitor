@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRU → VCE flights</title>
+<script src="filter.js"></script>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #171a21; --line: #262c36;
+    --text: #e6e9ef; --muted: #8a8f98; --accent: #8ae;
+    --warn: #e8a33d; --bad: #f66;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 14px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 14px 18px; border-bottom: 1px solid var(--line);
+           background: var(--panel); }
+  header h1 { margin: 0; font-size: 17px; letter-spacing: .3px; }
+  header p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+  main { display: grid; grid-template-columns: 300px 1fr; gap: 16px;
+         padding: 16px 18px; max-width: 1100px; margin: 0 auto; }
+  @media (max-width: 820px) { main { grid-template-columns: 1fr; } }
+  .filters { background: var(--panel); border: 1px solid var(--line);
+             border-radius: 10px; padding: 14px; height: fit-content; }
+  .filters h2 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase;
+                letter-spacing: .8px; color: var(--muted); }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12px; color: var(--muted);
+                 margin-bottom: 4px; }
+  .field input[type="number"], .field input[type="text"], .field input[type="date"],
+  .field input[type="time"] {
+    width: 100%; background: var(--bg); color: var(--text);
+    border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px;
+    font-size: 13px; }
+  .inline { display: flex; gap: 8px; }
+  .inline .field { flex: 1; }
+  .check { display: flex; align-items: center; gap: 7px; margin-bottom: 6px;
+           font-size: 13px; cursor: pointer; }
+  .check input { width: 16px; height: 16px; }
+  .weekdays { display: flex; gap: 4px; }
+  .weekdays button { flex: 1; padding: 6px 2px; border-radius: 6px; cursor: pointer;
+                     border: 1px solid var(--line); background: var(--bg);
+                     color: var(--muted); font-size: 11px; }
+  .weekdays button.on { background: var(--accent); color: #0c0f14; border-color: var(--accent); }
+  .results { min-width: 0; }
+  .bar { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .bar .count { font-size: 13px; color: var(--muted); }
+  .bar .fresh { font-size: 12px; color: var(--muted); margin-left: auto; }
+  .warn { font-size: 12px; color: var(--warn); }
+  table { width: 100%; border-collapse: collapse; background: var(--panel);
+          border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line);
+           font-size: 13px; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  tr:last-child td { border-bottom: none; }
+  td.price { font-weight: 700; }
+  td .leg { color: var(--muted); font-size: 12px; }
+  .empty { color: var(--bad); padding: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>BRU ⇄ VCE · flight search</h1>
+  <p id="meta">loading fares.json…</p>
+</header>
+
+<main>
+  <aside class="filters">
+    <h2>Trip</h2>
+    <div class="inline">
+      <div class="field"><label>Min nights</label>
+        <input type="number" id="minNights" value="4" min="1" max="30"></div>
+      <div class="field"><label>Max nights</label>
+        <input type="number" id="maxNights" value="10" min="1" max="30"></div>
+    </div>
+    <label class="check"><input type="checkbox" id="saturdayIn" checked> Saturday night in trip</label>
+    <label class="check"><input type="checkbox" id="nonstopOnly" checked> Nonstop only</label>
+    <div class="field"><label>Airlines (substrings, comma)</label>
+      <input type="text" id="airlines" placeholder="e.g. SN"></div>
+    <div class="field"><label>Earliest departure (all legs)</label>
+      <input type="time" id="earliestDeparture"></div>
+
+    <h2>Leave (outbound)</h2>
+    <div class="field"><label>Allowed weekdays</label>
+      <div class="weekdays" id="weekdays">
+        <button data-d="0">Sun</button><button data-d="1">Mon</button>
+        <button data-d="2">Tue</button><button data-d="3">Wed</button>
+        <button data-d="4">Thu</button><button data-d="5">Fri</button>
+        <button data-d="6">Sat</button>
+      </div></div>
+    <div class="field"><label>Depart at/after hour (24h · 0 = any)</label>
+      <input type="number" id="depAfterHour" value="0" min="0" max="23"></div>
+    <div class="inline">
+      <div class="field"><label>Departure from</label>
+        <input type="date" id="searchFrom"></div>
+      <div class="field"><label>Departure to</label>
+        <input type="date" id="searchTo"></div>
+    </div>
+    <h2>Must cover</h2>
+    <div class="field"><label>A specific day inside a period</label>
+      <input type="date" id="forceIncludeDay"></div>
+  </aside>
+
+  <section class="results">
+    <div class="bar">
+      <span class="count" id="count"></span>
+      <span class="fresh" id="fresh"></span>
+    </div>
+    <div id="warn" class="warn"></div>
+    <div id="table"></div>
+  </section>
+</main>
+
+<script>
+(function () {
+  const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const TOP = 100;
+  let fares = null;
+
+  const $ = (id) => document.getElementById(id);
+
+  const weekdays = $("weekdays");
+  weekdays.querySelectorAll("button").forEach((b) => {
+    b.addEventListener("click", () => {
+      b.classList.toggle("on");
+      refresh();
+    });
+  });
+
+  document.querySelectorAll("input").forEach((el) => {
+    el.addEventListener("input", refresh);
+    el.addEventListener("change", refresh);
+  });
+
+  function readOptions() {
+    const days = [];
+    weekdays.querySelectorAll("button.on").forEach((b) => days.push(Number(b.dataset.d)));
+    return {
+      from: "BRU", to: "VCE",
+      minNights: int($("minNights").value, 4) || 4,
+      maxNights: int($("maxNights").value, 10) || 10,
+      saturdayIn: $("saturdayIn").checked,
+      nonstopOnly: $("nonstopOnly").checked,
+      airlines: $("airlines").value.trim(),
+      earliestDeparture: $("earliestDeparture").value || "",
+      depWeekdays: days,
+      depAfterHour: int($("depAfterHour").value, 0),
+      searchFrom: $("searchFrom").value || "",
+      searchTo: $("searchTo").value || "",
+      forceIncludeDay: $("forceIncludeDay").value || "",
+    };
+  }
+  function int(v, fallback) {
+    const n = parseInt(v, 10);
+    return Number.isFinite(n) ? n : fallback;
+  }
+
+  function fmt(i) { return i.slice(5); } // YYYY-MM-DD -> MM-DD
+
+  function render() {
+    if (!fares) return;
+    const opts = readOptions();
+    const trips = Filter.computeTrips(fares.flights || [], opts);
+    $("count").textContent = `${trips.length} round trips match (showing top ${Math.min(TOP, trips.length)})`;
+    $("fresh").textContent = fares.metadata ? `data: ${fares.metadata.generated_at || "?"}` : "";
+    const skipped = (fares.metadata || {}).skipped_days || [];
+    $("warn").textContent = skipped.length
+      ? `${skipped.length} date(s) missing from last scan (partial data)`
+      : "";
+
+    if (trips.length === 0) {
+      $("table").innerHTML = '<p class="empty">No trips match these filters.</p>';
+      return;
+    }
+    const rows = trips.slice(0, TOP).map((c) => {
+      const price = `${c.score.toFixed(0)} €`;
+      const trip = `<td>${fmt(c.outDate)} → ${fmt(c.retDate)}</td><td>${c.nights}n</td>`;
+      const leg = (f) => `${f.departure}-${f.arrival} ${(f.airline || "?")}`;
+      const out = `<td><div>${leg(c.out)}</div><div class="leg">${c.out.origin} → ${c.out.destination}</div></td>`;
+      const back = `<td><div>${leg(c.ret)}</div><div class="leg">${c.ret.origin} → ${c.ret.destination}</div></td>`;
+      const sat = `<td>${c.saturday ? DAY_NAMES[new Date(c.saturday + "T00:00:00Z").getUTCDay()] + " " + fmt(c.saturday) : ""}</td>`;
+      return `<tr><td class="price">${price}</td>${trip}${out}${back}${sat}</tr>`;
+    }).join("");
+    $("table").innerHTML = `<table><thead><tr>
+      <th>Price</th><th>Trip</th><th>Nights</th><th>Outbound</th><th>Return</th><th>Sat night</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+  }
+  window.refresh = render;
+
+  fetch("fares.json").then((r) => r.json()).then((d) => {
+    fares = d;
+    $("meta").textContent =
+      `data from ${(d.metadata || {}).source || "?"} · updated ${(d.metadata || {}).generated_at || "?"}`;
+    render();
+  }).catch((err) => {
+    $("meta").textContent = `load failed: ${err}`;
+  });
+})();
+</script>
+</body>
+</html>

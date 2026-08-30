@@ -1,239 +1,133 @@
-# Deployment Plan — BRU ⇄ VCE flight widget (Scriptable path)
+# Deployment Plan — BRU ⇄ VCE flight tool (web app + Scriptable widget)
 
-Personal project. Zero budget, zero Apple-developer friction, widget on the home
-screen, parameters editable from the phone. Companion of README.md — this is
-about *how it runs in the real world*, not how the Python scoring works.
+Personal project. Zero budget, zero Apple-developer friction. Companion of
+README.md — this is about *how it runs in the real world*, not how the Python
+scoring works.
 
 ## Non-negotiable requirements
 
 - Free, no server to maintain.
 - A **home-screen widget** showing the top round trips.
-- No Xcode, no Apple Developer account, no 7-day re-signing (native iOS apps are
-  out — a home-screen widget demands a native app, which on a free account must
-  be re-signed every 7 days; the only escape hatches were $99/yr TestFlight or
-  not going native — see decisions below).
-- Config changed from the phone, without touching the Mac.
-- Later: same thing for a second person (girlfriend) with a different config.
-- Notifications are out of scope.
+- A **web app** where I can easily add/change filter conditions and inspect
+  results.
+- No Xcode, no Apple Developer account, no 7-day re-signing (native iOS apps
+  are out — a home-screen widget demands a native app, which on a free account
+  must be re-signed every 7 days; the escape hatches were $99/yr TestFlight or
+  not going native — rejected).
+- Config changed from the phone or the browser, without touching the Mac.
+- Later: same thing for a second person (girlfriend).
 
-## Selected architecture: "server serves fares, Scriptable does the thinking"
+## Architecture: "server serves fares, clients do the thinking"
 
-The insight that shapes everything: the personal part of this project
-(false constraints, scoring, ranking) is a **pure, config-driven function** —
-`find_round_trips.py`. It never needed a server. It was "ported to the cloud"
-by assumption.
-
-So we split the workload:
+The cloud stores only one fact: *what do BRU⇄VCE one-way legs cost over the
+horizon right now* (all nonstop offers, next ~5 months, both directions). No
+filters, no profiles, no config server-side.
 
 ```
- WEEKLY (free, server-side)                     ON THE PHONE (free, per user)
- ┌─────────────────────────────┐
- │ GitHub Actions (cron)       │
- │  fetch fare GRID (date-grid)│       ┌──────────────────────────────────┐
- │  write fares.json (one-way) │       │ Scriptable JS widget             │
- │  (brand-new raw legs only,  │──────▶│  - reads fares.json from a URL   │
- │   no config inside)         │       │  - runs scoring (JS port)        │
- └─────────────────────────────┘       │  - shows top trips               │
-                                       │  - params at top of the script   │
-                                       │  - per-user, per-phone           │
-                                       └──────────────────────────────────┘
+ WEEKLY (free, server-side)                          CLIENTS (free, per user)
+ GitHub Actions cron ─▶ fares.json ─▶ GitHub Pages ──▶ Scriptable iOS widget
+   build-fares (Playwright scrape)                          (web/filter.js engine)
+        │  cache + resume (data/fares_cache)           ─▶ web app (fares.json +
+        │  metadata.skipped_days for failures)             filter.js, filter UI)
 ```
 
-- The cloud stores only one fact: *what do BRU⇄VCE one-way legs cost over the
-  horizon right now*. Same artifact for every user. No config, no profiles, no
-  regeneration API.
-- Everything personal runs on the device. It's a widget over a while-loop of a
-  few thousand combinations — trivial for the phone.
+- Filtering/ranking is one shared JS engine, `web/filter.js`
+  (`computeTrips(flights, options)`) used by BOTH the widget and the web app,
+  so results always match. Pure, no I/O.
+- The Python ranker `find_round_trips.py` mirrors `web/filter.js` exactly
+  (parity-checked: identical trip lists on the same data across all knob
+  combinations) — used as a CLI/reference on the Mac.
+- Ranking is **price only** (ties: longer trip, then earlier departures).
+  No penalty weights — hard filters answer "what I want to see".
 
-## Server side (the only moving part)
+## Filter knobs (shared everywhere)
 
-Purpose: keep `fares.json` (one-way legs, both directions, full horizon) fresh.
+| Knob | Meaning |
+|---|---|
+| `searchFrom` / `searchTo` | outbound departure window ("" = whole horizon) |
+| `minNights` / `maxNights` | trip length range |
+| `nonstopOnly` | direct flights only |
+| `airlines` | comma-separated name substrings (e.g. "SN") |
+| `saturdayIn` | require a Saturday night in the trip |
+| `earliestDeparture` | drop any leg leaving before HH:MM |
+| `depWeekdays` | outbound only: leave on these weekdays (0=Sun..6=Sat) |
+| `depAfterHour` | outbound only: leave at/after this hour (24h) |
+| `forceIncludeDay` | trip must cover this calendar day |
 
-1. **Data source**: live Google Flights scrape via `fast-flights` v3 (see
-   "Step 2 result"). Per-date requests (≈25–35/wk with filters); no key, no
-   quota. Runs on the Mac or in a headless GitHub Actions runner (needs
-   Playwright + Chrome binary provisioned in the job; consent is accepted once
-   per browser session).
-   - Fallbacks: RapidAPI `google-flights8` BASIC tier (per-date) or mock data.
-2. **Scheduler**: GitHub Actions cron (free, ~weekly). Stores the RapidAPI key
-   as a secret, never in the repo.
-3. **Serving**: static JSON. GitHub Pages (repo branch or `/docs`) or a 3-line
-   Cloudflare Worker. The widget fetches one stable URL.
-4. **Mock mode stays**: `generate_mock_flights.py` keeps producing
-   `mock_flights_BRU_VCE.json` so the whole pipeline runs with zero cost and
-   zero API when needed.
+## Data pipeline (server)
 
-Open question: exact free-tier volume of `google-flights8` BASIC
-(comparable scrapers sit at ~150 req/month — with date-grid that's plenty for
-a weekly full-window refresh). Confirm on the RapidAPI listing page.
+1. **Source**: live Google Flights scrape via `fast-flights` v3 + Playwright
+   (headless system Chrome, accepts Google's EU consent wall once/session).
+   `ScraperFetcher` in `flight_monitor/fetchers/scraper.py`. No API key.
+2. **Builder**: `flight_monitor/build_fares.py` (`build-fares`) scrapes every
+   nonstop offer per day over a horizon — start default tomorrow, `--horizon 5`
+   months, both directions, no time/airline filtering at scrape time
+   (`--with-connections` optionally merges an all-offers pass). One artifact.
+3. **Scheduler**: GitHub Actions cron (weekly Mon 05:00 UTC) + manual dispatch.
+   Publishes `docs/` (fares.json + web app) to the `gh-pages` branch.
+4. **Resilience / resume**:
+   - Per-day results cached in `--cache-dir data/fares_cache` (one JSON per
+     direction/day), reused on re-runs → interrupted/partial runs resume.
+   - Days retry (`--retries`, default 2) on transient parser/network errors.
+   - Skipped days are listed and the partial dataset is still published with
+     `metadata.skipped_days`; the run only aborts if every day of a pass fails.
+   - First CI run failed because a single parser TypeError (2026-09-20 VCE→BRU
+     nonstop) killed the whole build — this is what the cache/partial handled.
+   - CI also caches `data/fares_cache` (actions/cache) so a failing run resumes
+     on the next dispatch.
 
-### Step 1 result (tested 2026-08-30 with key)
+### Verification (live, no mock)
 
-`date-grid/one-way` was probed live (`explore_date_grid.py`): **returns an empty
-`entries[]` grid for BRU→VCE** in every variant (default ±3d window, explicit
-15-day window, near-term dates), and it also echoes back a `currency` that
-ignores the request (EUR → USD). So it's a dead end even for a "cheapest day"
-widget on this route/API version. The endpoint is both schema-limited and
-empirically broken here.
-
-### Free/cheap sources for RICH data (full offers, tested candidates)
-
-The scorer needs per-flight detail (times, airline, stops, duration), which
-rules out price-grid-only endpoints. Free paths that keep the full model:
-
-| Source | Rich data? | Request efficiency | Free? | Real prices? | Risk |
-|---|---|---|---|---|---|
-| **Kiwi Tequila `/v2/search`** | ✅ full itineraries (legs, airline, times, stops, price) | ✅ date-range in one call (`date_from/date_to`, `one_per_date`, `limit` up to 1000) | ⚠️ portal key historically free; some 2024+ reports say new signups invitation-only — must try | ✅ | join-wall may block |
-| Google Flights scraping (`flights_ice_breaker.py`, or `swoop`) | ✅ | per-date | ✅ | ✅ | ToS-grey, breakable, anti-bot |
-| SerpAPI google_flights | ✅ | per-date | ~100/mo | ✅ | quota tiny |
-| Amadeus self-service free tier | ✅ | per-date | ✅ | ❌ sandbox fake fares | useless for real pricing |
-| RapidAPI `/api/v1/search` | ✅ | per-date (≈306/horizon) | BASIC ~150/mo | ✅ | quota too small for 5 mo |
-
-**Step 1 → decision: scraper is the primary data path.** Free APIs are closed
-(Amadeus self-service decommissioned 2026-07, Tequila invite-only since 2024,
-RapidAPI `date-grid` returns 0 entries for BRU→VCE — tested). `fast-flights`
-(v3, AWeirdDev/flights, MIT, maintained) replays Google Flights' request format:
-no key, rich structured offers, built-in filters (airlines/max_stops/dep-hours),
-~1–3 s/request → ~25–35 requests ≈ 1–2 min per constraint-driven weekly run.
-
-### Step 2 result (tested 2026-08-30 with live data, no mock)
-
-Scraper fetcher implemented and proven end-to-end:
-
-- `flight_monitor/fetchers/scraper.py` (`ScraperFetcher`) + CLI `scrape-flights`.
-- ⚠️ EU geo ⇒ Google serves a **consent wall** ("Before you continue"): raw
-  primp/impersonation (and consent-cookie injection) gets blocked. Solved by
-  rendering the page in headless **Playwright** (`chromium`, `channel="chrome"`,
-  system Chrome) and clicking "Accept all". Consent is accepted once per session.
-- 10-day live run (BRU→VCE + VCE→BRU, 2026-08-31..09-09): **130 real offers,
-  121–737 EUR**; red-eyes captured with `arrival_day_offset=1`.
-- Constraint filters proven: `--max-stops 0 --earliest/latest-departure-hour`
-  narrow to nonstop SN/etc. per-day.
-- Merged both directions → `find-round-trips --no-nonstop` computed real trips
-  (best 208 EUR: out Sep 1, back Sep 8, 7 nights); dataset validates via
-  `flight_model.py`.
-- `fast-flights` pinned `==3.1.0` (v2 `FlightData`/fallback modes are gone —
-  `flights_ice_breaker.py` removed as superseded). v3 needs Python ≥3.10 →
-  `requires-python` bumped. Also adds `typing_extensions` (upstream packaging gap).
-- No mock: a failing day hard-fails the run with a per-day report.
-
-### Step 3 result (fares artifact + widget, local)
-
-- `flight_monitor/build_fares.py` (`build-fares`): derives the **scorable date
-     set** from `config/round_trip_config.json` (outbound = period dates, return =
-     outbound + min..max nights; 2026-09-01..01-31 → 153 outbound / 163 return
-     dates). **Default = one nonstop pass per direction** (that's all the widget
-     shows); `--with-connections` re-adds the all-offers pass and merges.
-     Merges, dedupes (cheapest per identical leg), renumbers ids, recomputes
-     `is_best`, validates → single `data/fares.json` artifact.
-     - The nonstop pass is essential: default Google listings omit direct
-       VCE→BRU legs (verified: 0 nonstop in the default scrape, ~2/day with
-       `max_stops 0`).
-     - Nonstop-only weekly run ≈ 320 requests ≈ 20–25 min (default delay
-       1.5 s). Smoke test on a 4-date set verified merge/dedupe/validate +
-       scorer end-to-end.
-   - **Resilience (added after first CI run failed)**: per-day results are
-     cached under `--cache-dir data/fares_cache` (one JSON per direction/day)
-     and reused on re-runs, so an interrupted run resumes instead of restarting;
-     each day retries `--retries` (≤3 attempts total) on transient errors; a day
-     that still fails is skipped and **reported**, and the partial dataset is
-     still published (the run only aborts if *every* day fails, i.e. blocked).
-     First CI run killed the whole build on a single parser TypeError for
-     2026-09-20 VCE→BRU nonstop — fixed by this.
-   - The weekly CI job caches `data/fares_cache` (actions/cache) so even a
-     failing runner run resumes on the next dispatch instead of re-scraping all.
-- `widget/flight-widget.js` (Scriptable): direct JS port of the scorer. Config
-  block at the top (nonstop/airlines/saturday-in/periods+penalties),
-  fetches `fares.json` from a static URL, scores locally, renders top trips.
-  **Verified against the Python reference on the same input: identical result**
-  (052→Sep-10, 5n, 748 € = 727 + 21 penalties).
-- ⚠️ Google may throttle a 630-request burst: keep the weekly cadence, stagger
-  with the poll delay, and treat a hard failure as data-not-refreshed (keep the
-  previous fares.json), not a broken widget.
+- 10-day probe BRU⇄VCE: 130 real offers (121–737 EUR), consent-wall solved.
+- Full weekly run (nonstop-only): ≈320 requests ≈ 20–25 min → **494 nonstop
+  offers / 167 days**, both directions, published weekly.
+- Known deterministic flake: `2026-09-20 VCE→BRU` trips fast_flights'
+  `'NoneType' object is not subscriptable` → surfaced via `skipped_days`
+  (widget/web show "n date(s) missing"); everything else scrapes cleanly.
 
 ## Phone side (Scriptable)
 
-- Free App Store app, installable by anyone without any Apple-developer stuff.
-- One JS file = the whole "app": fetch fares URL → score with the current
-  config → render top trips in the widget.
-- The JS is a small, direct port of the scoring core in `find_round_trips.py`
-  (hard/soft constraints, per-period config, `score = price + penalties`,
-  `overall_best` + per-weekend top). Pure and serialisable, ~a couple hundred
-  lines.
-- **Config from the phone**: the first lines of the script are the constants
-  (origin/destination, min–max nights, Saturday-in, earliest departure,
-  penalties). Edit in the Scriptable app, save, widget re-renders. No Mac, no
-  redeploy.
-- Sync via iCloud so the script persists across reinstallation/resigning.
-- The JSON schema must stay locked while the Python and JS sides diverge:
-  reuse it from `flight_model.py`; only convert the leg fields the widget
-  needs, browser into readable text in the widget.
+- One script `widget/flight-widget.js`: edit `CONFIG` at the top, save in the
+  Scriptable app, add as a home-screen widget. Konfig: min/max nights,
+  saturday-in, nonstop, earliest departure, depWeekdays/depAfterHour
+  ("Monday/Thursday evening"), searchFrom/searchTo, forceIncludeDay.
+- The widget fetches the shared engine from the Pages URL (`engineUrl` →
+  `filter.js`) and `fares.json`, then scores locally.
+- Footer shows data freshness + "n date(s) missing from scan (partial data)"
+  when the build skipped days.
+- Widget refresh timing is decided by iOS (minutes–hours). Fine for
+  weekly-fresh data.
+- GF phase: same app/script with her constants — zero new infrastructure.
 
-Honest constraints:
-- Widget refresh timing is decided by iOS, not by the script (order of
-  minutes–hours depending on background status). Fine for weekly-fresh data.
-- No standalone app UI or push notifications — intentionally accepted.
+## Web app
 
-## Girlfriend (phase 2)
+- `web/index.html` + `web/filter.js`, published to the Pages site root →
+  `https://luca-benedetti.github.io/flight-monitor/`.
+- Form for every knob + live result table (price, dates, legs, Sat night),
+  freshness + skipped-days warning.
 
-- Same free app, same script (or a copy) with her constants.
-- Because all logic is per-device, a second user costs zero infrastructure.
-- Real remaining cost: *teaching* her to edit two numbers if she ever wants to
-  change them — keep the constant block documented at the top of the script.
+## Status
 
-## Rollout phases
+- ✅ Pipeline end-to-end: scrape → fares.json → Pages (weekly cron + manual).
+- ✅ Widget tested on phone (v1).
+- ✅ Web app (filter UI) built, published with the fares workflow.
+- ✅ JS engine ≡ Python ranker (parity-checked).
+- 🔜 Re-dispatch the fares workflow so Pages serves the new web app + engine.
 
-1. **Verify data** ✅ done: `date-grid` returns 0 entries for BRU→VCE (dead
-   end); scraper fetcher proven live over 10 days (Step 2 result) — rich
-   scoring kept, free.
-2. **Server** ✅ workflow implemented: `.github/workflows/fares.yml` — weekly
-   cron (Mon 05:00 UTC) + manual dispatch; provisions uv/Python 3.12 + Chrome
-   on the runner, `build-fares --out docs/fares.json`, validates, publishes
-   `docs/` to the `gh-pages` branch (peaceiris/actions-gh-pages). GitHub Pages
-   then serves `https://luca-benedetti.github.io/flight-monitor/fares.json` —
-   paste that into the widget's `CONFIG.faresUrl`.
-   - One-time manual step (repo Settings → Pages → deploy from branch
-     `gh-pages` / root), then run the workflow once (`workflow_dispatch`) to
-     confirm scraping works on the runner (consent/blocking risk lives here —
-     first successful CI run is the real proof).
-3. **Phone** (built, needs testing on device): `widget/flight-widget.js` in
-   Scriptable; add as home-screen widget; config block at top. Edit-and-save to
-   change rules.
-4. **Polish**: per-weekend view line, cheapest 30 list screen? Widget only, no
-   built-in app UI — keep it a widget.
-5. **GF**: copy the script, change constants, done.
+## Backlog / future ideas
 
-## What was decided and what's still open
-
-| Decision | Status |
-|---|---|
-| Native iOS app (SwiftUI + widget) | ❌ rejected — 7-day resign friction |
-| $99 Apple Developer + TestFlight | ❌ rejected — fee, not needed now |
-| HuggingFace Spaces + FastAPI | ❌ rejected — heavier than needed, no cron, sleeps |
-| GitHub Actions + Pages for fares | ✅ 
-| Scriptable JS widget on the phone | ✅ 
-| Config from the phone (script constants) | ✅ 
-| GF support via same script | deferred to phase 5 |
-| Real data via free `date-grid` tier | ❌ tested — endpoint returns 0 entries |
-| Rich data free | ✅ scraper path chosen and proven: `ScraperFetcher` (fast-flights v3 + Playwright), 10-day live test passed |
-| Notifications | ❌ out of scope |
-
-## Hands-on next steps
-
-1. Commit the new files and push, so CI can run (`un`: `pyproject.toml`,
-   `PLAN.md`, `flight_monitor/build_fares.py`, `widget/`, `.github/`).
-2. Enable Pages for the `gh-pages` branch and dispatch the
-   **fares** workflow once; watch the first Google-block risk pass.
-3. Open `widget/flight-widget.js`, uncomment/paste the Pages `faresUrl`, and
-   test in Scriptable on the phone.
-4. Local Mac run (`uv run python -m flight_monitor.build_fares`) remains an
-   option for immediate/adhoc refreshes without waiting for CI.
+- Per-day *scan timestamp* per cached date → split a horizon across sessions,
+  staleness per date instead of one global `generated_at`.
+- Investigate the `2026-09-20 VCE→BRU` page variant.
+- Web app: persist last-used filters (localStorage), shareable URL params.
+- Widget: list-screen / per-weekend view (medium+ widget rows).
 
 ## Reminders / gotchas
 
-- The API key and any secrets live only in GitHub Actions secrets, never in
-  the repo or the widget.
-- `fetch_flights.py`'s other Google Flights endpoints must not be confused
-  with the price API; the grid endpoints are what makes "free" viable.
-- The whole thing stays mock-compatible: no feature should require the paid
-  API to work locally.
+- One scraper session must not run while another does (Chrome + Google load);
+  the Actions workflow uses `concurrency` so weekly cron and manual dispatch
+  serialise.
+- Keep the scrape unfiltered (all nonstop, every time); push conditions into
+  `web/filter.js` / the Python mirror — single source of truth.
+- Repo is private; GitHub Pages on free plan requires a public repo (repo is
+  the one open decision). No secrets live in the repo or the widget either way.

@@ -1,205 +1,119 @@
-# BRU ⇄ VCE Flight Price Tool
+# BRU ⇄ VCE Flight tool
 
-Find round-trip flight combinations between Brussels (BRU) and Venice (VCE),
-understand what they cost, and rank them against personal preferences — without
-burning limited API requests while the logic is still being developed.
-
-## Goal
-
-The end product: given a calendar horizon (e.g. "the next 5 months"), enumerate
-one-way and round-trip flight options on BRU ⇄ VCE and surface the ones that
-matter to the user. "Matter" is deliberately user-defined — cheap trips, trips
-that include a Saturday night, trips of a certain length, trips at civilised
-departure times — expressed as **hard constraints** (impossibilities) and
-**soft constraints** (preferences that cost a tunable penalty).
-
-## Why this design
-
-A few decisions shape the whole project:
-
-1. **Mock-first.** The real API key is rate-limited, so everything except the
-   actual fetching runs against deterministic, locally generated data. The
-   algorithm is developed and tuned on `mock_flights_BRU_VCE.json` and works
-   unchanged on real fetched data later.
-2. **One data model.** Both the live fetcher and the mock generator emit the
-   same JSON schema (`flight_model.py`), so "does it work" is answerable by one
-   validator instead of drifting formats.
-3. **Server-side filtering.** The API supports `max_stops` and
-   `preferred_airlines`, so filters worth enforcing upstream are sent with the
-   request instead of wasting results.
-4. **Score = price + penalties.** Hard vs soft constraints is a false
-   dichotomy — it is a matter of weight. One formula, `score = price +
-   early_departure_penalty + short_stay_penalty`, tunes behaviour by editing
-   numbers (config) instead of code.
-5. **Per-period constraints.** Preferences are not constant over a year, so
-   constraints can differ per calendar window (e.g. longer stays around the
-   winter holidays).
-
-## Data model
-
-Every record is a **one-way flight offer** (`flight_model.py`):
-
-```json
-{
-  "flight_id": "BRU-VCE-2026-09-15-003",
-  "origin": "BRU",
-  "destination": "VCE",
-  "date": "2026-09-15",
-  "airline": "Brussels Airlines",
-  "departure": "15:40",
-  "arrival": "17:25",
-  "arrival_day_offset": 0,
-  "duration_min": 105,
-  "stops": 0,
-  "price": 119.0,
-  "currency": "EUR",
-  "is_best": false
-}
-```
-
-A dataset wraps them in `metadata` + `flights`. Conventions:
-
-- `departure` / `arrival` are local `HH:MM`; `arrival_day_offset` is 1 for
-  red-eyes that land the next day.
-- `price` is a **number** (never a string) so it can be compared directly.
-- Round trips are *not* precomputed in the data — the finder pairs legs.
-
-Validate any dataset (mock or real):
+Find round trips between Brussels (BRU) and Venice (VCE): a free iOS home-screen
+widget plus a small web app, both reading the same weekly-fresh dataset of
+one-way direct flights.
 
 ```
-python flight_model.py mock_flights_BRU_VCE.json
+                    every week (GitHub Actions cron, free)
+  Google Flights ──▶ build-fares (Playwright) ──▶ fares.json ──▶ GitHub Pages
+       nonstop offers                                   │
+                                                        ├─▶ web app  (filters + results)
+                                                        └─▶ Scriptable iOS widget
 ```
 
-## Pipeline
+The data side fetches **all nonstop offers for the next 5 months** (both
+directions) and serves one static file. All filtering/ranking happens on the
+client (web app and widget), so you can play with conditions without touching
+the data pipeline.
+
+## Repo layout
 
 ```
-                    ┌─────────────────────────┐
-   RapidAPI key  → │  fetch_flights.py        │ → flights_BRU_VCE.json
-   (.env)          └─────────────────────────┘
-                    ┌─────────────────────────┐
-                  → │  generate_mock_flights.py│ → mock_flights_BRU_VCE.json
-                    └─────────────────────────┘
-                    ┌─────────────────────────┐
-   flights*.json  → │  flight_model.py        │  (validator, shared schema)
-                    └─────────────────────────┘
-                    ┌─────────────────────────┐
-   mock/flights +  →│  find_round_trips.py    │ → round_trips.json
-   round_trip_config.json                     │    (overall best + top-k/weekend)
-                    └─────────────────────────┘
+flight_monitor/         Python: scraper fetcher, fares builder, round-trip ranker
+  fetchers/scraper.py     live Google Flights scraping (fast-flights + Playwright)
+  build_fares.py          builds fares.json over a horizon, with cache/resume
+  find_round_trips.py     Python reference ranker (mirrors web/filter.js)
+  flight_model.py         JSON schema + validator
+web/                    static web app (index.html + filter.js)
+widget/                 Scriptable widget script (flight-widget.js)
+.github/workflows/fares.yml   weekly cron + Pages publish
 ```
 
-### `fetch_flights.py` — live data
+## Data pipeline
 
-- Calls RapidAPI **google-flights8** (Crawlio), `GET /api/v1/search`
-  (one-way search).
-- Query params sent: `origin`, `destination`, `date`, `adults=1`,
-  `seat_class=economy`, `currency=EUR`, plus optional
-  `max_stops` (`--max-stops 0|1|2`) and `preferred_airlines`
-  (`--airlines SN` or e.g. `STAR_ALLIANCE`).
-- The API returns a top-level dict with `flights[]` / `results[]`; each row
-  carries times under `departure` / `arrival` (top-level and per segment),
-  `duration` + `duration_min`, `stops`, `price`, and its own `is_best`.
-  The parser maps those onto the model fields.
-- Output is capped to the first 10 rows (`flight_lists[:10]`) — a client-side
-  choice, not an API limit.
-- Reads the key from `RAPIDAPI_KEY` (env var or `--key`). The project's `.env`
-  also has `TRAXES_*` credentials used by `script.py`, which is unrelated.
+### `build-fares` — fetch the whole horizon
+
+Scrapes every nonstop flight per day for **start (default: tomorrow) → +5
+months**, both directions, no time/airline filtering at scrape time (all that
+lives in the client filters):
 
 ```
-python fetch_flights.py --from BRU --to VCE --dates 2026-09-15 --max-stops 0 --airlines SN
-python fetch_flights.py --from BRU --to VCE --dates 2026-09-15 --sample   # no key needed
+uv run build-fares                    # default horizon, nonstop pass only
+uv run build-fares --horizon 6        # longer horizon
+uv run build-fares --with-connections # also merge an all-offers pass
+uv run build-fares --dates 2026-09-05,2026-09-08   # smoke test
 ```
 
-### `generate_mock_flights.py` — offline data
+Resilience:
 
-- Builds a deterministic (fixed seed) dataset of one-way legs, both directions,
-  from itinerary templates (Brussels Airlines nonstops, 1-stop via EU hubs,
-  budget red-eyes, cheap 2-stops).
-- Current mock: **5202 flights**, 153 days (`2026-09-01 .. 2027-01-31`), 17
-  departure times/day/direction, prices ≈ €87–€299.
-- Weekend prices are inflated slightly; prices vary per date via seeded RNG so
-  the finder has something to chew on.
+- Per-day results are cached in `data/fares_cache/` (one JSON per
+  direction/day) and reused on re-runs → an interrupted or partial run resumes
+  instead of restarting.
+- Each day retries (`--retries`, default 2 extra attempts) on transient
+  parser/network errors.
+- A day that still fails is skipped and **listed**; the partial dataset is
+  still published with `metadata.skipped_days`. The run only aborts if every
+  day of a pass fails (i.e. blocked).
+- Weekly CI caches `data/fares_cache` via `actions/cache` so a failed runner
+  run resumes on the next dispatch.
 
-```
-python generate_mock_flights.py --dates 2026-09-01..2027-01-31
-```
+### `find-round-trips` — CLI ranker (mirrors the web engine)
 
-### `find_round_trips.py` — the enumerator & ranker
-
-Pairs every qualifying BRU→VCE outbound leg with a qualifying VCE→BRU return leg
-and scores the result. No API calls.
-
-**Score formula**
+Pairs outbound/return legs and ranks by **price**. Its semantics are identical
+to `web/filter.js` (verified: same output on the same data) so the CLI is a
+debugging/reference tool for whatever the widget/web show.
 
 ```
-score = price + early_departure_penalty + short_stay_penalty
+uv run find-round-trips --data data/fares.json --min-nights 4 --max-nights 10
+uv run find-round-trips --dep-weekdays 1,4 --dep-after-hour 17   # Mon/Thu evening
+uv run find-round-trips --search-from 2026-12-01 --search-to 2027-01-31
 ```
 
-**Hard constraints** (legs/combos removed before scoring):
+Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
+`--nonstop/--no-nonstop`, `--airlines`, `--earliest-departure HH:MM`,
+`--dep-weekdays 0=Sun..6=Sat`, `--dep-after-hour 24h`, `--search-from/to`,
+`--force-include-day YYYY-MM-DD`.
 
-| Constraint | Meaning | CLI |
-|---|---|---|
-| Nonstop only | drops legs with `stops > 0` | on by default; `--no-nonstop` |
-| Airline list | substring match on airline name | `--airlines` |
-| Min / max nights | stay length between legs | `--min-nights`, `--max-nights` (defaults 4–12) |
-| Earliest departure | legs leaving before `HH:MM` are dropped | `--earliest-departure` |
-| Saturday night in | the stay must cover a Saturday night | `--saturday-in` (default); `--no-saturday-in` |
+## Web app
 
-**Soft constraints** (penalties added to the score):
+`web/index.html` + `web/filter.js`, served on the same Pages site. Open
+`https://luca-benedetti.github.io/flight-monitor/` and you get:
 
-| Constraint | Penalty | CLI |
-|---|---|---|
-| Early departure | € per minute the leg leaves before `preferred-departure` | `--preferred-departure`, `--early-departure-penalty` |
-| Short stay | € per night below `preferred-nights` | `--preferred-nights`, `--short-stay-penalty` |
+- Trip shape: min/max nights, Saturday-in, nonstop, airlines, earliest departure.
+- "Leave" filters: allowed weekdays (Sun–Sat), depart-at/after hour,
+  departure date window.
+- "Must cover": force trips to span a specific day.
+- Live result table (price, dates, legs), with a freshness + skipped-days
+  warning.
 
-A large penalty weight effectively hardens a soft constraint; a zero weight
-disables it.
+## iOS widget
 
-**Periods** — `--config round_trip_config.json` lets every constraint above
-differ per calendar window (outbound date picks the period). CLI flags act as
-defaults that a period can override. Example config ships as
-`round_trip_config.json` (Sep–Nov: 4–10 nights, no flights before 08:30;
-Dec–Jan: 5–14 nights, prefer longer stays).
+`widget/flight-widget.js` (Scriptable). Edit the `CONFIG` block at the top to
+set the same knobs (min/max nights, Saturday-in, nonstop, `depWeekdays` /
+`depAfterHour` for "Monday/Thursday evening", `searchFrom/searchTo`,
+`forceIncludeDay`), save in the Scriptable app, add as a home-screen widget.
+The widget fetches `fares.json` **and** the shared `web/filter.js` engine from
+the Pages URL and scores locally.
 
-**Output** — `round_trips.json` and console summary:
-
-- `overall_best`: cheapest `--limit` (default 30) round trips by score.
-- `per_weekend_top`: `--top-k` (default 5) trips per Saturday-night group,
-  so you get "the useful few" per weekend rather than thousands of rows.
-
-```
-python find_round_trips.py                                   # defaults
-python find_round_trips.py --config round_trip_config.json
-python find_round_trips.py --min-nights 5 --max-nights 9 --top-k 3 --limit 10
-```
+Because scoring runs on-device with your own constants, a second person (girlfriend
+phase) just installs the same script/app with different constants — zero new
+infrastructure.
 
 ## Current state
 
-Working end-to-end and verified:
+- Live scrape verified: **494 nonstop offers / 167 days** (both directions),
+  published weekly + on demand.
+- One known date is deterministic-flaky: `2026-09-20 VCE→BRU` trips the
+  fast-flights parser (`'NoneType' object is not subscriptable`); it's reported
+  via `metadata.skipped_days` and the widget/web show the missing-day warning.
+- JS engine and Python ranker produce **identical** trip lists across knob
+  combinations (parity-checked).
 
-- [x] One-way fetch from the real API, server-side `max_stops`/`preferred_airlines`
-      filtering, output validates against the model.
-- [x] Shared data model + JSON validator.
-- [x] Deterministic 5-month mock dataset (both directions, mixed airlines/times).
-- [x] Round-trip enumeration with hard + soft (weighted) constraints and
-      per-period configuration.
+## Backlog / future ideas
 
-Numbers from recent runs on the mock:
-
-- Default config (Saturday-in, 4–12 nights, nonstop): **≈29 450** valid round
-  trips over the 5-month window.
-- Cheapest trip overall ≈ **€174** (e.g. 16→24 Dec, 8 nights).
-- Adding a hard `earliest_departure` of 08:30–09:00 removes every 06:30 leg;
-  weighting `preferred-nights 10 @ 30 €/night` demotes cheap short trips in
-  favour of 10–12-night stays.
-
-## Extending
-
-New preferences slot into the existing pattern:
-
-1. **Hard**: add a `leg_hard_ok` / combo filter in `build_combo_candidates`.
-2. **Soft**: add a penalty function called from `penalize()` so it lands in
-   `combo["penalties"]` and feeds the score.
-
-Suggested next candidates: a latest nightly arrival for legs, a hard total
-budget cap, per-night price view, or a "no wasted Saturday at home" rule.
+- Store a per-day *scan timestamp* with each cached result, so a horizon can be
+  fetched in several sessions with per-day staleness instead of one
+  `generated_at`.
+- Investigate the `2026-09-20 VCE→BRU` page variant.
+- More widget results (list-screen / per-weekend view).

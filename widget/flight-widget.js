@@ -4,36 +4,36 @@
 // script in the Scriptable app and add it as a home-screen widget.
 //
 // Data: reads fares.json (one-way legs both directions, produced by
-// `build-fares`) from a static URL; scoring runs locally on the phone
-// (a direct port of find_round_trips.py).
+// `build-fares`) from a static URL; scoring runs locally on the phone using
+// the shared engine in web/filter.js (a direct port of find_round_trips.py).
 
 const CONFIG = {
   from: "BRU",
   to: "VCE",
   faresUrl: "https://luca-benedetti.github.io/flight-monitor/fares.json",
+  engineUrl: "https://luca-benedetti.github.io/flight-monitor/filter.js",
+
+  // Trip shape
+  minNights: 4,
+  maxNights: 10,
 
   // Hard filters
   nonstopOnly: true,        // only direct flights (no stops)
   airlines: "",             // comma-separated airline substrings, e.g. "SN"
   saturdayIn: true,         // require a Saturday night in the trip
+  earliestDeparture: "",    // "08:30" = drop any leg leaving before this
 
-  // Soft scoring (mirrors config/round_trip_config.json)
-  periods: [
-    {
-      from: "2026-09-01", to: "2026-11-30",
-      minNights: 4, maxNights: 10,
-      earliestDeparture: "08:30",
-      preferredDeparture: "10:00", earlyPenaltyPerMin: 1.0,
-      preferredNights: 7, shortStayPenaltyPerNight: 8.0,
-    },
-    {
-      from: "2026-12-01", to: "2027-01-31",
-      minNights: 5, maxNights: 14,
-      earliestDeparture: "09:00",
-      preferredDeparture: "09:00", earlyPenaltyPerMin: 0.0,
-      preferredNights: 10, shortStayPenaltyPerNight: 6.0,
-    },
-  ],
+  // Outbound "leave" filters (disable by leaving empty / 0)
+  depWeekdays: [],          // e.g. [1,4] = only leave on Monday or Thursday (0=Sun..6=Sat)
+  depAfterHour: 0,          // only leave at/after this hour (24h); combine with depWeekdays
+                            // for "Monday/Thursday evening". 0 = any time.
+
+  // Outbound departure window ("" = any date in the scrape horizon)
+  searchFrom: "",           // e.g. "2026-09-07"
+  searchTo: "",             // e.g. "2026-10-31"
+
+  // Force every shown trip to cover a specific calendar day ("" = off)
+  forceIncludeDay: "",      // e.g. "2026-09-20"
 
   // Display
   topLines: 4,              // combo rows to show (medium widget fits ~4-5)
@@ -41,21 +41,8 @@ const CONFIG = {
 };
 
 // ---------------------------------------------------------------------------
-// Helpers (do not edit below this line)
+// Rendering helpers (do not edit below this line)
 // ---------------------------------------------------------------------------
-
-function toDate(iso) {
-  const [y, m, d] = iso.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d));
-}
-
-function addDays(date, days) {
-  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + days));
-}
-
-function iso(date) {
-  return date.toISOString().slice(0, 10);
-}
 
 function shortDate(isoStr) {
   const [y, m, d] = isoStr.split("-").map(Number);
@@ -64,120 +51,8 @@ function shortDate(isoStr) {
   return `${d} ${month}`;
 }
 
-function toMinutes(hhmm) {
-  const [h, m] = hhmm.split(":").map(Number);
-  return h * 60 + m;
-}
-
-function hasSaturdayNight(dep, ret) {
-  for (let day = dep; day < ret; day = addDays(day, 1)) {
-    if (day.getUTCDay() === 6) return true;
-  }
-  return false;
-}
-
-function firstSaturday(dep, ret) {
-  for (let day = dep; day < ret; day = addDays(day, 1)) {
-    if (day.getUTCDay() === 6) return day;
-  }
-  return null;
-}
-
-function legHardOk(flight, period) {
-  if (CONFIG.nonstopOnly && flight.stops > 0) return false;
-  if (CONFIG.airlines) {
-    const wanted = CONFIG.airlines.split(",").map((a) => a.trim().toLowerCase());
-    const name = flight.airline.toLowerCase();
-    if (!wanted.some((a) => name.includes(a))) return false;
-  }
-  if (period.earliestDeparture &&
-      toMinutes(flight.departure) < toMinutes(period.earliestDeparture)) {
-    return false;
-  }
-  return true;
-}
-
-function inWindow(isoStr, period) {
-  return isoStr >= period.from && isoStr <= period.to;
-}
-
-function earlyPenalty(flight, period) {
-  if (!period.preferredDeparture || !period.earlyPenaltyPerMin) return 0;
-  const early = toMinutes(period.preferredDeparture) - toMinutes(flight.departure);
-  return Math.max(0, early) * period.earlyPenaltyPerMin;
-}
-
-function shortStayPenalty(nights, period) {
-  if (!period.preferredNights || !period.shortStayPenaltyPerNight) return 0;
-  return Math.max(0, period.preferredNights - nights) * period.shortStayPenaltyPerNight;
-}
-
 function airlineLabel(flight) {
   return (flight.airline || "?").replace(/ \/ /g, "+");
-}
-
-// ---------------------------------------------------------------------------
-// Scoring (port of find_round_trips.py)
-// ---------------------------------------------------------------------------
-
-function computeCombos(flights) {
-  const outbound = flights.filter((f) => f.origin === CONFIG.from && f.destination === CONFIG.to);
-  const inbound = flights.filter((f) => f.origin === CONFIG.to && f.destination === CONFIG.from);
-  const combos = [];
-
-  for (const period of CONFIG.periods) {
-    const outByDate = new Map();
-    for (const f of outbound) {
-      if (inWindow(f.date, period) && legHardOk(f, period)) {
-        if (!outByDate.has(f.date)) outByDate.set(f.date, []);
-        outByDate.get(f.date).push(f);
-      }
-    }
-    const retByDate = new Map();
-    for (const f of inbound) {
-      if (legHardOk(f, period)) {
-        if (!retByDate.has(f.date)) retByDate.set(f.date, []);
-        retByDate.get(f.date).push(f);
-      }
-    }
-
-    for (const [outDateStr, outFlights] of outByDate) {
-      const outDate = toDate(outDateStr);
-      for (let nights = period.minNights; nights <= period.maxNights; nights++) {
-        const retDate = addDays(outDate, nights);
-        const retFlights = retByDate.get(iso(retDate)) || [];
-        if (retFlights.length === 0) continue;
-        if (CONFIG.saturdayIn && !hasSaturdayNight(outDate, retDate)) continue;
-        const sat = CONFIG.saturdayIn ? firstSaturday(outDate, retDate) : null;
-
-        for (const of2 of outFlights) {
-          for (const rf of retFlights) {
-            const price = Math.round((of2.price + rf.price) * 100) / 100;
-            const penalties =
-              earlyPenalty(of2, period) + earlyPenalty(rf, period) +
-              shortStayPenalty(nights, period);
-            combos.push({
-              out: of2, ret: rf,
-              outDate: outDateStr,
-              retDate: iso(retDate),
-              nights,
-              saturday: sat ? iso(sat) : null,
-              price,
-              penalties: Math.round(penalties * 100) / 100,
-              score: Math.round((price + penalties) * 100) / 100,
-            });
-          }
-        }
-      }
-    }
-  }
-
-  combos.sort((a, b) =>
-    a.score - b.score ||
-    a.price - b.price ||
-    b.nights - a.nights ||
-    a.out.departure.localeCompare(b.out.departure));
-  return combos;
 }
 
 function comboLine(c) {
@@ -236,10 +111,15 @@ async function buildWidget(combos, fares) {
 async function main() {
   let widget;
   try {
+    const engine = new Request(CONFIG.engineUrl);
+    engine.headers = { "Accept": "text/javascript" };
+    const engineSrc = await engine.loadString();
+    eval(engineSrc);
+
     const req = new Request(CONFIG.faresUrl);
     req.headers = { "Accept": "application/json" };
     const fares = await req.loadJSON();
-    const combos = computeCombos(fares.flights || []);
+    const combos = Filter.computeTrips(fares.flights || [], CONFIG);
     widget = await buildWidget(combos, fares.metadata);
   } catch (err) {
     widget = new ListWidget();

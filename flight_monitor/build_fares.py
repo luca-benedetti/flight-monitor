@@ -2,13 +2,11 @@
 """
 Build the single fares artifact served to the widget.
 
-Scrapes only the dates that can actually form a valid round trip given the
-config periods: outbound dates inside each period's [from, to], and return
-dates = outbound date + min..max nights. By default only a nonstop pass is
-scraped per direction (the widget only shows direct flights). With
---with-connections an extra pass for all offers is scraped and merged too
-(Google's default list often omits direct flights, e.g. VCE->BRU). Legs are
-deduped, flight ids renumbered, is_best recomputed, and the result validated.
+Scrapes every nonstop flight for the route over a fixed horizon: from --start
+(default: tomorrow) covering --horizon months, both directions, nonstop only
+(the widget only shows direct flights). --with-connections additionally
+scrapes and merges an all-offers pass. Legs are deduped, flight ids renumbered,
+is_best recomputed, and the result validated.
 
 Per-day results are cached in --cache-dir so a failed or interrupted run can
 be resumed without re-fetching. Days that fail after retries are skipped and
@@ -23,6 +21,7 @@ Usage:
 """
 
 import argparse
+import calendar
 import json
 import os
 import sys
@@ -33,47 +32,23 @@ from flight_monitor.flight_model import Flight, FlightDataset, validate
 
 from .fetchers import ScraperFetcher
 
-DEFAULT_MIN_NIGHTS = 1
-DEFAULT_MAX_NIGHTS = 14
+
+def add_months(day: date, months: int) -> date:
+    """Return `day` shifted by `months`, clamped to month-end when needed."""
+    total = day.year * 12 + (day.month - 1) + months
+    year, month_index = divmod(total, 12)
+    month = month_index + 1
+    last_day = calendar.monthrange(year, month)[1]
+    return date(year, month, min(day.day, last_day))
 
 
-def load_periods(path: str) -> list[dict]:
-    """Read a round-trip config file (list of periods or {'periods': [...]})."""
-    with open(path) as fh:
-        loaded = json.load(fh)
-    raw = loaded.get("periods") or [loaded]
-    periods = []
-    for i, p in enumerate(raw):
-        for key in ("from", "to"):
-            if not p.get(key):
-                raise ValueError(f"period #{i}: missing {key!r} date")
-            try:
-                date.fromisoformat(p[key])
-            except ValueError:
-                raise ValueError(f"period #{i}: {key} must be YYYY-MM-DD") from None
-        periods.append(
-            {
-                **p,
-                "min_nights": int(p.get("min_nights", DEFAULT_MIN_NIGHTS)),
-                "max_nights": int(p.get("max_nights", DEFAULT_MAX_NIGHTS)),
-            }
-        )
-    return periods
-
-
-def scorable_dates(periods: list[dict]) -> tuple[list[str], list[str]]:
-    """Return (outbound_dates, return_dates) that a round trip can use."""
-    outbound: set[str] = set()
-    returns: set[str] = set()
-    for p in periods:
-        day = date.fromisoformat(p["from"])
-        to = date.fromisoformat(p["to"])
-        while day <= to:
-            outbound.add(day.isoformat())
-            for nights in range(p["min_nights"], p["max_nights"] + 1):
-                returns.add((day + timedelta(days=nights)).isoformat())
-            day += timedelta(days=1)
-    return sorted(outbound), sorted(returns)
+def every_day(start: date, end: date) -> list[str]:
+    days = []
+    day = start
+    while day <= end:
+        days.append(day.isoformat())
+        day += timedelta(days=1)
+    return days
 
 
 def _leg_key(f: Flight) -> tuple:
@@ -110,11 +85,10 @@ def merge_passes(full: list[Flight], extra: list[Flight]) -> list[Flight]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build the fares.json artifact")
-    parser.add_argument("--config", default="config/round_trip_config.json")
     parser.add_argument("--out", default="data/fares.json")
     parser.add_argument(
         "--dates", default="",
-        help="Comma-separated dates for BOTH directions (overrides config-derived scope)",
+        help="Comma-separated dates for BOTH directions (overrides the horizon scope)",
     )
     parser.add_argument(
         "--with-connections",
@@ -130,18 +104,56 @@ def main() -> None:
         "--retries", type=int, default=2,
         help="Extra attempts per day after the first failure",
     )
+    parser.add_argument("--start", default="",
+        help="First outbound day (YYYY-MM-DD); default: tomorrow",
+    )
+    parser.add_argument("--horizon", type=int, default=5,
+        help="Scrape this many months from start (default: 5)",
+    )
+    parser.add_argument("--return-buffer", type=int, default=14,
+        help="Extra days beyond the horizon scraped as return-leg dates",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--headed", action="store_true")
     parser.add_argument("--delay", type=float, default=1.5, help="Pause between days")
     args = parser.parse_args()
 
-    periods = load_periods(args.config)
+    if args.dates:
+        try:
+            outbound = sorted({d.strip() for d in args.dates.split(",") if d.strip()})
+            for d in outbound:
+                date.fromisoformat(d)
+        except ValueError:
+            parser.error("--dates must be comma-separated YYYY-MM-DD")
+        returns = list(outbound)
+    else:
+        try:
+            start = date.fromisoformat(args.start) if args.start else (
+                date.today() + timedelta(days=1)
+            )
+        except ValueError:
+            parser.error("--start must be YYYY-MM-DD")
+        outbound = every_day(start, add_months(start, args.horizon))
+        returns = every_day(
+            start,
+            add_months(start, args.horizon) + timedelta(days=args.return_buffer),
+        )
 
     if args.dates:
         outbound = sorted({d.strip() for d in args.dates.split(",") if d.strip()})
         returns = list(outbound)
     else:
-        outbound, returns = scorable_dates(periods)
+        try:
+            start = date.fromisoformat(args.start) if args.start else (
+                date.today() + timedelta(days=1)
+            )
+        except ValueError:
+            parser.error("--start must be YYYY-MM-DD")
+        outbound = every_day(start, add_months(start, args.horizon))
+        returns = every_day(
+            start,
+            add_months(start, args.horizon) + timedelta(days=args.return_buffer),
+        )
 
     print(f"Scope:  outbound {len(outbound)} dates ({outbound[0]} .. {outbound[-1]})")
     print(f"        return  {len(returns)} dates ({returns[0]} .. {returns[-1]})")
