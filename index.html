@@ -124,6 +124,14 @@
           CONFIG block at the top of flight-widget.js (until the closing "};").
           The widget will then score with exactly these filters.</div>
       </div>
+      <button class="retry" id="syncBtn">Save filters to web</button>
+      <div id="syncPanel" class="hidden">
+        <div class="field"><label>GitHub token (one-time; Contents: write to
+          luca-benedetti/flight-monitor; stored only in this browser)</label>
+          <input type="password" id="patInput" placeholder="github_pat_…"></div>
+        <button class="retry" id="syncNowBtn">Sync now</button>
+        <div id="syncStatus" class="export-hint"></div>
+      </div>
     </div>
   </aside>
 
@@ -145,9 +153,13 @@
   const MONTH = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const TOP = 100;
-  const VERSION = "7";
+  const VERSION = "8";
   const SAVE_KEY = "fm-filters-v1";
+  const PAT_KEY = "fm-gh-pat";
+  const REPO = "luca-benedetti/flight-monitor";
+  const CONFIG_PATH = "web/config.json";
   let fares = null;
+  let remoteFilters = null;
 
   const $ = (id) => document.getElementById(id);
 
@@ -175,6 +187,19 @@
         $("exportText").select();
       });
     }
+    const syncBtn = $("syncBtn");
+    if (syncBtn) {
+      syncBtn.addEventListener("click", () => {
+        const panel = $("syncPanel");
+        const patInput = $("patInput");
+        if (!patInput.value) {
+          try { patInput.value = localStorage.getItem(PAT_KEY) || ""; } catch (e) {}
+        }
+        panel.classList.toggle("hidden");
+      });
+    }
+    const syncNowBtn = $("syncNowBtn");
+    if (syncNowBtn) syncNowBtn.addEventListener("click", syncToWeb);
   }
 
   function readOptions() {
@@ -213,9 +238,9 @@
     return (f.airline || "?").replace(/ \/ /g, "+");
   }
 
-  function restoreFilters() {
+  function restoreFilters(base) {
     try {
-      const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "null");
+      const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "null") || base;
       if (!saved) return;
       const set = (id, v) => { const el = $(id); if (el) el.value = v ?? ""; };
       set("minNights", saved.minNights);
@@ -316,20 +341,80 @@
 
   function load() {
     $("ver").textContent = "v" + VERSION;
-    fetch("fares.json", { cache: "no-cache" })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status))))
-      .then((d) => {
-        fares = d;
-        $("meta").textContent =
-          `data from ${(d.metadata || {}).source || "?"} · updated ${(d.metadata || {}).generated_at || "?"}`;
-        $("ver").textContent = "v" + VERSION;
-        render();
-      })
+    Promise.all([
+      fetch("fares.json", { cache: "no-cache" })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))),
+      fetch("config.json", { cache: "no-cache" })
+        .then((r) => (r.ok ? r.json() : Promise.resolve(null)))
+        .catch(() => null),
+    ]).then(([d, cfg]) => {
+      fares = d;
+      remoteFilters = cfg && cfg.filters ? cfg.filters : null;
+      restoreFilters(remoteFilters);
+      $("meta").textContent =
+        `data from ${(d.metadata || {}).source || "?"} · updated ${(d.metadata || {}).generated_at || "?"}`;
+      $("ver").textContent = "v" + VERSION;
+      render();
+    })
       .catch(loadFailed);
   }
 
+  function syncedFilters(opts) {
+    return {
+      minNights: opts.minNights, maxNights: opts.maxNights,
+      nonstopOnly: opts.nonstopOnly, airlines: opts.airlines,
+      saturdayIn: opts.saturdayIn, earliestDeparture: opts.earliestDeparture,
+      depWeekdays: opts.depWeekdays, depAfterHour: opts.depAfterHour,
+      searchFrom: opts.searchFrom, searchTo: opts.searchTo,
+      includeFrom: opts.includeFrom, includeTo: opts.includeTo,
+    };
+  }
+
+  function toBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = "";
+    bytes.forEach((b) => { bin += String.fromCharCode(b); });
+    return btoa(bin);
+  }
+
+  async function syncToWeb() {
+    const status = $("syncStatus");
+    const token = $("patInput").value.trim();
+    if (!token) {
+      status.textContent = "Paste a GitHub token first (fine-grained, Contents: read/write on this repo).";
+      return;
+    }
+    localStorage.setItem(PAT_KEY, token);
+    const filters = syncedFilters(readOptions());
+    const payload = JSON.stringify({ version: 1, filters: filters }, null, 2);
+    const headers = {
+      "Authorization": `Bearer ${token}`,
+      "Accept": "application/vnd.github+json",
+    };
+    status.textContent = "Updating config.json…";
+    try {
+      let sha = null;
+      const head = await fetch(`https://api.github.com/repos/${REPO}/contents/${CONFIG_PATH}`, { headers });
+      if (head.ok) sha = (await head.json()).sha;
+      const body = { message: "config: update filters from web app", content: toBase64(payload) };
+      if (sha) body.sha = sha;
+      const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/${CONFIG_PATH}`, {
+        method: "PUT",
+        headers: { ...headers, "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (resp.ok) {
+        status.textContent = "Saved. GitHub deploys it in ~10 s — the widget picks it up on its next refresh.";
+      } else {
+        const err = await resp.json().catch(() => ({}));
+        status.textContent = `Failed (${resp.status}): ${err.message || resp.statusText}`;
+      }
+    } catch (err) {
+      status.textContent = `Failed: ${err}`;
+    }
+  }
+
   wireControls();
-  restoreFilters();
   load();
 })();
 </script>
