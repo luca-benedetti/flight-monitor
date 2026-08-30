@@ -1,0 +1,51 @@
+name: fares
+
+on:
+  schedule:
+    # Weekly, Monday 05:00 UTC.
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fares
+  cancel-in-progress: false
+
+jobs:
+  build-fares:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install Chrome (used headless by the scraper)
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install project dependencies
+        run: uv sync --frozen
+
+      - name: Build fares.json (scrapes Google Flights)
+        run: |
+          mkdir -p docs
+          uv run python -m flight_monitor.build_fares --out docs/fares.json
+
+      - name: Validate fares.json
+        run: uv run validate-flight-model docs/fares.json
+
+      - name: Publish to GitHub Pages (gh-pages branch)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs
+          publish_branch: gh-pages
+          enable_jekyll: false
+          commit_message: "fares: refresh fares.json"
