@@ -112,10 +112,10 @@ filters, no profiles, no config server-side.
 ## Status
 
 - ✅ Pipeline end-to-end: scrape → fares.json → Pages (weekly cron + manual).
-- ✅ Widget tested on phone (v1).
-- ✅ Web app (filter UI) built, published with the fares workflow.
+- ✅ Widget on phone: ⇄ title, readable dates, both departures, remote-config auto-sync, filter echo.
+- ✅ Web app: all filter knobs, live table + Search, icon/favicon, localStorage persistence, Save-filters-to-web (GitHub API sync), Export widget config.
+- ✅ Fast webapp deploys (webapp.yml) decoupled from the weekly scrape.
 - ✅ JS engine ≡ Python ranker (parity-checked).
-- 🔜 Re-dispatch the fares workflow so Pages serves the new web app + engine.
 
 ## Backlog / future ideas
 
