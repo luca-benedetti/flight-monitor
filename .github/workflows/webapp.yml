@@ -1,0 +1,48 @@
+name: webapp
+
+# Deploy ONLY the web app (web/) to GitHub Pages, without touching the
+# weekly scrape. Runs the moment web files change; keeps every other file on
+# gh-pages (e.g. fares.json) intact.
+
+on:
+  push:
+    branches: [main]
+    paths: ["web/**"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: webapp-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy-webapp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Stage web files
+        run: cp -R web /tmp/webapp
+
+      - name: Fetch current published site
+        run: git fetch origin gh-pages --depth=1
+
+      - name: Checkout gh-pages (keeps fares.json etc.)
+        run: git checkout gh-pages
+
+      - name: Overlay web app files
+        run: cp -R /tmp/webapp/. .
+
+      - name: Commit and push with rebase retry
+        run: |
+          git -c user.name=github-actions -c user.email=actions@github.com \
+              add -A
+          for i in 1 2 3; do
+            git status --porcelain | grep -q . || { echo "no changes"; exit 0; }
+            git -c user.name=github-actions -c user.email=actions@github.com \
+                commit -m "webapp: deploy at $(git rev-parse --short HEAD)"
+            git pull --rebase origin gh-pages && break || sleep 3
+          done
+          git push origin gh-pages

@@ -58,6 +58,11 @@ Resilience:
 - Weekly CI caches `data/fares_cache` via `actions/cache` so a failed runner
   run resumes on the next dispatch.
 
+Two workflows on pages:
+- `fares.yml` — weekly (or manual) scrape + publish `fares.json` (slow, ~9–25 min).
+- `webapp.yml` — deploys `web/` to the site instantly on every push touching
+  `web/**`, without re-scraping (fares.json untouched).
+
 ### `find-round-trips` — CLI ranker (mirrors the web engine)
 
 Pairs outbound/return legs and ranks by **price**. Its semantics are identical
