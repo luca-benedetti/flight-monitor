@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Find round-trip flight combinations between Brussels (BRU) and Venice (VCE) with configurable constraints"
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     {name = "Luca Benedetti", email = "luca@example.com"}
 ]
@@ -26,7 +26,10 @@ classifiers = [
 ]
 
 dependencies = [
+    "fast-flights==3.1.0",
+    "playwright>=1.60.0",
     "requests>=2.28.0",
+    "typing-extensions>=4.16.0",
 ]
 
 [project.optional-dependencies]
@@ -41,6 +44,7 @@ dev = [
 fetch-flights = "flight_monitor.fetch_flights:main"
 generate-mock-flights = "flight_monitor.generate_mock_flights:main"
 find-round-trips = "flight_monitor.find_round_trips:main"
+scrape-flights = "flight_monitor.scrape_flights:main"
 validate-flight-model = "flight_monitor.flight_model:main"
 
 [project.urls]
