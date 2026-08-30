@@ -41,6 +41,7 @@ dev = [
 ]
 
 [project.scripts]
+build-fares = "flight_monitor.build_fares:main"
 fetch-flights = "flight_monitor.fetch_flights:main"
 generate-mock-flights = "flight_monitor.generate_mock_flights:main"
 find-round-trips = "flight_monitor.find_round_trips:main"

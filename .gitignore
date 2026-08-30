@@ -10,6 +10,7 @@ build/
 *.json
 !data/mock_flights_BRU_VCE.json
 !data/round_trips.json
+!docs/fares.json
 
 # Environment
 .env
