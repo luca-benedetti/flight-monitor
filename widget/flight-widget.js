@@ -37,6 +37,10 @@ const CONFIG = {
   includeFrom: "",           // e.g. "2026-12-24"
   includeTo: "",             // e.g. "2027-01-02"
 
+  // When set, this URL's filter values override all the knobs above on every
+  // run. Edit them in the web app ("Save filters to web") instead of here.
+  remoteConfigUrl: "https://luca-benedetti.github.io/flight-monitor/config.json",
+
   // Display
   topLines: 4,              // combo rows to show (medium widget fits ~4-5)
   currency: "€",
@@ -136,6 +140,17 @@ async function buildWidget(combos, fares) {
   return widget;
 }
 
+async function loadRemoteConfig() {
+  if (!CONFIG.remoteConfigUrl) return null;
+  try {
+    const r = new Request(CONFIG.remoteConfigUrl);
+    const cfg = await r.loadJSON();
+    return cfg && cfg.filters ? cfg.filters : null;
+  } catch (err) {
+    return null; // stale/local CONFIG still works
+  }
+}
+
 async function main() {
   let widget;
   try {
@@ -147,6 +162,10 @@ async function main() {
     const req = new Request(CONFIG.faresUrl);
     req.headers = { "Accept": "application/json" };
     const fares = await req.loadJSON();
+
+    const remote = await loadRemoteConfig();
+    if (remote) Object.assign(CONFIG, remote);
+
     const combos = Filter.computeTrips(fares.flights || [], CONFIG);
     widget = await buildWidget(combos, fares.metadata);
   } catch (err) {

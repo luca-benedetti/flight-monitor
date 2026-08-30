@@ -93,9 +93,12 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 - **Export widget config** button: copies your current filters as a
   ready-to-paste `CONFIG` block for the widget script, so the widget scores
   with exactly the web app's filters.
+- **Save filters to web** (once a GitHub token is pasted): writes the current
+  filters to `web/config.json` via the GitHub API → auto-deploys (~10 s) → and
+  the widget picks it up automatically (see below).
 - Filters persist in the browser (localStorage) across visits.
-- Live result table (price, dates, legs, Sat night) — updates as you change
-  filters, or via the explicit **Search** button.
+- Live result table (price, per-leg date + times, nights) — updates as you
+  change filters, or via the explicit **Search** button.
 - Freshness + skipped-days warning. The widget footer echoes your active
   filters ("filters: …") so a config edit is visibly confirmed.
 
@@ -105,8 +108,10 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 set the same knobs (min/max nights, Saturday-in, nonstop, `depWeekdays` /
 `depAfterHour` for "Monday/Thursday evening", `searchFrom/searchTo`,
 `includeFrom/includeTo`), save in the Scriptable app, add as a home-screen widget.
-The widget fetches `fares.json` **and** the shared `web/filter.js` engine from
-the Pages URL and scores locally.
+The widget fetches `fares.json`, the shared `web/filter.js` engine, **and**
+`web/config.json` — if `remoteConfigUrl` is set, the published filter values
+override the local knobs on every run, so "Save filters to web" in the web app
+is the only place you ever need to edit.
 
 Because scoring runs on-device with your own constants, a second person (girlfriend
 phase) just installs the same script/app with different constants — zero new

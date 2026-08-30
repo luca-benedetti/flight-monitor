@@ -92,7 +92,10 @@ filters, no profiles, no config server-side.
   saturday-in, nonstop, earliest departure, depWeekdays/depAfterHour
   ("Monday/Thursday evening"), searchFrom/searchTo, includeFrom/includeTo.
 - The widget fetches the shared engine from the Pages URL (`engineUrl` →
-  `filter.js`) and `fares.json`, then scores locally.
+  `filter.js`), `fares.json`, and optionally `web/config.json`; if
+  `remoteConfigUrl` is set, published filters override the local knob block on
+  every run (edited via the web app's "Save filters to web" → GitHub API →
+  instant deploy).
 - Footer shows data freshness + "n date(s) missing from scan (partial data)"
   when the build skipped days.
 - Widget refresh timing is decided by iOS (minutes–hours). Fine for
