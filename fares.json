@@ -3,7 +3,7 @@
     "schema_version": "1.0",
     "currency": "EUR",
     "source": "scraper_google_flights",
-    "generated_at": "2026-08-30T15:48:18Z",
+    "generated_at": "2026-08-30T15:58:08Z",
     "skipped_days": [
       "2026-09-20 (VCE->BRU)"
     ]
