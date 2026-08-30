@@ -9,7 +9,7 @@
     "earliestDeparture": "",
     "depWeekdays": [],
     "depAfterHour": 0,
-    "searchFrom": "",
+    "searchFrom": "2026-12-17",
     "searchTo": "",
     "includeFrom": "2026-12-24",
     "includeTo": "2027-01-06"
