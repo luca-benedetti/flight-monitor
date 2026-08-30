@@ -12,7 +12,7 @@ semantics here must match `computeTrips` exactly. Options are flat knobs:
     --dep-weekdays 1,4                     OUTBOUND only (0=Sun..6=Sat)
     --dep-after-hour 17                    OUTBOUND only
     --search-from / --search-to            OUTBOUND window ("" = open)
-    --force-include-day YYYY-MM-DD         trip must cover this day
+    --include-from / --include-to          trip must span: leave <= from, return >= to
     --saturday-in                          require a Saturday night
     --min-nights / --max-nights            trip length range
 
@@ -131,7 +131,9 @@ def compute(outbound: list[Flight], inbound: list[Flight], /) -> list[dict]:
         out_date = date.fromisoformat(out_date_str)
         for nights in range(ARGS.min_nights, ARGS.max_nights + 1):
             ret_str = (out_date + timedelta(days=nights)).isoformat()
-            if ARGS.force_include_day and not (out_date_str <= ARGS.force_include_day <= ret_str):
+            if ARGS.include_from and not (out_date_str <= ARGS.include_from):
+                continue
+            if ARGS.include_to and not (ret_str >= ARGS.include_to):
                 continue
             ret_flights = ret_by_date.get(ret_str, [])
             if not ret_flights:
@@ -192,7 +194,8 @@ def main() -> None:
                         help="OUTBOUND only: depart at/after this hour (24h)")
     parser.add_argument("--search-from", default="", help="OUTBOUND window start (YYYY-MM-DD)")
     parser.add_argument("--search-to", default="", help="OUTBOUND window end (YYYY-MM-DD)")
-    parser.add_argument("--force-include-day", default="", help="Trip must cover this day (YYYY-MM-DD)")
+    parser.add_argument("--include-from", default="", help="Trip must leave on/before this date (YYYY-MM-DD)")
+    parser.add_argument("--include-to", default="", help="Trip must return on/after this date (YYYY-MM-DD)")
     parser.add_argument("--top-k", type=int, default=5)
     parser.add_argument("--limit", type=int, default=30)
     parser.add_argument("--out", default="round_trips.json")
@@ -202,7 +205,7 @@ def main() -> None:
         parser.error("--min-nights/--max-nights invalid")
     if args.earliest_departure and not TIME_RE.match(args.earliest_departure):
         parser.error("--earliest-departure must be HH:MM")
-    for key in ("search_from", "search_to", "force_include_day"):
+    for key in ("search_from", "search_to", "include_from", "include_to"):
         value = getattr(args, key)
         if value and not DATE_RE.match(value):
             parser.error(f"--{key.replace('_', '-')} must be YYYY-MM-DD")
@@ -240,7 +243,8 @@ def main() -> None:
                 "dep_after_hour": args.dep_after_hour,
                 "search_from": args.search_from,
                 "search_to": args.search_to,
-                "force_include_day": args.force_include_day,
+                "include_from": args.include_from,
+                "include_to": args.include_to,
             },
             "valid_round_trips_found": len(combos),
         },

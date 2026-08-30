@@ -32,8 +32,10 @@ const CONFIG = {
   searchFrom: "",           // e.g. "2026-09-07"
   searchTo: "",             // e.g. "2026-10-31"
 
-  // Force every shown trip to cover a specific calendar day ("" = off)
-  forceIncludeDay: "",      // e.g. "2026-09-20"
+  // Force every shown trip to span a date range ("" = off): the trip must
+  // leave on/before includeFrom AND return on/after includeTo.
+  includeFrom: "",           // e.g. "2026-12-24"
+  includeTo: "",             // e.g. "2027-01-02"
 
   // Display
   topLines: 4,              // combo rows to show (medium widget fits ~4-5)

@@ -12,7 +12,8 @@
 //   depWeekdays               numbers 0=Sun..6=Sat; restrict OUTBOUND days
 //   depAfterHour              OUTBOUND only: depart at/after this hour (24h)
 //   searchFrom, searchTo      OUTBOUND window (YYYY-MM-DD, "" = open)
-//   forceIncludeDay           trip must cover this calendar day ("" = off)
+//   includeFrom / includeTo   trip must span the whole range: leave on/before
+//                             includeFrom and return on/after includeTo ("" = off)
 //
 // Ranking: price only (ties: longer trip first, then earlier departures).
 (function (global) {
@@ -103,10 +104,8 @@
       const outDate = toDate(outDateStr);
       for (let nights = minN; nights <= maxN; nights++) {
         const retIso = iso(addDays(outDate, nights));
-        if (o.forceIncludeDay &&
-            !(outDateStr <= o.forceIncludeDay && o.forceIncludeDay <= retIso)) {
-          continue;
-        }
+        if (o.includeFrom && !(outDateStr <= o.includeFrom)) continue;
+        if (o.includeTo && !(retIso >= o.includeTo)) continue;
         const retFlights = retByDate.get(retIso) || [];
         if (retFlights.length === 0) continue;
         if (o.saturdayIn && !hasSaturdayNight(outDate, toDate(retIso))) continue;

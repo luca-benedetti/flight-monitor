@@ -52,7 +52,7 @@ filters, no profiles, no config server-side.
 | `earliestDeparture` | drop any leg leaving before HH:MM |
 | `depWeekdays` | outbound only: leave on these weekdays (0=Sun..6=Sat) |
 | `depAfterHour` | outbound only: leave at/after this hour (24h) |
-| `forceIncludeDay` | trip must cover this calendar day |
+| `includeFrom` / `includeTo` | trip must span the range: leave on/before `includeFrom`, return on/after `includeTo` |
 
 ## Data pipeline (server)
 
@@ -90,7 +90,7 @@ filters, no profiles, no config server-side.
 - One script `widget/flight-widget.js`: edit `CONFIG` at the top, save in the
   Scriptable app, add as a home-screen widget. Konfig: min/max nights,
   saturday-in, nonstop, earliest departure, depWeekdays/depAfterHour
-  ("Monday/Thursday evening"), searchFrom/searchTo, forceIncludeDay.
+  ("Monday/Thursday evening"), searchFrom/searchTo, includeFrom/includeTo.
 - The widget fetches the shared engine from the Pages URL (`engineUrl` →
   `filter.js`) and `fares.json`, then scores locally.
 - Footer shows data freshness + "n date(s) missing from scan (partial data)"

@@ -73,7 +73,8 @@ uv run find-round-trips --search-from 2026-12-01 --search-to 2027-01-31
 Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 `--nonstop/--no-nonstop`, `--airlines`, `--earliest-departure HH:MM`,
 `--dep-weekdays 0=Sun..6=Sat`, `--dep-after-hour 24h`, `--search-from/to`,
-`--force-include-day YYYY-MM-DD`.
+`--include-from/--include-to` (trip must leave on/before `includeFrom` and
+  return on/after `includeTo`).
 
 ## Web app
 
@@ -83,7 +84,7 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 - Trip shape: min/max nights, Saturday-in, nonstop, airlines, earliest departure.
 - "Leave" filters: allowed weekdays (Sun–Sat), depart-at/after hour,
   departure date window.
-- "Must cover": force trips to span a specific day.
+- "Trip must span": leave on/before X and return on/after Y.
 - Live result table (price, dates, legs), with a freshness + skipped-days
   warning.
 
@@ -92,7 +93,7 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 `widget/flight-widget.js` (Scriptable). Edit the `CONFIG` block at the top to
 set the same knobs (min/max nights, Saturday-in, nonstop, `depWeekdays` /
 `depAfterHour` for "Monday/Thursday evening", `searchFrom/searchTo`,
-`forceIncludeDay`), save in the Scriptable app, add as a home-screen widget.
+`includeFrom/includeTo`), save in the Scriptable app, add as a home-screen widget.
 The widget fetches `fares.json` **and** the shared `web/filter.js` engine from
 the Pages URL and scores locally.
 

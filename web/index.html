@@ -97,9 +97,11 @@
       <div class="field"><label>Departure to</label>
         <input type="date" id="searchTo"></div>
     </div>
-    <h2>Must cover</h2>
-    <div class="field"><label>A specific day inside a period</label>
-      <input type="date" id="forceIncludeDay"></div>
+    <h2>Trip must span</h2>
+    <div class="field"><label>Leave on/before</label>
+      <input type="date" id="includeFrom"></div>
+    <div class="field"><label>Return on/after</label>
+      <input type="date" id="includeTo"></div>
   </aside>
 
   <section class="results">
@@ -148,7 +150,8 @@
       depAfterHour: int($("depAfterHour").value, 0),
       searchFrom: $("searchFrom").value || "",
       searchTo: $("searchTo").value || "",
-      forceIncludeDay: $("forceIncludeDay").value || "",
+      includeFrom: $("includeFrom").value || "",
+      includeTo: $("includeTo").value || "",
     };
   }
   function int(v, fallback) {
