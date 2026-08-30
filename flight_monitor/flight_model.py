@@ -60,7 +60,7 @@ TIME_RE = re.compile(r"^(?:[01]\d|2[0-3]):[0-5]\d$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 IATA_RE = re.compile(r"^[A-Z]{3}$")
 
-SOURCES = ("mock", "sample", "rapidapi_google_flights")
+SOURCES = ("mock", "sample", "rapidapi_google_flights", "scraper_google_flights")
 SCHEMA_VERSION = "1.0"
 
 
@@ -104,7 +104,9 @@ class Flight:
         try:
             datetime.strptime(self.date, "%Y-%m-%d")
         except ValueError:
-            raise ValueError(f"date is not a valid calendar day, got {self.date!r}")
+            raise ValueError(
+                f"date is not a valid calendar day, got {self.date!r}"
+            ) from None
         if not TIME_RE.match(self.departure):
             raise ValueError(f"departure must be HH:MM, got {self.departure!r}")
         if not TIME_RE.match(self.arrival):
@@ -126,7 +128,7 @@ class Flight:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "Flight":
+    def from_dict(cls, data: dict) -> Flight:
         return cls(**data)
 
     def __repr__(self) -> str:
@@ -172,7 +174,7 @@ class FlightDataset:
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> "FlightDataset":
+    def from_dict(cls, data: dict) -> FlightDataset:
         md = data.get("metadata", {})
         return cls(
             schema_version=md.get("schema_version", SCHEMA_VERSION),

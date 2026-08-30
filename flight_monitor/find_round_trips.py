@@ -46,7 +46,7 @@ import re
 from collections import defaultdict
 from datetime import date, timedelta
 
-from flight_model import Flight, FlightDataset
+from flight_monitor.flight_model import Flight, FlightDataset
 
 TIME_RE = re.compile(r"^(?:[01]\d|2[0-3]):[0-5]\d$")
 
