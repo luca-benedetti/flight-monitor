@@ -90,6 +90,10 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 - "Leave" filters: allowed weekdays (Sun–Sat), depart-at/after hour,
   departure date window.
 - "Trip must span": leave on/before X and return on/after Y.
+- **Export widget config** button: copies your current filters as a
+  ready-to-paste `CONFIG` block for the widget script, so the widget scores
+  with exactly the web app's filters.
+- Filters persist in the browser (localStorage) across visits.
 - Live result table (price, dates, legs, Sat night) — updates as you change
   filters, or via the explicit **Search** button.
 - Freshness + skipped-days warning. The widget footer echoes your active

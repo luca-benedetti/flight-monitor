@@ -119,7 +119,8 @@ filters, no profiles, no config server-side.
 - Per-day *scan timestamp* per cached date → split a horizon across sessions,
   staleness per date instead of one global `generated_at`.
 - Investigate the `2026-09-20 VCE→BRU` page variant.
-- Web app: persist last-used filters (localStorage), shareable URL params.
+- Web app: persist last-used filters (localStorage) — done. Shareable URL
+  params for filter state still open.
 - Widget: list-screen / per-weekend view (medium+ widget rows).
 
 ## Reminders / gotchas
