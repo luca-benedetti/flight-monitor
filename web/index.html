@@ -48,6 +48,10 @@
   .bar .count { font-size: 13px; color: var(--muted); }
   .bar .fresh { font-size: 12px; color: var(--muted); margin-left: auto; }
   .warn { font-size: 12px; color: var(--warn); }
+  .bar button { background: var(--accent); color: #0c0f14; border: 0;
+                border-radius: 6px; padding: 6px 14px; font-size: 13px;
+                font-weight: 700; cursor: pointer; }
+  .hint { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
   table { width: 100%; border-collapse: collapse; background: var(--panel);
           border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
   th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line);
@@ -108,9 +112,11 @@
     <div class="bar">
       <span class="count" id="count"></span>
       <span class="fresh" id="fresh"></span>
+      <button id="searchBtn">Search</button>
     </div>
     <div id="warn" class="warn"></div>
-    <div id="table"></div>
+    <p class="hint">Results update live as you change the filters — or press Search.</p>
+    <div id="table"><p class="empty">Loading fares…</p></div>
   </section>
 </main>
 
@@ -190,6 +196,7 @@
     </tr></thead><tbody>${rows}</tbody></table>`;
   }
   window.refresh = render;
+  $("searchBtn").addEventListener("click", render);
 
   fetch("fares.json").then((r) => r.json()).then((d) => {
     fares = d;
@@ -197,7 +204,9 @@
       `data from ${(d.metadata || {}).source || "?"} · updated ${(d.metadata || {}).generated_at || "?"}`;
     render();
   }).catch((err) => {
-    $("meta").textContent = `load failed: ${err}`;
+    const msg = `Failed to load fares.json (${err}). Is the data published?`;
+    $("meta").textContent = msg;
+    $("table").innerHTML = `<p class="empty">${msg}</p>`;
   });
 })();
 </script>

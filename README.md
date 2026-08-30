@@ -85,8 +85,10 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 - "Leave" filters: allowed weekdays (Sun–Sat), depart-at/after hour,
   departure date window.
 - "Trip must span": leave on/before X and return on/after Y.
-- Live result table (price, dates, legs), with a freshness + skipped-days
-  warning.
+- Live result table (price, dates, legs, Sat night) — updates as you change
+  filters, or via the explicit **Search** button.
+- Freshness + skipped-days warning. The widget footer echoes your active
+  filters ("filters: …") so a config edit is visibly confirmed.
 
 ## iOS widget
 

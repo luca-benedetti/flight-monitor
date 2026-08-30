@@ -57,6 +57,25 @@ function airlineLabel(flight) {
   return (flight.airline || "?").replace(/ \/ /g, "+");
 }
 
+function activeFilterLabels(cfg) {
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const labels = [];
+  if (cfg.depWeekdays && cfg.depWeekdays.length)
+    labels.push(cfg.depWeekdays.map((d) => days[d]).join("+"));
+  if (cfg.depAfterHour) labels.push(`≥${cfg.depAfterHour}h`);
+  if (cfg.earliestDeparture) labels.push(`after ${cfg.earliestDeparture}`);
+  if (!cfg.saturdayIn) labels.push("no Sat night");
+  if (!cfg.nonstopOnly) labels.push("stops ok");
+  if (cfg.airlines) labels.push(cfg.airlines);
+  if (cfg.minNights !== 4 || cfg.maxNights !== 10)
+    labels.push(`${cfg.minNights}–${cfg.maxNights}n`);
+  if (cfg.searchFrom || cfg.searchTo)
+    labels.push(`${cfg.searchFrom || "…"}..${cfg.searchTo || "…"}`);
+  if (cfg.includeFrom || cfg.includeTo)
+    labels.push(`span ${cfg.includeFrom || "…"}–${cfg.includeTo || "…"}`);
+  return labels.join(" · ");
+}
+
 function comboLine(c) {
   const price = `${CONFIG.currency}${c.score.toFixed(0)}`;
   const trip = `${shortDate(c.outDate)} → ${shortDate(c.retDate)} · ${c.nights}n`;
@@ -99,6 +118,13 @@ async function buildWidget(combos, fares) {
     `fares updated ${generatedAt ? generatedAt.slice(0, 10) : "?"}`);
   footer.font = Font.regularSystemFont(9);
   footer.textColor = Color.gray();
+
+  const filters = activeFilterLabels(CONFIG);
+  if (filters) {
+    const f = widget.addText(`filters: ${filters}`);
+    f.font = Font.regularSystemFont(9);
+    f.textColor = new Color("#8a8f98");
+  }
 
   if (skipped.length > 0) {
     const warn = widget.addText(
