@@ -33,6 +33,14 @@ jobs:
       - name: Install project dependencies
         run: uv sync --frozen
 
+      - name: Restore per-day scrape cache (resumes interrupted runs)
+        uses: actions/cache@v4
+        with:
+          path: data/fares_cache
+          key: fares-cache-${{ github.run_number }}
+          restore-keys: |
+            fares-cache-
+
       - name: Build fares.json (scrapes Google Flights)
         run: |
           mkdir -p docs

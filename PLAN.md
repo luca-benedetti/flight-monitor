@@ -120,16 +120,28 @@ Scraper fetcher implemented and proven end-to-end:
 ### Step 3 result (fares artifact + widget, local)
 
 - `flight_monitor/build_fares.py` (`build-fares`): derives the **scorable date
-  set** from `config/round_trip_config.json` (outbound = period dates, return =
-  outbound + min..max nights; 2026-09-01..01-31 → 153 outbound / 163 return
-  dates) and runs 4 scrapes: each direction full + nonstop pass. Merges,
-  dedupes (cheapest per identical leg), renumbers ids, recomputes `is_best`,
-  validates → single `data/fares.json` artifact.
-  - The nonstop pass is essential: default Google listings omit direct
-    VCE→BRU legs (verified: 0 nonstop in the default scrape, ~2/day with
-    `max_stops 0`).
-  - Full weekly run ≈ 630 requests ≈ 40–60 min (default delay 1.5 s). Smoke
-    test on a 4-date set verified merge/dedupe/validate + scorer end-to-end.
+     set** from `config/round_trip_config.json` (outbound = period dates, return =
+     outbound + min..max nights; 2026-09-01..01-31 → 153 outbound / 163 return
+     dates). **Default = one nonstop pass per direction** (that's all the widget
+     shows); `--with-connections` re-adds the all-offers pass and merges.
+     Merges, dedupes (cheapest per identical leg), renumbers ids, recomputes
+     `is_best`, validates → single `data/fares.json` artifact.
+     - The nonstop pass is essential: default Google listings omit direct
+       VCE→BRU legs (verified: 0 nonstop in the default scrape, ~2/day with
+       `max_stops 0`).
+     - Nonstop-only weekly run ≈ 320 requests ≈ 20–25 min (default delay
+       1.5 s). Smoke test on a 4-date set verified merge/dedupe/validate +
+       scorer end-to-end.
+   - **Resilience (added after first CI run failed)**: per-day results are
+     cached under `--cache-dir data/fares_cache` (one JSON per direction/day)
+     and reused on re-runs, so an interrupted run resumes instead of restarting;
+     each day retries `--retries` (≤3 attempts total) on transient errors; a day
+     that still fails is skipped and **reported**, and the partial dataset is
+     still published (the run only aborts if *every* day fails, i.e. blocked).
+     First CI run killed the whole build on a single parser TypeError for
+     2026-09-20 VCE→BRU nonstop — fixed by this.
+   - The weekly CI job caches `data/fares_cache` (actions/cache) so even a
+     failing runner run resumes on the next dispatch instead of re-scraping all.
 - `widget/flight-widget.js` (Scriptable): direct JS port of the scorer. Config
   block at the top (nonstop/airlines/saturday-in/periods+penalties),
   fetches `fares.json` from a static URL, scores locally, renders top trips.

@@ -191,7 +191,10 @@ function comboLine(c) {
 // Rendering
 // ---------------------------------------------------------------------------
 
-async function buildWidget(combos, generatedAt) {
+async function buildWidget(combos, fares) {
+  const meta = fares || {};
+  const generatedAt = meta.generated_at;
+  const skipped = meta.skipped_days || [];
   const widget = new ListWidget();
   widget.backgroundColor = new Color("#0f1115", 1);
 
@@ -220,6 +223,13 @@ async function buildWidget(combos, generatedAt) {
   footer.font = Font.regularSystemFont(9);
   footer.textColor = Color.gray();
 
+  if (skipped.length > 0) {
+    const warn = widget.addText(
+      `${skipped.length} date(s) missing from scan (partial data)`);
+    warn.font = Font.regularSystemFont(9);
+    warn.textColor = new Color("#e8a33d");
+  }
+
   return widget;
 }
 
@@ -230,7 +240,7 @@ async function main() {
     req.headers = { "Accept": "application/json" };
     const fares = await req.loadJSON();
     const combos = computeCombos(fares.flights || []);
-    widget = await buildWidget(combos, (fares.metadata || {}).generated_at);
+    widget = await buildWidget(combos, fares.metadata);
   } catch (err) {
     widget = new ListWidget();
     widget.backgroundColor = new Color("#0f1115", 1);

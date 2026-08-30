@@ -11,11 +11,18 @@ Usage:
     fetcher.save(dataset, "scraped_flights.json")
 
 Requires Google Chrome (or a Playwright Chromium build) installed locally.
-No mock fallback: if a day fails it is reported as an error.
+
+Per-day results are cached to `cache_dir` and reused on re-runs, so an
+interrupted or partially failed run can be resumed without re-fetching. Days
+that fail after `retries` attempts are reported; with `allow_partial` the run
+continues and only aborts if every day fails (e.g. blocked).
 """
 
+import json
+import os
 import re
 from datetime import date
+from pathlib import Path
 from urllib.parse import urlencode
 
 from fast_flights import (
@@ -59,6 +66,9 @@ class ScraperFetcher(Fetcher):
         headless: bool = True,
         delay_sec: float = 2.0,
         timeout_ms: int = 45000,
+        retries: int = 2,
+        cache_dir: str | None = None,
+        allow_partial: bool = False,
     ) -> None:
         self.airlines = airlines
         self.max_stops = max_stops
@@ -67,12 +77,17 @@ class ScraperFetcher(Fetcher):
         self.headless = headless
         self.delay_sec = delay_sec
         self.timeout_ms = timeout_ms
+        self.retries = retries
+        self.cache_dir = cache_dir
+        self.allow_partial = allow_partial
+        self.failed_days: list[str] = []
 
     def fetch(self, origin: str, destination: str, dates: list[str]) -> FlightDataset:
         origin = origin.upper()
         destination = destination.upper()
         all_flights: list[Flight] = []
-        errors: list[str] = []
+        self.failed_days = []
+        total = len(dates)
 
         with sync_playwright() as p:
             try:
@@ -83,38 +98,106 @@ class ScraperFetcher(Fetcher):
             page = context.new_page()
 
             for index, day in enumerate(dates):
-                try:
-                    url, html = self._fetch_day_html(page, origin, destination, day)
-                    try:
-                        offers = parse_google_html(html)
-                    except FlightsNotFound:
-                        offers = []
-                    mapped = self._to_flights(offers, origin, destination, day)
-                    all_flights.extend(mapped)
-                    n = len(mapped)
-                    cheapest = min(mapped, key=lambda f: f.price) if mapped else None
-                    price_info = f"{cheapest.price:g} EUR" if cheapest else "-"
-                    print(
-                        f"  {day} ({origin}->{destination}): {n} offers, "
-                        f"cheapest {price_info}"
-                    )
-                except Exception as exc:  # noqa: BLE001 - report per-day failure
-                    errors.append(f"{day}: {type(exc).__name__}: {exc}")
-                    print(f"  {day} ({origin}->{destination}): FAILED - {exc}")
+                cache_file = self._cache_file(origin, destination, day)
+                cached = self._load_cached(cache_file)
+                if cached is not None:
+                    all_flights.extend(cached)
+                    self._print_day(origin, destination, day, cached, cached=True)
+                else:
+                    mapped, exc = self._fetch_one(page, origin, destination, day)
+                    if mapped is not None:
+                        self._save_cache(cache_file, mapped)
+                        all_flights.extend(mapped)
+                        self._print_day(origin, destination, day, mapped)
+                    else:
+                        self.failed_days.append(
+                            f"{day} ({origin}->{destination}): "
+                            f"{type(exc).__name__}: {exc}"
+                        )
+                        print(f"  {day} ({origin}->{destination}): FAILED - {exc}")
 
-                if index < len(dates) - 1 and self.delay_sec:
+                if index < total - 1 and self.delay_sec:
                     page.wait_for_timeout(int(self.delay_sec * 1000))
 
             browser.close()
 
-        if errors:
+        if self.failed_days and (not self.allow_partial or len(self.failed_days) == total):
             raise RuntimeError(
-                f"{len(errors)}/{len(dates)} days failed:\n"
-                + "\n".join(f"  {e}" for e in errors)
+                f"{len(self.failed_days)}/{total} days failed:\n"
+                + "\n".join(f"  {e}" for e in self.failed_days)
             )
 
         return FlightDataset(
             source="scraper_google_flights", currency="EUR", flights=all_flights
+        )
+
+    def _fetch_one(
+        self, page, origin: str, destination: str, day: str
+    ) -> tuple[list[Flight] | None, Exception | None]:
+        """Fetch one day, retrying on transient errors (e.g. parser hiccups)."""
+        last_exc: Exception | None = None
+        for attempt in range(self.retries + 1):
+            try:
+                _, html = self._fetch_day_html(page, origin, destination, day)
+                try:
+                    offers = parse_google_html(html)
+                except FlightsNotFound:
+                    offers = []
+                return self._to_flights(offers, origin, destination, day), None
+            except Exception as exc:  # noqa: BLE001 - report per-day failure
+                last_exc = exc
+                if attempt < self.retries:
+                    retry_delay = self.delay_sec * 2 if self.delay_sec else 4.0
+                    print(
+                        f"  {day}: attempt {attempt + 1} failed "
+                        f"({type(exc).__name__}: {exc}); retrying"
+                    )
+                    page.wait_for_timeout(int(retry_delay * 1000))
+        return None, last_exc
+
+    def _stops_label(self) -> str:
+        return "nonstop" if self.max_stops == 0 else "all"
+
+    def _cache_file(self, origin: str, destination: str, day: str) -> Path:
+        return (
+            Path(self.cache_dir)
+            / f"{origin}_{destination}_{self._stops_label()}"
+            / f"{day}.json"
+        )
+
+    def _load_cached(self, cache_file: Path) -> list[Flight] | None:
+        if not self.cache_dir or not cache_file.is_file():
+            return None
+        try:
+            with open(cache_file) as fh:
+                return [Flight.from_dict(f) for f in json.load(fh)]
+        except (OSError, json.JSONDecodeError, KeyError, ValueError, TypeError):
+            return None
+
+    def _save_cache(self, cache_file: Path, flights: list[Flight]) -> None:
+        if not self.cache_dir:
+            return
+        cache_file.parent.mkdir(parents=True, exist_ok=True)
+        tmp = cache_file.with_suffix(".json.tmp")
+        with open(tmp, "w") as fh:
+            json.dump([f.to_dict() for f in flights], fh)
+        os.replace(tmp, cache_file)
+
+    def _print_day(
+        self,
+        origin: str,
+        destination: str,
+        day: str,
+        flights: list[Flight],
+        cached: bool = False,
+    ) -> None:
+        n = len(flights)
+        cheapest = min(flights, key=lambda f: f.price) if flights else None
+        price_info = f"{cheapest.price:g} EUR" if cheapest else "-"
+        tag = " (cached)" if cached else ""
+        print(
+            f"  {day} ({origin}->{destination}): {n} offers, "
+            f"cheapest {price_info}{tag}"
         )
 
     def _fetch_day_html(

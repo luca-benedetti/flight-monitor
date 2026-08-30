@@ -4,16 +4,22 @@ Build the single fares artifact served to the widget.
 
 Scrapes only the dates that can actually form a valid round trip given the
 config periods: outbound dates inside each period's [from, to], and return
-dates = outbound date + min..max nights. Two passes per direction are scraped
-and merged: the default "best" offers and a nonstop-only pass (Google's default
-list often omits direct flights, e.g. VCE->BRU). Legs are deduped, flight ids
-renumbered, is_best recomputed, and the result validated.
+dates = outbound date + min..max nights. By default only a nonstop pass is
+scraped per direction (the widget only shows direct flights). With
+--with-connections an extra pass for all offers is scraped and merged too
+(Google's default list often omits direct flights, e.g. VCE->BRU). Legs are
+deduped, flight ids renumbered, is_best recomputed, and the result validated.
 
-Usag:
-    python -m flight_monitor.build_fares                       # full focused run
+Per-day results are cached in --cache-dir so a failed or interrupted run can
+be resumed without re-fetching. Days that fail after retries are skipped and
+the partial dataset is still published (the skipped days are listed); the run
+only exits non-zero if nothing could be fetched.
+
+Usage:
+    python -m flight_monitor.build_fares                        # nonstop-only
+    python -m flight_monitor.build_fares --with-connections     # + all offers
     python -m flight_monitor.build_fares --dates 2026-09-05,2026-09-08   # smoke
-    python -m flight_monitor.build_fares --no-nonstop-pass     # skip nonstop pass
-    python -m flight_monitor.build_fares --dry-run             # show dates only
+    python -m flight_monitor.build_fares --dry-run              # show dates only
 """
 
 import argparse
@@ -110,7 +116,20 @@ def main() -> None:
         "--dates", default="",
         help="Comma-separated dates for BOTH directions (overrides config-derived scope)",
     )
-    parser.add_argument("--no-nonstop-pass", action="store_true")
+    parser.add_argument(
+        "--with-connections",
+        action="store_true",
+        help="Also scrape the all-connections pass and merge it (default: nonstop only)",
+    )
+    parser.add_argument(
+        "--cache-dir",
+        default="data/fares_cache",
+        help="Directory for per-day results, reused to resume interrupted runs",
+    )
+    parser.add_argument(
+        "--retries", type=int, default=2,
+        help="Extra attempts per day after the first failure",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--headed", action="store_true")
     parser.add_argument("--delay", type=float, default=1.5, help="Pause between days")
@@ -130,30 +149,51 @@ def main() -> None:
         print("Dry run - nothing scraped.")
         return
 
-    fetcher = ScraperFetcher(headless=not args.headed, delay_sec=args.delay)
-    nonstop_fetcher = ScraperFetcher(
-        max_stops=0, headless=not args.headed, delay_sec=args.delay
+    fetcher_kwargs = dict(
+        headless=not args.headed,
+        delay_sec=args.delay,
+        cache_dir=args.cache_dir,
+        retries=args.retries,
+        allow_partial=True,
     )
+    nonstop_fetcher = ScraperFetcher(max_stops=0, **fetcher_kwargs)
+    if args.with_connections:
+        connections_fetcher = ScraperFetcher(**fetcher_kwargs)
     directions = [
         ("BRU", "VCE", outbound),
         ("VCE", "BRU", returns),
     ]
 
     datasets = []
+    skipped = []
     for origin, destination, dates in directions:
-        print(f"\nPass 1/2: {origin} -> {destination} (all offers)")
-        full = fetcher.fetch(origin, destination, dates)
-        extras: list[Flight] = []
-        if not args.no_nonstop_pass:
-            print(f"\nPass 2/2: {origin} -> {destination} (nonstop only)")
-            nonstop = nonstop_fetcher.fetch(origin, destination, dates)
-            extras = nonstop.flights
-        merged = merge_passes(full.flights, extras)
-        print(
-            f"Merged {origin}->{destination}: {len(full.flights)} full + "
-            f"{len(extras)} nonstop -> {len(merged)} unique"
-        )
+        print(f"\nPass {origin} -> {destination}")
+        print("  nonstop only")
+        nonstop = nonstop_fetcher.fetch(origin, destination, dates)
+        skipped.extend(nonstop_fetcher.failed_days)
+        extras = nonstop.flights
+
+        if args.with_connections:
+            print("  + all offers")
+            full = connections_fetcher.fetch(origin, destination, dates)
+            skipped.extend(connections_fetcher.failed_days)
+            merged = merge_passes(full.flights, extras)
+            print(
+                f"Merged {origin}->{destination}: {len(full.flights)} full + "
+                f"{len(extras)} nonstop -> {len(merged)} unique"
+            )
+        else:
+            merged = merge_passes([], extras)
+            print(
+                f"Merged {origin}->{destination}: {len(extras)} nonstop -> "
+                f"{len(merged)} unique"
+            )
         datasets.append(merged)
+
+    if skipped:
+        print("\nSkipped days (partial data still published; re-run resumes from cache):")
+        for day in skipped:
+            print(f"  {day}")
 
     fares = FlightDataset(
         source="scraper_google_flights", currency="EUR",
@@ -167,8 +207,11 @@ def main() -> None:
         sys.exit(1)
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
+    payload = fares.to_dict()
+    if skipped:
+        payload["metadata"]["skipped_days"] = [s.split(": ", 1)[0] for s in skipped]
     with open(args.out, "w") as fh:
-        json.dump(fares.to_dict(), fh, indent=2)
+        json.dump(payload, fh, indent=2)
 
     prices = [f.price for f in fares.flights]
     print("-" * 60)
