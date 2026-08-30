@@ -60,7 +60,8 @@
   th { color: var(--muted); font-weight: 600; font-size: 12px; }
   tr:last-child td { border-bottom: none; }
   td.price { font-weight: 700; }
-  td .leg { color: var(--muted); font-size: 12px; }
+  td .leg { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  td.nights, th.nights { text-align: right; color: var(--muted); font-weight: 400; }
   .empty { color: var(--bad); padding: 12px; }
 </style>
 </head>
@@ -123,9 +124,11 @@
 
 <script>
 (function () {
-  const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const MONTH = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const TOP = 100;
-  const VERSION = "5";
+  const VERSION = "6";
   let fares = null;
 
   const $ = (id) => document.getElementById(id);
@@ -175,7 +178,14 @@
     return Number.isFinite(n) ? n : fallback;
   }
 
-  function fmt(i) { return i.slice(5); } // YYYY-MM-DD -> MM-DD
+  function dateLabel(isoStr) {
+    const [y, m, d] = isoStr.split("-").map(Number);
+    return `${WEEK[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]} ${d} ${MONTH[m - 1]}`;
+  }
+
+  function airlineLabel(f) {
+    return (f.airline || "?").replace(/ \/ /g, "+");
+  }
 
   function render() {
     if (!fares) return;
@@ -195,15 +205,14 @@
       }
       const rows = trips.slice(0, TOP).map((c) => {
         const price = `${c.score.toFixed(0)} €`;
-        const trip = `<td>${fmt(c.outDate)} → ${fmt(c.retDate)}</td><td>${c.nights}n</td>`;
-        const leg = (f) => `${f.departure}-${f.arrival} ${(f.airline || "?")}`;
-        const out = `<td><div>${leg(c.out)}</div><div class="leg">${c.out.origin} → ${c.out.destination}</div></td>`;
-        const back = `<td><div>${leg(c.ret)}</div><div class="leg">${c.ret.origin} → ${c.ret.destination}</div></td>`;
-        const sat = `<td>${c.saturday ? DAY_NAMES[new Date(c.saturday + "T00:00:00Z").getUTCDay()] + " " + fmt(c.saturday) : ""}</td>`;
-        return `<tr><td class="price">${price}</td>${trip}${out}${back}${sat}</tr>`;
+        const leg = (f) =>
+          `<td><div>${dateLabel(f.date)} · ${f.departure} → ${f.arrival}</div>` +
+          `<div class="leg">${airlineLabel(f)}</div></td>`;
+        return `<tr><td class="price">${price}</td>${leg(c.out)}${leg(c.ret)}` +
+          `<td class="nights">${c.nights} nights</td></tr>`;
       }).join("");
       $("table").innerHTML = `<table><thead><tr>
-        <th>Price</th><th>Trip</th><th>Nights</th><th>Outbound</th><th>Return</th><th>Sat night</th>
+        <th>Price</th><th>Outbound</th><th>Return</th><th class="nights">Nights</th>
       </tr></thead><tbody>${rows}</tbody></table>`;
     } catch (err) {
       $("table").innerHTML = `<p class="empty">Error while scoring trips: ${err}</p>`;
