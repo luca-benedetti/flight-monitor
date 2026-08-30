@@ -53,6 +53,14 @@
                 font-weight: 700; cursor: pointer; }
   .hint { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
   .ver { color: var(--accent); font-weight: 700; margin-left: 8px; }
+  .sidebar-actions { margin-top: 14px; }
+  .sidebar-actions button { width: 100%; margin-top: 8px; }
+  .hidden { display: none; }
+  #exportText { width: 100%; min-height: 230px; background: var(--bg); color: var(--text);
+                border: 1px solid var(--line); border-radius: 6px; padding: 8px;
+                margin-top: 10px; font: 11px/1.5 ui-monospace, Menlo, monospace;
+                resize: vertical; }
+  .export-hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
   table { width: 100%; border-collapse: collapse; background: var(--panel);
           border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
   th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line);
@@ -108,6 +116,15 @@
       <input type="date" id="includeFrom"></div>
     <div class="field"><label>Return on/after</label>
       <input type="date" id="includeTo"></div>
+    <div class="sidebar-actions">
+      <button class="retry" id="exportBtn">Export widget config</button>
+      <div id="exportPanel" class="hidden">
+        <textarea id="exportText" spellcheck="false"></textarea>
+        <div class="export-hint">Paste this into Scriptable, replacing the
+          CONFIG block at the top of flight-widget.js (until the closing "};").
+          The widget will then score with exactly these filters.</div>
+      </div>
+    </div>
   </aside>
 
   <section class="results">
@@ -128,7 +145,8 @@
   const MONTH = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const TOP = 100;
-  const VERSION = "6";
+  const VERSION = "7";
+  const SAVE_KEY = "fm-filters-v1";
   let fares = null;
 
   const $ = (id) => document.getElementById(id);
@@ -149,6 +167,14 @@
     });
     const btn = $("searchBtn");
     if (btn) btn.addEventListener("click", refresh);
+    const exportBtn = $("exportBtn");
+    if (exportBtn) {
+      exportBtn.addEventListener("click", () => {
+        $("exportText").value = exportWidgetConfig(readOptions());
+        $("exportPanel").classList.remove("hidden");
+        $("exportText").select();
+      });
+    }
   }
 
   function readOptions() {
@@ -187,10 +213,69 @@
     return (f.airline || "?").replace(/ \/ /g, "+");
   }
 
+  function restoreFilters() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "null");
+      if (!saved) return;
+      const set = (id, v) => { const el = $(id); if (el) el.value = v ?? ""; };
+      set("minNights", saved.minNights);
+      set("maxNights", saved.maxNights);
+      set("airlines", saved.airlines);
+      set("earliestDeparture", saved.earliestDeparture);
+      set("depAfterHour", saved.depAfterHour);
+      set("searchFrom", saved.searchFrom);
+      set("searchTo", saved.searchTo);
+      set("includeFrom", saved.includeFrom);
+      set("includeTo", saved.includeTo);
+      const sat = $("saturdayIn"); if (sat) sat.checked = saved.saturdayIn !== false;
+      const ns = $("nonstopOnly"); if (ns) ns.checked = saved.nonstopOnly !== false;
+      const weekdays = $("weekdays");
+      const days = saved.depWeekdays || [];
+      if (weekdays) weekdays.querySelectorAll("button").forEach((b) =>
+        b.classList.toggle("on", days.includes(Number(b.dataset.d))));
+    } catch (e) { /* ignore broken saved state */ }
+  }
+
+  function persist(opts) {
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(opts)); } catch (e) { /* storage full/blocked */ }
+  }
+
+  function exportWidgetConfig(opts) {
+    const lines = [];
+    const add = (k, v) => {
+      let val;
+      if (Array.isArray(v)) val = "[" + v.join(",") + "]";
+      else if (typeof v === "string") val = JSON.stringify(v);
+      else if (typeof v === "boolean") val = String(v);
+      else val = String(v);
+      lines.push(`  ${k}: ${val},`);
+    };
+    add("from", opts.from);
+    add("to", opts.to);
+    add("faresUrl", "https://luca-benedetti.github.io/flight-monitor/fares.json");
+    add("engineUrl", "https://luca-benedetti.github.io/flight-monitor/filter.js");
+    add("minNights", opts.minNights);
+    add("maxNights", opts.maxNights);
+    add("nonstopOnly", opts.nonstopOnly);
+    add("airlines", opts.airlines);
+    add("saturdayIn", opts.saturdayIn);
+    add("earliestDeparture", opts.earliestDeparture);
+    add("depWeekdays", opts.depWeekdays);
+    add("depAfterHour", opts.depAfterHour);
+    add("searchFrom", opts.searchFrom);
+    add("searchTo", opts.searchTo);
+    add("includeFrom", opts.includeFrom);
+    add("includeTo", opts.includeTo);
+    add("topLines", 4);
+    add("currency", "€");
+    return "const CONFIG = {\n" + lines.join("\n") + "};\n";
+  }
+
   function render() {
     if (!fares) return;
     try {
       const opts = readOptions();
+      persist(opts);
       const trips = Filter.computeTrips(fares.flights || [], opts);
       $("count").textContent = `${trips.length} round trips match (showing top ${Math.min(TOP, trips.length)})`;
       $("fresh").textContent = fares.metadata ? `data: ${fares.metadata.generated_at || "?"}` : "";
@@ -244,6 +329,7 @@
   }
 
   wireControls();
+  restoreFilters();
   load();
 })();
 </script>
