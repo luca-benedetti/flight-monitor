@@ -50,15 +50,13 @@ const CONFIG = {
 // Rendering helpers (do not edit below this line)
 // ---------------------------------------------------------------------------
 
-function shortDate(isoStr) {
-  const [y, m, d] = isoStr.split("-").map(Number);
-  const month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][m - 1];
-  return `${d} ${month}`;
-}
+const MONTH = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function airlineLabel(flight) {
-  return (flight.airline || "?").replace(/ \/ /g, "+");
+function goodDate(isoStr) {
+  const [y, m, d] = isoStr.split("-").map(Number);
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return `${days[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]} ${d} ${MONTH[m - 1]}`;
 }
 
 function activeFilterLabels(cfg) {
@@ -82,9 +80,9 @@ function activeFilterLabels(cfg) {
 
 function comboLine(c) {
   const price = `${CONFIG.currency}${c.score.toFixed(0)}`;
-  const trip = `${shortDate(c.outDate)} → ${shortDate(c.retDate)} · ${c.nights}n`;
-  const flight = `${c.out.departure}-${c.out.arrival} ${airlineLabel(c.out)}`;
-  return { price, trip, flight };
+  const trip = `${goodDate(c.outDate)} → ${goodDate(c.retDate)}`;
+  const departures = `leave ${c.out.departure} · return ${c.ret.departure}`;
+  return { price, trip, departures };
 }
 
 // ---------------------------------------------------------------------------
@@ -98,7 +96,7 @@ async function buildWidget(combos, fares) {
   const widget = new ListWidget();
   widget.backgroundColor = new Color("#0f1115", 1);
 
-  const header = widget.addText(`BRU → VCE · best trips`);
+  const header = widget.addText(`BRU ⇄ VCE · best trips`);
   header.font = Font.boldSystemFont(15);
   header.textColor = Color.white();
 
@@ -108,11 +106,11 @@ async function buildWidget(combos, fares) {
     nothing.textColor = Color.gray();
   } else {
     for (const c of combos.slice(0, CONFIG.topLines)) {
-      const { price, trip, flight } = comboLine(c);
+      const { price, trip, departures } = comboLine(c);
       const row = widget.addText(`${price}   ${trip}`);
       row.font = Font.mediumSystemFont(13);
       row.textColor = new Color("#8ae");
-      const sub = widget.addText(`        ${flight}`);
+      const sub = widget.addText(`        ${departures}`);
       sub.font = Font.regularSystemFont(10);
       sub.textColor = new Color("#8a8f98");
     }
