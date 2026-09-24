@@ -2,16 +2,16 @@
   "version": 1,
   "filters": {
     "minNights": 4,
-    "maxNights": 25,
+    "maxNights": 11,
     "nonstopOnly": true,
     "airlines": "",
     "saturdayIn": true,
-    "earliestDeparture": "",
+    "earliestDeparture": "08:37",
     "depWeekdays": [],
-    "depAfterHour": 0,
-    "searchFrom": "2026-12-17",
-    "searchTo": "",
-    "includeFrom": "2026-12-24",
-    "includeTo": "2027-01-06"
+    "depAfterHour": 9,
+    "searchFrom": "2027-02-01",
+    "searchTo": "2027-02-21",
+    "includeFrom": "2027-02-05",
+    "includeTo": "2027-02-07"
   }
 }
