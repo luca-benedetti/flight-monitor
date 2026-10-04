@@ -12,6 +12,7 @@ build/
 !data/round_trips.json
 !docs/fares.json
 !web/config.json
+!web/config-gf.json
 
 # Environment
 .env
