@@ -56,6 +56,11 @@
   .hint { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
   .ver { color: var(--accent); font-weight: 700; margin-left: 8px; }
   .sidebar-actions { margin-top: 14px; }
+  .profile { display: flex; gap: 6px; margin-bottom: 14px; }
+  .profile button { flex: 1; padding: 7px 4px; border-radius: 8px; cursor: pointer;
+                    border: 1px solid var(--line); background: var(--bg);
+                    color: var(--muted); font-size: 12px; }
+  .profile button.on { background: var(--accent); color: #0c0f14; border-color: var(--accent); }
   .sidebar-actions button { width: 100%; margin-top: 8px; }
   .hidden { display: none; }
   #exportText { width: 100%; min-height: 230px; background: var(--bg); color: var(--text);
@@ -84,6 +89,10 @@
 <main>
   <aside class="filters">
     <h2>Trip</h2>
+    <div class="profile">
+      <button data-profile="me" class="on">BRU → VCE</button>
+      <button data-profile="gf">VCE → BRU</button>
+    </div>
     <div class="inline">
       <div class="field"><label>Min nights</label>
         <input type="number" id="minNights" value="4" min="1" max="30"></div>
@@ -155,13 +164,15 @@
   const MONTH = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const TOP = 100;
-  const VERSION = "8";
-  const SAVE_KEY = "fm-filters-v1";
-  const PAT_KEY = "fm-gh-pat";
+  const VERSION = "9";
+  const PROFILES = {
+    me: { file: "config.json", from: "BRU", to: "VCE", saveKey: "fm-filters-v1", patKey: "fm-gh-pat" },
+    gf: { file: "config-gf.json", from: "VCE", to: "BRU", saveKey: "fm-filters-gf-v1", patKey: "fm-gh-pat-gf" },
+  };
   const REPO = "luca-benedetti/flight-monitor";
-  const CONFIG_PATH = "web/config.json";
   let fares = null;
   let remoteFilters = null;
+  let profile = "me";
 
   const $ = (id) => document.getElementById(id);
 
@@ -189,13 +200,25 @@
         $("exportText").select();
       });
     }
+    // Profile switching (BRU→VCE / VCE→BRU)
+    document.querySelectorAll(".profile button").forEach((b) => {
+      b.addEventListener("click", () => {
+        const newProfile = b.dataset.profile;
+        if (newProfile && newProfile !== profile) {
+          profile = newProfile;
+          document.querySelectorAll(".profile button").forEach((btn) =>
+            btn.classList.toggle("on", btn.dataset.profile === profile));
+          load();
+        }
+      });
+    });
     const syncBtn = $("syncBtn");
     if (syncBtn) {
       syncBtn.addEventListener("click", () => {
         const panel = $("syncPanel");
         const patInput = $("patInput");
         if (!patInput.value) {
-          try { patInput.value = localStorage.getItem(PAT_KEY) || ""; } catch (e) {}
+          try { patInput.value = localStorage.getItem(PROFILES[profile].patKey) || ""; } catch (e) {}
         }
         panel.classList.toggle("hidden");
       });
@@ -211,7 +234,7 @@
       weekdays.querySelectorAll("button.on").forEach((b) => days.push(Number(b.dataset.d)));
     }
     return {
-      from: "BRU", to: "VCE",
+from: PROFILES[profile].from, to: PROFILES[profile].to,
       minNights: int($("minNights").value, 4) || 4,
       maxNights: int($("maxNights").value, 10) || 10,
       saturdayIn: $("saturdayIn").checked,
@@ -242,7 +265,7 @@
 
   function restoreFilters(base) {
     try {
-      const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "null") || base;
+      const saved = JSON.parse(localStorage.getItem(PROFILES[profile].saveKey) || "null") || base;
       if (!saved) return;
       const set = (id, v) => { const el = $(id); if (el) el.value = v ?? ""; };
       set("minNights", saved.minNights);
@@ -264,7 +287,7 @@
   }
 
   function persist(opts) {
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify(opts)); } catch (e) { /* storage full/blocked */ }
+    try { localStorage.setItem(PROFILES[profile].saveKey, JSON.stringify(opts)); } catch (e) { /* storage full/blocked */ }
   }
 
   function exportWidgetConfig(opts) {
@@ -343,10 +366,11 @@
 
   function load() {
     $("ver").textContent = "v" + VERSION;
+    $("h1").textContent = `${PROFILES[profile].from} ⇄ ${PROFILES[profile].to} · flight search`;
     Promise.all([
       fetch("fares.json", { cache: "no-cache" })
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))),
-      fetch("config.json", { cache: "no-cache" })
+      fetch(PROFILES[profile].file, { cache: "no-cache" })
         .then((r) => (r.ok ? r.json() : Promise.resolve(null)))
         .catch(() => null),
     ]).then(([d, cfg]) => {
@@ -386,21 +410,22 @@
       status.textContent = "Paste a GitHub token first (fine-grained, Contents: read/write on this repo).";
       return;
     }
-    localStorage.setItem(PAT_KEY, token);
+    const p = PROFILES[profile];
+    localStorage.setItem(p.patKey, token);
     const filters = syncedFilters(readOptions());
     const payload = JSON.stringify({ version: 1, filters: filters }, null, 2);
     const headers = {
       "Authorization": `Bearer ${token}`,
       "Accept": "application/vnd.github+json",
     };
-    status.textContent = "Updating config.json…";
+    status.textContent = `Updating ${p.file} (${profile})…`;
     try {
       let sha = null;
-      const head = await fetch(`https://api.github.com/repos/${REPO}/contents/${CONFIG_PATH}`, { headers });
+      const head = await fetch(`https://api.github.com/repos/${REPO}/contents/${p.file}`, { headers });
       if (head.ok) sha = (await head.json()).sha;
-      const body = { message: "config: update filters from web app", content: toBase64(payload) };
+      const body = { message: `config: update filters (${profile}) from web app`, content: toBase64(payload) };
       if (sha) body.sha = sha;
-      const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/${CONFIG_PATH}`, {
+      const resp = await fetch(`https://api.github.com/repos/${REPO}/contents/${p.file}`, {
         method: "PUT",
         headers: { ...headers, "Content-Type": "application/json" },
         body: JSON.stringify(body),
