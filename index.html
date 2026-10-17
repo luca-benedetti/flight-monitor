@@ -116,17 +116,23 @@
       </div></div>
     <div class="field"><label>Depart at/after hour (24h · 0 = any)</label>
       <input type="number" id="depAfterHour" value="0" min="0" max="23"></div>
-    <div class="inline">
-      <div class="field"><label>Departure from</label>
-        <input type="date" id="searchFrom"></div>
-      <div class="field"><label>Departure to</label>
-        <input type="date" id="searchTo"></div>
+
+    <h2>Dates</h2>
+    <div class="field"><label>Trip must be within (entire trip inside)</label>
+      <div class="inline">
+        <div class="field"><label>From</label><input type="date" id="tripWithinFrom"></div>
+        <div class="field"><label>To</label><input type="date" id="tripWithinTo"></div>
+      </div>
+      <div class="hint">Outbound ≥ From AND Return ≤ To</div>
     </div>
-    <h2>Trip must span</h2>
-    <div class="field"><label>Leave on/before</label>
-      <input type="date" id="includeFrom"></div>
-    <div class="field"><label>Return on/after</label>
-      <input type="date" id="includeTo"></div>
+    <div class="field"><label>Trip must contain (trip covers these dates)</label>
+      <div class="inline">
+        <div class="field"><label>From</label><input type="date" id="tripContainsFrom"></div>
+        <div class="field"><label>To</label><input type="date" id="tripContainsTo"></div>
+      </div>
+      <div class="hint">Outbound ≤ From AND Return ≥ To</div>
+    </div>
+
     <div class="sidebar-actions">
       <button class="retry" id="exportBtn">Export widget config</button>
       <div id="exportPanel" class="hidden">
@@ -164,7 +170,7 @@
   const MONTH = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const TOP = 100;
-  const VERSION = "9";
+  const VERSION = "10";
   const PROFILES = {
     me: { file: "config.json", from: "BRU", to: "VCE", saveKey: "fm-filters-v1", patKey: "fm-gh-pat" },
     gf: { file: "config-gf.json", from: "VCE", to: "BRU", saveKey: "fm-filters-gf-v1", patKey: "fm-gh-pat-gf" },
@@ -234,7 +240,7 @@
       weekdays.querySelectorAll("button.on").forEach((b) => days.push(Number(b.dataset.d)));
     }
     return {
-from: PROFILES[profile].from, to: PROFILES[profile].to,
+      from: PROFILES[profile].from, to: PROFILES[profile].to,
       minNights: int($("minNights").value, 4) || 4,
       maxNights: int($("maxNights").value, 10) || 10,
       saturdayIn: $("saturdayIn").checked,
@@ -243,10 +249,11 @@ from: PROFILES[profile].from, to: PROFILES[profile].to,
       earliestDeparture: $("earliestDeparture").value || "",
       depWeekdays: days,
       depAfterHour: int($("depAfterHour").value, 0),
-      searchFrom: $("searchFrom").value || "",
-      searchTo: $("searchTo").value || "",
-      includeFrom: $("includeFrom").value || "",
-      includeTo: $("includeTo").value || "",
+      // New interval-based date filters
+      tripWithinFrom: $("tripWithinFrom").value || "",
+      tripWithinTo: $("tripWithinTo").value || "",
+      tripContainsFrom: $("tripContainsFrom").value || "",
+      tripContainsTo: $("tripContainsTo").value || "",
     };
   }
   function int(v, fallback) {
@@ -273,10 +280,13 @@ from: PROFILES[profile].from, to: PROFILES[profile].to,
       set("airlines", saved.airlines);
       set("earliestDeparture", saved.earliestDeparture);
       set("depAfterHour", saved.depAfterHour);
-      set("searchFrom", saved.searchFrom);
-      set("searchTo", saved.searchTo);
-      set("includeFrom", saved.includeFrom);
-      set("includeTo", saved.includeTo);
+      // New interval-based date filters, with migration from the old fields:
+      //   includeFrom/includeTo had the exact "trip must contain" semantics
+      //   searchFrom mapped to an outbound lower bound (trip must be within)
+      set("tripWithinFrom", saved.tripWithinFrom ?? saved.searchFrom);
+      set("tripWithinTo", saved.tripWithinTo);
+      set("tripContainsFrom", saved.tripContainsFrom ?? saved.includeFrom);
+      set("tripContainsTo", saved.tripContainsTo ?? saved.includeTo);
       const sat = $("saturdayIn"); if (sat) sat.checked = saved.saturdayIn !== false;
       const ns = $("nonstopOnly"); if (ns) ns.checked = saved.nonstopOnly !== false;
       const weekdays = $("weekdays");
@@ -312,10 +322,10 @@ from: PROFILES[profile].from, to: PROFILES[profile].to,
     add("earliestDeparture", opts.earliestDeparture);
     add("depWeekdays", opts.depWeekdays);
     add("depAfterHour", opts.depAfterHour);
-    add("searchFrom", opts.searchFrom);
-    add("searchTo", opts.searchTo);
-    add("includeFrom", opts.includeFrom);
-    add("includeTo", opts.includeTo);
+    add("tripWithinFrom", opts.tripWithinFrom);
+    add("tripWithinTo", opts.tripWithinTo);
+    add("tripContainsFrom", opts.tripContainsFrom);
+    add("tripContainsTo", opts.tripContainsTo);
     add("topLines", 4);
     add("currency", "€");
     return "const CONFIG = {\n" + lines.join("\n") + "};\n";
@@ -391,8 +401,8 @@ from: PROFILES[profile].from, to: PROFILES[profile].to,
       nonstopOnly: opts.nonstopOnly, airlines: opts.airlines,
       saturdayIn: opts.saturdayIn, earliestDeparture: opts.earliestDeparture,
       depWeekdays: opts.depWeekdays, depAfterHour: opts.depAfterHour,
-      searchFrom: opts.searchFrom, searchTo: opts.searchTo,
-      includeFrom: opts.includeFrom, includeTo: opts.includeTo,
+      tripWithinFrom: opts.tripWithinFrom, tripWithinTo: opts.tripWithinTo,
+      tripContainsFrom: opts.tripContainsFrom, tripContainsTo: opts.tripContainsTo,
     };
   }
 

@@ -11,9 +11,10 @@
 //   earliestDeparture         "HH:MM": drop ANY leg leaving before this
 //   depWeekdays               numbers 0=Sun..6=Sat; restrict OUTBOUND days
 //   depAfterHour              OUTBOUND only: depart at/after this hour (24h)
-//   searchFrom, searchTo      OUTBOUND window (YYYY-MM-DD, "" = open)
-//   includeFrom / includeTo   trip must span the whole range: leave on/before
-//                             includeFrom and return on/after includeTo ("" = off)
+//   tripWithinFrom, tripWithinTo       entire trip must fall inside this range:
+//                                      outbound >= from AND return <= to
+//   tripContainsFrom, tripContainsTo   trip must cover this range:
+//                                      outbound <= from AND return >= to
 //
 // Ranking: price only (ties: longer trip first, then earlier departures).
 (function (global) {
@@ -72,8 +73,6 @@
     if (o.depAfterHour && toMinutes(flight.departure) < Number(o.depAfterHour) * 60) {
       return false;
     }
-    if (o.searchFrom && flight.date < o.searchFrom) return false;
-    if (o.searchTo && flight.date > o.searchTo) return false;
     return true;
   }
 
@@ -104,8 +103,12 @@
       const outDate = toDate(outDateStr);
       for (let nights = minN; nights <= maxN; nights++) {
         const retIso = iso(addDays(outDate, nights));
-        if (o.includeFrom && !(outDateStr <= o.includeFrom)) continue;
-        if (o.includeTo && !(retIso >= o.includeTo)) continue;
+        // Trip must be within [tripWithinFrom, tripWithinTo]
+        if (o.tripWithinFrom && !(outDateStr >= o.tripWithinFrom)) continue;
+        if (o.tripWithinTo && !(retIso <= o.tripWithinTo)) continue;
+        // Trip must contain [tripContainsFrom, tripContainsTo]
+        if (o.tripContainsFrom && !(outDateStr <= o.tripContainsFrom)) continue;
+        if (o.tripContainsTo && !(retIso >= o.tripContainsTo)) continue;
         const retFlights = retByDate.get(retIso) || [];
         if (retFlights.length === 0) continue;
         if (o.saturdayIn && !hasSaturdayNight(outDate, toDate(retIso))) continue;
