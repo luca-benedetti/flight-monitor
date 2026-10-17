@@ -6,183 +6,470 @@
 <title>BRU ⇄ VCE flights</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.png">
-<script src="filter.js"></script>
+<script src="filter.js?v=11"></script>
+<script src="daterange.js?v=11"></script>
 <style>
   :root {
-    --bg: #0f1115; --panel: #171a21; --line: #262c36;
-    --text: #e6e9ef; --muted: #8a8f98; --accent: #8ae;
-    --warn: #e8a33d; --bad: #f66;
+    --bg: #0b0d12;
+    --panel: #141821;
+    --panel-2: #1b2029;
+    --line: #2a3140;
+    --line-soft: #212734;
+    --text: #e8ebf0;
+    --muted: #98a0ad;
+    --accent: #6ea8fe;
+    --accent-2: #4d7fd6;
+    --on-accent: #0a0d12;
+    --good: #6ee7a8;
+    --warn: #e8b45a;
+    --bad: #f2707a;
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 12px 40px rgba(0, 0, 0, .45);
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text);
-         font: 14px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; }
-  header { padding: 14px 18px; border-bottom: 1px solid var(--line);
-           background: var(--panel); }
-  header h1 { margin: 0; font-size: 17px; letter-spacing: .3px; }
-  header p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
-  main { display: grid; grid-template-columns: 300px 1fr; gap: 16px;
-         padding: 16px 18px; max-width: 1100px; margin: 0 auto; }
-  @media (max-width: 820px) { main { grid-template-columns: 1fr; } }
-  .filters { background: var(--panel); border: 1px solid var(--line);
-             border-radius: 10px; padding: 14px; height: fit-content; }
-  .filters h2 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase;
-                letter-spacing: .8px; color: var(--muted); }
-  .field { margin-bottom: 12px; }
-  .field label { display: block; font-size: 12px; color: var(--muted);
-                 margin-bottom: 4px; }
-  .field input[type="number"], .field input[type="text"], .field input[type="date"],
-  .field input[type="time"] {
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  h1, h2, h3 { margin: 0; }
+  button { font: inherit; }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 12px 18px; background: rgba(20, 24, 33, .92);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+  }
+  .brand { min-width: 0; }
+  .brand h1 { font-size: 18px; letter-spacing: .2px; }
+  .brand .subline { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+  .brand .ver { color: var(--accent); font-weight: 700; margin-left: 8px; }
+  .direction {
+    margin-left: auto; display: flex; gap: 4px; padding: 4px;
+    background: var(--bg); border: 1px solid var(--line); border-radius: 999px;
+  }
+  .direction button {
+    border: 0; background: transparent; color: var(--muted); cursor: pointer;
+    padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600;
+    white-space: nowrap;
+  }
+  .direction button.on { background: var(--accent); color: var(--on-accent); }
+
+  /* ---------- layout ---------- */
+  main {
+    display: grid; grid-template-columns: 340px minmax(0, 1fr);
+    gap: 18px; padding: 18px; max-width: 1160px; margin: 0 auto;
+    align-items: start;
+  }
+  .results { min-width: 0; order: 2; }
+  .filters { order: 1; }
+
+  /* ---------- buttons ---------- */
+  .primary, .btn, .ghost, .search {
+    border: 0; border-radius: 10px; cursor: pointer; font-size: 14px;
+    font-weight: 600; padding: 9px 15px; transition: filter .15s, background .15s;
+  }
+  .primary, .search, .btn.submit {
+    background: var(--accent); color: var(--on-accent);
+  }
+  .primary:hover, .search:hover { filter: brightness(1.08); }
+  .btn {
+    display: block; width: 100%; margin-top: 8px;
+    background: var(--panel-2); color: var(--text); border: 1px solid var(--line);
+  }
+  .btn:hover { border-color: var(--accent-2); }
+  .ghost {
+    background: transparent; color: var(--muted); border: 1px solid var(--line);
+    padding: 6px 12px;
+  }
+  .ghost:hover { color: var(--text); border-color: var(--accent-2); }
+
+  /* ---------- results toolbar ---------- */
+  .toolbar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .toolbar .count { font-size: 14px; font-weight: 600; }
+  .toolbar .fresh { font-size: 12px; color: var(--muted); }
+  .toolbar .spacer { flex: 1; }
+  .warn { font-size: 12px; color: var(--warn); margin-bottom: 8px; }
+
+  /* ---------- active chips ---------- */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .chips:empty { display: none; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(110, 168, 254, .12); color: var(--accent);
+    border: 1px solid rgba(110, 168, 254, .35); border-radius: 999px;
+    padding: 4px 10px; font-size: 12px; cursor: pointer; font-weight: 500;
+  }
+  .chip .chip-x { opacity: .7; font-size: 11px; }
+  .chip:hover { background: rgba(110, 168, 254, .2); }
+
+  /* ---------- trip cards ---------- */
+  .trips { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .trip {
+    display: grid; grid-template-columns: 92px 1fr 1fr 96px; align-items: center;
+    gap: 14px; background: var(--panel); border: 1px solid var(--line-soft);
+    border-radius: var(--radius); padding: 13px 16px;
+  }
+  .trip:hover { border-color: var(--line); }
+  .trip-price { font-size: 22px; font-weight: 800; color: var(--accent); }
+  .trip-price span { font-size: 13px; font-weight: 600; margin-left: 2px; }
+  .trip-leg { min-width: 0; }
+  .trip-leg-head {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .6px;
+    color: var(--muted); display: flex; align-items: center; gap: 6px;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot.out { background: var(--accent); }
+  .dot.ret { background: var(--good); }
+  .trip-leg-main { font-size: 14px; font-weight: 600; margin-top: 2px; }
+  .trip-leg-sub { font-size: 12px; color: var(--muted); }
+  .trip-nights { text-align: right; font-size: 15px; font-weight: 700; color: var(--muted); }
+  .trip-nights span { display: block; font-size: 11px; font-weight: 500; }
+  .empty { color: var(--bad); padding: 16px; }
+
+  /* ---------- filters panel ---------- */
+  .filters {
+    position: sticky; top: 84px;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px;
+    max-height: calc(100vh - 104px); overflow-y: auto;
+  }
+  .filters-head {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+  }
+  .filters-head h2 { font-size: 15px; }
+  .filters-head .ghost { margin-left: auto; }
+  .group { margin-bottom: 18px; }
+  .group h3 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .9px;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .field { display: block; margin-bottom: 12px; }
+  .field > span, .field label {
+    display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px;
+  }
+  .field input[type="number"], .field input[type="text"],
+  .field input[type="date"], .field input[type="time"] {
     width: 100%; background: var(--bg); color: var(--text);
-    border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px;
-    font-size: 13px; }
-  .inline { display: flex; gap: 8px; }
-  .inline .field { flex: 1; }
-  .check { display: flex; align-items: center; gap: 7px; margin-bottom: 6px;
-           font-size: 13px; cursor: pointer; }
-  .check input { width: 16px; height: 16px; }
-  .weekdays { display: flex; gap: 4px; }
-  .weekdays button { flex: 1; padding: 6px 2px; border-radius: 6px; cursor: pointer;
-                     border: 1px solid var(--line); background: var(--bg);
-                     color: var(--muted); font-size: 11px; }
-  .weekdays button.on { background: var(--accent); color: #0c0f14; border-color: var(--accent); }
-  .results { min-width: 0; }
-  .bar { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
-  .bar .count { font-size: 13px; color: var(--muted); }
-  .bar .fresh { font-size: 12px; color: var(--muted); margin-left: auto; }
-  .warn { font-size: 12px; color: var(--warn); }
-  .bar button, .retry { background: var(--accent); color: #0c0f14; border: 0;
-                border-radius: 6px; padding: 6px 14px; font-size: 13px;
-                font-weight: 700; cursor: pointer; }
-  .hint { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
-  .ver { color: var(--accent); font-weight: 700; margin-left: 8px; }
-  .sidebar-actions { margin-top: 14px; }
-  .profile { display: flex; gap: 6px; margin-bottom: 14px; }
-  .profile button { flex: 1; padding: 7px 4px; border-radius: 8px; cursor: pointer;
-                    border: 1px solid var(--line); background: var(--bg);
-                    color: var(--muted); font-size: 12px; }
-  .profile button.on { background: var(--accent); color: #0c0f14; border-color: var(--accent); }
-  .sidebar-actions button { width: 100%; margin-top: 8px; }
-  .hidden { display: none; }
-  #exportText { width: 100%; min-height: 230px; background: var(--bg); color: var(--text);
-                border: 1px solid var(--line); border-radius: 6px; padding: 8px;
-                margin-top: 10px; font: 11px/1.5 ui-monospace, Menlo, monospace;
-                resize: vertical; }
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 9px 11px; font-size: 14px;
+  }
+  .field input:focus { outline: none; border-color: var(--accent-2); }
+  .inline { display: flex; gap: 10px; }
+  .inline .field { flex: 1; margin-bottom: 12px; }
+  .check {
+    display: flex; align-items: center; gap: 9px; margin-bottom: 9px;
+    font-size: 14px; cursor: pointer;
+  }
+  .check input { width: 17px; height: 17px; accent-color: var(--accent); }
+  .weekdays { display: flex; gap: 5px; }
+  .weekdays button {
+    flex: 1; padding: 8px 2px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--bg); color: var(--muted);
+    font-size: 11px;
+  }
+  .weekdays button.on {
+    background: var(--accent); color: var(--on-accent); border-color: var(--accent);
+  }
+
+  /* ---------- advanced ---------- */
+  details.advanced { border-top: 1px solid var(--line-soft); padding-top: 12px; }
+  details.advanced > summary {
+    cursor: pointer; font-size: 11px; text-transform: uppercase;
+    letter-spacing: .9px; color: var(--muted); list-style: none;
+    display: flex; align-items: center; gap: 6px; margin-bottom: 12px;
+  }
+  details.advanced > summary::before { content: "▸"; transition: transform .15s; }
+  details.advanced[open] > summary::before { transform: rotate(90deg); }
+  details.advanced > summary::-webkit-details-marker { display: none; }
+
+  /* ---------- range picker ---------- */
+  .range { position: relative; margin-bottom: 16px; }
+  .range-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 8px;
+  }
+  .range-title { font-size: 13px; font-weight: 600; }
+  .range-sub { font-size: 11px; color: var(--muted); }
+  .range-presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .range-presets button {
+    border: 1px solid var(--line); background: var(--bg); color: var(--muted);
+    border-radius: 999px; padding: 5px 11px; font-size: 12px; cursor: pointer;
+  }
+  .range-presets button:hover { color: var(--text); border-color: var(--accent-2); }
+  .range-value {
+    width: 100%; text-align: left; cursor: pointer;
+    background: var(--bg); color: var(--text);
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 9px 11px; font-size: 14px;
+  }
+  .range-value::after { content: "▾"; float: right; color: var(--muted); }
+  .range-value.is-empty { color: var(--muted); }
+  .range-value:hover { border-color: var(--accent-2); }
+
+  /* calendar popover */
+  .cal-pop {
+    display: none; position: fixed; z-index: 60; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(660px, calc(100vw - 24px));
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 16px; padding: 14px; box-shadow: var(--shadow);
+  }
+  .cal-pop.open { display: block; }
+  .cal-backdrop {
+    display: none; position: fixed; inset: 0; z-index: 55;
+    background: rgba(0, 0, 0, .55);
+  }
+  body.cal-open .cal-backdrop { display: block; }
+  body.cal-open .filters { z-index: 61; }
+  .cal-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .cal-arrow {
+    width: 34px; height: 34px; border-radius: 9px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--bg); color: var(--text);
+    font-size: 18px; line-height: 1;
+  }
+  .cal-arrow:hover { border-color: var(--accent-2); }
+  .cal-range {
+    margin-left: auto; margin-right: auto; font-size: 12px; color: var(--muted);
+    font-weight: 600;
+  }
+  .cal-grids { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .cal-month-title {
+    text-align: center; font-size: 13px; font-weight: 600; margin-bottom: 8px;
+  }
+  .cal-wd, .cal-days {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+  }
+  .cal-wd span {
+    text-align: center; font-size: 10px; color: var(--muted); padding: 4px 0;
+  }
+  .cal-day {
+    aspect-ratio: 1; border: 0; background: transparent; color: var(--text);
+    border-radius: 8px; cursor: pointer; font-size: 13px;
+  }
+  .cal-day:hover { background: var(--line-soft); }
+  .cal-day.is-empty { visibility: hidden; }
+  .cal-day.in-range { background: rgba(110, 168, 254, .14); border-radius: 0; }
+  .cal-day.is-start, .cal-day.is-end {
+    background: var(--accent); color: var(--on-accent); font-weight: 700;
+  }
+  .cal-day.is-start { border-radius: 8px 0 0 8px; }
+  .cal-day.is-end { border-radius: 0 8px 8px 0; }
+  .cal-day.is-start.is-end { border-radius: 8px; }
+  .cal-actions {
+    display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;
+  }
+  .cal-actions .primary { background: var(--accent); color: var(--on-accent); }
+
+  /* ---------- export / sync ---------- */
+  .sidebar-actions { border-top: 1px solid var(--line-soft); padding-top: 14px; }
+  #exportText {
+    width: 100%; min-height: 200px; background: var(--bg); color: var(--text);
+    border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 10px;
+    margin-top: 10px; font: 11px/1.5 ui-monospace, Menlo, monospace;
+    resize: vertical;
+  }
   .export-hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
-  table { width: 100%; border-collapse: collapse; background: var(--panel);
-          border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line);
-           font-size: 13px; }
-  th { color: var(--muted); font-weight: 600; font-size: 12px; }
-  tr:last-child td { border-bottom: none; }
-  td.price { font-weight: 700; }
-  td .leg { color: var(--muted); font-size: 12px; margin-top: 2px; }
-  td.nights, th.nights { text-align: right; color: var(--muted); font-weight: 400; }
-  .empty { color: var(--bad); padding: 12px; }
+  .hidden { display: none; }
+
+  /* ---------- mobile ---------- */
+  .only-mobile { display: none; }
+  .backdrop { display: none; }
+  @media (max-width: 860px) {
+    main { grid-template-columns: 1fr; padding: 12px; gap: 12px; }
+    .topbar { padding: 10px 12px; gap: 10px; }
+    .direction { margin-left: 0; width: 100%; }
+    .direction button { flex: 1; }
+    .only-mobile { display: inline-flex; }
+    .filters {
+      position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 50;
+      max-height: 88vh; border-radius: 20px 20px 0 0;
+      transform: translateY(110%); transition: transform .25s ease;
+      box-shadow: var(--shadow);
+    }
+    body.filters-open .filters { transform: translateY(0); }
+    .backdrop {
+      display: block; position: fixed; inset: 0; z-index: 40;
+      background: rgba(0, 0, 0, .5); opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    body.filters-open .backdrop { opacity: 1; pointer-events: auto; }
+  }
+  @media (max-width: 640px) {
+    .cal-grids { grid-template-columns: 1fr; }
+    .cal-month:nth-child(2) { display: none; }
+    .trip { grid-template-columns: 1fr 1fr; }
+    .trip-price { grid-column: 1 / -1; }
+    .trip-nights { grid-column: 1 / -1; text-align: left; }
+  }
 </style>
 </head>
 <body>
-<header>
-  <h1 id="h1">BRU ⇄ VCE · flight search</h1>
-  <p id="meta">loading fares.json…<span class="ver" id="ver"></span></p>
+<header class="topbar">
+  <div class="brand">
+    <h1 id="h1">BRU ⇄ VCE · flight search</h1>
+    <p class="subline"><span id="meta">Loading fares…</span><span class="ver" id="ver"></span></p>
+  </div>
+  <div class="direction" role="tablist" aria-label="Direction">
+    <button data-profile="me" class="on">BRU → VCE</button>
+    <button data-profile="gf">VCE → BRU</button>
+  </div>
 </header>
 
 <main>
-  <aside class="filters">
-    <h2>Trip</h2>
-    <div class="profile">
-      <button data-profile="me" class="on">BRU → VCE</button>
-      <button data-profile="gf">VCE → BRU</button>
+  <section class="results">
+    <div class="toolbar">
+      <span class="count" id="count"></span>
+      <span class="fresh" id="fresh"></span>
+      <span class="spacer"></span>
+      <button class="primary only-mobile" id="filtersToggle">Filters</button>
+      <button class="primary" id="searchBtn">Search</button>
     </div>
-    <div class="inline">
-      <div class="field"><label>Min nights</label>
-        <input type="number" id="minNights" value="4" min="1" max="30"></div>
-      <div class="field"><label>Max nights</label>
-        <input type="number" id="maxNights" value="10" min="1" max="30"></div>
-    </div>
-    <label class="check"><input type="checkbox" id="saturdayIn" checked> Saturday night in trip</label>
-    <label class="check"><input type="checkbox" id="nonstopOnly" checked> Nonstop only</label>
-    <div class="field"><label>Airlines (substrings, comma)</label>
-      <input type="text" id="airlines" placeholder="e.g. SN"></div>
-    <div class="field"><label>Earliest departure (all legs)</label>
-      <input type="time" id="earliestDeparture"></div>
+    <div id="warn" class="warn"></div>
+    <div id="activeChips" class="chips"></div>
+    <div id="results"><p class="empty">Loading fares…</p></div>
+  </section>
 
-    <h2>Leave (outbound)</h2>
-    <div class="field"><label>Allowed weekdays</label>
-      <div class="weekdays" id="weekdays">
-        <button data-d="0">Sun</button><button data-d="1">Mon</button>
-        <button data-d="2">Tue</button><button data-d="3">Wed</button>
-        <button data-d="4">Thu</button><button data-d="5">Fri</button>
-        <button data-d="6">Sat</button>
-      </div></div>
-    <div class="field"><label>Depart at/after hour (24h · 0 = any)</label>
-      <input type="number" id="depAfterHour" value="0" min="0" max="23"></div>
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="filters" id="filtersPanel">
+    <div class="filters-head">
+      <h2>Filters</h2>
+      <button class="ghost" id="resetBtn">Reset</button>
+      <button class="ghost only-mobile" id="filtersClose">Close</button>
+    </div>
 
-    <h2>Dates</h2>
-    <div class="field"><label>Trip must be within (entire trip inside)</label>
-      <div class="inline">
-        <div class="field"><label>From</label><input type="date" id="tripWithinFrom"></div>
-        <div class="field"><label>To</label><input type="date" id="tripWithinTo"></div>
+    <section class="group">
+      <h3>Dates</h3>
+      <div class="range" data-range="within" data-from="tripWithinFrom" data-to="tripWithinTo">
+        <div class="range-head">
+          <span class="range-title">Travel window</span>
+          <span class="range-sub">whole trip inside</span>
+        </div>
+        <div class="range-presets">
+          <button type="button" data-preset="any">Any</button>
+          <button type="button" data-preset="thisweekend">This weekend</button>
+          <button type="button" data-preset="next2w">Next 2 weeks</button>
+          <button type="button" data-preset="next30">Next 30 days</button>
+          <button type="button" data-preset="custom">Custom…</button>
+        </div>
+        <button type="button" class="range-value is-empty" aria-expanded="false">Any dates</button>
+        <div class="cal-pop"></div>
       </div>
-      <div class="hint">Outbound ≥ From AND Return ≤ To</div>
-    </div>
-    <div class="field"><label>Trip must contain (trip covers these dates)</label>
-      <div class="inline">
-        <div class="field"><label>From</label><input type="date" id="tripContainsFrom"></div>
-        <div class="field"><label>To</label><input type="date" id="tripContainsTo"></div>
+
+      <div class="range" data-range="contains" data-from="tripContainsFrom" data-to="tripContainsTo">
+        <div class="range-head">
+          <span class="range-title">Must be away</span>
+          <span class="range-sub">trip covers these dates</span>
+        </div>
+        <div class="range-presets">
+          <button type="button" data-preset="any">Any</button>
+          <button type="button" data-preset="thisweekend">This weekend</button>
+          <button type="button" data-preset="next2w">Next 2 weeks</button>
+          <button type="button" data-preset="custom">Custom…</button>
+        </div>
+        <button type="button" class="range-value is-empty" aria-expanded="false">Any dates</button>
+        <div class="cal-pop"></div>
       </div>
-      <div class="hint">Outbound ≤ From AND Return ≥ To</div>
-    </div>
+    </section>
+
+    <section class="group">
+      <h3>Trip</h3>
+      <div class="inline">
+        <label class="field"><span>Min nights</span>
+          <input type="number" id="minNights" value="4" min="1" max="30"></label>
+        <label class="field"><span>Max nights</span>
+          <input type="number" id="maxNights" value="10" min="1" max="30"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="saturdayIn" checked>
+        <span>Saturday night in trip</span></label>
+      <label class="check"><input type="checkbox" id="nonstopOnly" checked>
+        <span>Nonstop only</span></label>
+    </section>
+
+    <details class="group advanced">
+      <summary>Advanced</summary>
+      <label class="field"><span>Airlines (substrings, comma)</span>
+        <input type="text" id="airlines" placeholder="e.g. SN"></label>
+      <label class="field"><span>Earliest departure (all legs)</span>
+        <input type="time" id="earliestDeparture"></label>
+      <div class="field"><span>Leave on weekdays</span>
+        <div class="weekdays" id="weekdays">
+          <button data-d="0">Sun</button><button data-d="1">Mon</button>
+          <button data-d="2">Tue</button><button data-d="3">Wed</button>
+          <button data-d="4">Thu</button><button data-d="5">Fri</button>
+          <button data-d="6">Sat</button>
+        </div>
+      </div>
+      <label class="field"><span>Leave at/after hour (24h · 0 = any)</span>
+        <input type="number" id="depAfterHour" value="0" min="0" max="23"></label>
+    </details>
 
     <div class="sidebar-actions">
-      <button class="retry" id="exportBtn">Export widget config</button>
+      <button class="btn" id="exportBtn">Export widget config</button>
       <div id="exportPanel" class="hidden">
         <textarea id="exportText" spellcheck="false"></textarea>
-        <div class="export-hint">Paste this into Scriptable, replacing the
-          CONFIG block at the top of flight-widget.js (until the closing "};").
-          The widget will then score with exactly these filters.</div>
+        <div class="export-hint">Paste this into Scriptable, replacing the CONFIG
+          block at the top of flight-widget.js (until the closing "};"). The widget
+          will then score with exactly these filters.</div>
       </div>
-      <button class="retry" id="syncBtn">Save filters to web</button>
+      <button class="btn" id="syncBtn">Save filters to web</button>
       <div id="syncPanel" class="hidden">
-        <div class="field"><label>GitHub token (one-time; Contents: write to
-          luca-benedetti/flight-monitor; stored only in this browser)</label>
+        <div class="field"><span>GitHub token (one-time; Contents: write to
+          luca-benedetti/flight-monitor; stored only in this browser)</span>
           <input type="password" id="patInput" placeholder="github_pat_…"></div>
-        <button class="retry" id="syncNowBtn">Sync now</button>
+        <button class="btn submit" id="syncNowBtn">Sync now</button>
         <div id="syncStatus" class="export-hint"></div>
       </div>
     </div>
-  </aside>
 
-  <section class="results">
-    <div class="bar">
-      <span class="count" id="count"></span>
-      <span class="fresh" id="fresh"></span>
-      <button id="searchBtn">Search</button>
-    </div>
-    <div id="warn" class="warn"></div>
-    <p class="hint">Results update live as you change the filters — or press Search.</p>
-    <div id="table"><p class="empty">Loading fares…</p></div>
-  </section>
+    <input type="hidden" id="tripWithinFrom">
+    <input type="hidden" id="tripWithinTo">
+    <input type="hidden" id="tripContainsFrom">
+    <input type="hidden" id="tripContainsTo">
+  </aside>
 </main>
+
+<div class="cal-backdrop" id="calBackdrop"></div>
 
 <script>
 (function () {
+  "use strict";
+
   const WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const MONTH = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const TOP = 100;
-  const VERSION = "10";
+  const VERSION = "11";
   const PROFILES = {
     me: { file: "config.json", from: "BRU", to: "VCE", saveKey: "fm-filters-v1", patKey: "fm-gh-pat" },
     gf: { file: "config-gf.json", from: "VCE", to: "BRU", saveKey: "fm-filters-gf-v1", patKey: "fm-gh-pat-gf" },
   };
   const REPO = "luca-benedetti/flight-monitor";
+  const DEFAULTS = { minNights: 4, maxNights: 10 };
+
   let fares = null;
   let remoteFilters = null;
   let profile = "me";
+  let pickers = { within: null, contains: null };
 
   const $ = (id) => document.getElementById(id);
 
+  // ------------------------------------------------------------------ wiring
   function wireControls() {
+    document.querySelectorAll(".range").forEach((root) => {
+      const picker = createRangePicker(root, refresh);
+      if (root.dataset.range === "within") pickers.within = picker;
+      else pickers.contains = picker;
+    });
+
     const weekdays = $("weekdays");
     if (weekdays) {
       weekdays.querySelectorAll("button").forEach((b) => {
@@ -192,47 +479,52 @@
         });
       });
     }
+
     document.querySelectorAll("input").forEach((el) => {
+      if (el.type === "hidden") return;
       el.addEventListener("input", refresh);
       el.addEventListener("change", refresh);
     });
-    const btn = $("searchBtn");
-    if (btn) btn.addEventListener("click", refresh);
-    const exportBtn = $("exportBtn");
-    if (exportBtn) {
-      exportBtn.addEventListener("click", () => {
-        $("exportText").value = exportWidgetConfig(readOptions());
-        $("exportPanel").classList.remove("hidden");
-        $("exportText").select();
-      });
-    }
+
+    $("searchBtn").addEventListener("click", refresh);
+    $("resetBtn").addEventListener("click", resetFilters);
+    $("filtersToggle").addEventListener("click", openFilters);
+    $("filtersClose").addEventListener("click", closeFilters);
+    $("backdrop").addEventListener("click", closeFilters);
+
     // Profile switching (BRU→VCE / VCE→BRU)
-    document.querySelectorAll(".profile button").forEach((b) => {
+    document.querySelectorAll(".direction button").forEach((b) => {
       b.addEventListener("click", () => {
-        const newProfile = b.dataset.profile;
-        if (newProfile && newProfile !== profile) {
-          profile = newProfile;
-          document.querySelectorAll(".profile button").forEach((btn) =>
-            btn.classList.toggle("on", btn.dataset.profile === profile));
-          load();
-        }
+        const next = b.dataset.profile;
+        if (!next || next === profile) return;
+        profile = next;
+        document.querySelectorAll(".direction button").forEach((btn) =>
+          btn.classList.toggle("on", btn.dataset.profile === profile));
+        load();
       });
     });
-    const syncBtn = $("syncBtn");
-    if (syncBtn) {
-      syncBtn.addEventListener("click", () => {
-        const panel = $("syncPanel");
-        const patInput = $("patInput");
-        if (!patInput.value) {
-          try { patInput.value = localStorage.getItem(PROFILES[profile].patKey) || ""; } catch (e) {}
-        }
-        panel.classList.toggle("hidden");
-      });
-    }
-    const syncNowBtn = $("syncNowBtn");
-    if (syncNowBtn) syncNowBtn.addEventListener("click", syncToWeb);
+
+    $("exportBtn").addEventListener("click", () => {
+      $("exportText").value = exportWidgetConfig(readOptions());
+      $("exportPanel").classList.remove("hidden");
+      $("exportText").select();
+    });
+
+    $("syncBtn").addEventListener("click", () => {
+      const panel = $("syncPanel");
+      const patInput = $("patInput");
+      if (!patInput.value) {
+        try { patInput.value = localStorage.getItem(PROFILES[profile].patKey) || ""; } catch (e) {}
+      }
+      panel.classList.toggle("hidden");
+    });
+    $("syncNowBtn").addEventListener("click", syncToWeb);
   }
 
+  function openFilters() { document.body.classList.add("filters-open"); }
+  function closeFilters() { document.body.classList.remove("filters-open"); }
+
+  // ------------------------------------------------------------------ reading
   function readOptions() {
     const weekdays = $("weekdays");
     const days = [];
@@ -241,15 +533,14 @@
     }
     return {
       from: PROFILES[profile].from, to: PROFILES[profile].to,
-      minNights: int($("minNights").value, 4) || 4,
-      maxNights: int($("maxNights").value, 10) || 10,
+      minNights: int($("minNights").value, DEFAULTS.minNights) || DEFAULTS.minNights,
+      maxNights: int($("maxNights").value, DEFAULTS.maxNights) || DEFAULTS.maxNights,
       saturdayIn: $("saturdayIn").checked,
       nonstopOnly: $("nonstopOnly").checked,
       airlines: $("airlines").value.trim(),
       earliestDeparture: $("earliestDeparture").value || "",
       depWeekdays: days,
       depAfterHour: int($("depAfterHour").value, 0),
-      // New interval-based date filters
       tripWithinFrom: $("tripWithinFrom").value || "",
       tripWithinTo: $("tripWithinTo").value || "",
       tripContainsFrom: $("tripContainsFrom").value || "",
@@ -265,11 +556,15 @@
     const [y, m, d] = isoStr.split("-").map(Number);
     return `${WEEK[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]} ${d} ${MONTH[m - 1]}`;
   }
-
+  function dateShort(isoStr) {
+    const [, m, d] = isoStr.split("-").map(Number);
+    return `${d} ${MONTH[m - 1]}`;
+  }
   function airlineLabel(f) {
     return (f.airline || "?").replace(/ \/ /g, "+");
   }
 
+  // ------------------------------------------------------------------ state
   function restoreFilters(base) {
     try {
       const saved = JSON.parse(localStorage.getItem(PROFILES[profile].saveKey) || "null") || base;
@@ -280,13 +575,10 @@
       set("airlines", saved.airlines);
       set("earliestDeparture", saved.earliestDeparture);
       set("depAfterHour", saved.depAfterHour);
-      // New interval-based date filters, with migration from the old fields:
-      //   includeFrom/includeTo had the exact "trip must contain" semantics
-      //   searchFrom mapped to an outbound lower bound (trip must be within)
-      set("tripWithinFrom", saved.tripWithinFrom ?? saved.searchFrom);
-      set("tripWithinTo", saved.tripWithinTo);
-      set("tripContainsFrom", saved.tripContainsFrom ?? saved.includeFrom);
-      set("tripContainsTo", saved.tripContainsTo ?? saved.includeTo);
+      // Interval dates, with migration from the old field names.
+      pickers.within.set(saved.tripWithinFrom ?? saved.searchFrom, saved.tripWithinTo);
+      pickers.contains.set(saved.tripContainsFrom ?? saved.includeFrom,
+                           saved.tripContainsTo ?? saved.includeTo);
       const sat = $("saturdayIn"); if (sat) sat.checked = saved.saturdayIn !== false;
       const ns = $("nonstopOnly"); if (ns) ns.checked = saved.nonstopOnly !== false;
       const weekdays = $("weekdays");
@@ -297,16 +589,145 @@
   }
 
   function persist(opts) {
-    try { localStorage.setItem(PROFILES[profile].saveKey, JSON.stringify(opts)); } catch (e) { /* storage full/blocked */ }
+    try { localStorage.setItem(PROFILES[profile].saveKey, JSON.stringify(opts)); } catch (e) {}
   }
 
+  function resetFilters() {
+    $("minNights").value = DEFAULTS.minNights;
+    $("maxNights").value = DEFAULTS.maxNights;
+    $("saturdayIn").checked = true;
+    $("nonstopOnly").checked = true;
+    $("airlines").value = "";
+    $("earliestDeparture").value = "";
+    $("depAfterHour").value = 0;
+    const weekdays = $("weekdays");
+    if (weekdays) weekdays.querySelectorAll("button").forEach((b) => b.classList.remove("on"));
+    pickers.within.clear();
+    pickers.contains.clear();
+    try { localStorage.removeItem(PROFILES[profile].saveKey); } catch (e) {}
+    refresh();
+  }
+
+  // ------------------------------------------------------------------ chips
+  function renderChips(o) {
+    const box = $("activeChips");
+    box.innerHTML = "";
+    const add = (label, clear) => {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "chip";
+      el.innerHTML = `${label}<span class="chip-x">✕</span>`;
+      el.addEventListener("click", () => { clear(); refresh(); });
+      box.appendChild(el);
+    };
+    if (o.tripWithinFrom || o.tripWithinTo) {
+      add(`within ${o.tripWithinFrom ? dateShort(o.tripWithinFrom) : "…"} – ${o.tripWithinTo ? dateShort(o.tripWithinTo) : "…"}`,
+        () => pickers.within.clear());
+    }
+    if (o.tripContainsFrom || o.tripContainsTo) {
+      add(`covers ${o.tripContainsFrom ? dateShort(o.tripContainsFrom) : "…"} – ${o.tripContainsTo ? dateShort(o.tripContainsTo) : "…"}`,
+        () => pickers.contains.clear());
+    }
+    if (o.minNights !== DEFAULTS.minNights || o.maxNights !== DEFAULTS.maxNights) {
+      add(`${o.minNights}–${o.maxNights} nights`, () => {
+        $("minNights").value = DEFAULTS.minNights;
+        $("maxNights").value = DEFAULTS.maxNights;
+      });
+    }
+    if (o.airlines) add(o.airlines, () => { $("airlines").value = ""; });
+    if (o.earliestDeparture) add(`after ${o.earliestDeparture}`, () => { $("earliestDeparture").value = ""; });
+    if (o.depWeekdays && o.depWeekdays.length) {
+      add(o.depWeekdays.map((d) => WEEK[d]).join(", "), () => {
+        const weekdays = $("weekdays");
+        if (weekdays) weekdays.querySelectorAll("button").forEach((b) => b.classList.remove("on"));
+      });
+    }
+    if (o.depAfterHour) add(`≥${o.depAfterHour}h`, () => { $("depAfterHour").value = 0; });
+    if (!o.saturdayIn) add("no Sat night", () => { $("saturdayIn").checked = true; });
+    if (!o.nonstopOnly) add("stops ok", () => { $("nonstopOnly").checked = true; });
+  }
+
+  // ------------------------------------------------------------------ render
+  function render() {
+    if (!fares) return;
+    try {
+      const opts = readOptions();
+      persist(opts);
+      renderChips(opts);
+      const trips = Filter.computeTrips(fares.flights || [], opts);
+      $("count").textContent =
+        `${trips.length} round trip${trips.length === 1 ? "" : "s"}` +
+        (trips.length > TOP ? ` (top ${TOP})` : "");
+      $("fresh").textContent = fares.metadata
+        ? `· data ${fares.metadata.generated_at || "?"}` : "";
+      const skipped = (fares.metadata || {}).skipped_days || [];
+      $("warn").textContent = skipped.length
+        ? `${skipped.length} date(s) missing from last scan (partial data)` : "";
+
+      if (trips.length === 0) {
+        $("results").innerHTML =
+          '<p class="empty">No trips match these filters. Try widening the dates.</p>';
+        return;
+      }
+      const rows = trips.slice(0, TOP).map((c) => `
+        <li class="trip">
+          <div class="trip-price">${c.score.toFixed(0)}<span>€</span></div>
+          <div class="trip-leg">
+            <div class="trip-leg-head"><span class="dot out"></span>Outbound</div>
+            <div class="trip-leg-main">${dateLabel(c.out.date)}</div>
+            <div class="trip-leg-sub">${c.out.departure} → ${c.out.arrival} · ${airlineLabel(c.out)}</div>
+          </div>
+          <div class="trip-leg">
+            <div class="trip-leg-head"><span class="dot ret"></span>Return</div>
+            <div class="trip-leg-main">${dateLabel(c.ret.date)}</div>
+            <div class="trip-leg-sub">${c.ret.departure} → ${c.ret.arrival} · ${airlineLabel(c.ret)}</div>
+          </div>
+          <div class="trip-nights">${c.nights}<span>nights</span></div>
+        </li>`).join("");
+      $("results").innerHTML = `<ul class="trips">${rows}</ul>`;
+    } catch (err) {
+      $("results").innerHTML = `<p class="empty">Error while scoring trips: ${err}</p>`;
+    }
+  }
+  window.refresh = render;
+
+  // ------------------------------------------------------------------ load
+  function loadFailed(err) {
+    const msg = `Failed to load fares.json (${err.message || err}).`;
+    $("meta").textContent = msg;
+    $("results").innerHTML =
+      `<p class="empty">${msg}<br><button class="ghost" id="retryBtn">Retry</button></p>`;
+    const retry = $("retryBtn");
+    if (retry) retry.addEventListener("click", load);
+  }
+
+  function load() {
+    $("ver").textContent = "v" + VERSION;
+    $("h1").textContent = `${PROFILES[profile].from} ⇄ ${PROFILES[profile].to} · flight search`;
+    Promise.all([
+      fetch("fares.json", { cache: "no-cache" })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))),
+      fetch(PROFILES[profile].file, { cache: "no-cache" })
+        .then((r) => (r.ok ? r.json() : Promise.resolve(null)))
+        .catch(() => null),
+    ]).then(([d, cfg]) => {
+      fares = d;
+      remoteFilters = cfg && cfg.filters ? cfg.filters : null;
+      restoreFilters(remoteFilters);
+      $("meta").textContent =
+        `data from ${(d.metadata || {}).source || "?"} · updated ${(d.metadata || {}).generated_at || "?"}`;
+      $("ver").textContent = "v" + VERSION;
+      render();
+    }).catch(loadFailed);
+  }
+
+  // ------------------------------------------------------------------ config
   function exportWidgetConfig(opts) {
     const lines = [];
     const add = (k, v) => {
       let val;
       if (Array.isArray(v)) val = "[" + v.join(",") + "]";
       else if (typeof v === "string") val = JSON.stringify(v);
-      else if (typeof v === "boolean") val = String(v);
       else val = String(v);
       lines.push(`  ${k}: ${val},`);
     };
@@ -329,70 +750,6 @@
     add("topLines", 4);
     add("currency", "€");
     return "const CONFIG = {\n" + lines.join("\n") + "};\n";
-  }
-
-  function render() {
-    if (!fares) return;
-    try {
-      const opts = readOptions();
-      persist(opts);
-      const trips = Filter.computeTrips(fares.flights || [], opts);
-      $("count").textContent = `${trips.length} round trips match (showing top ${Math.min(TOP, trips.length)})`;
-      $("fresh").textContent = fares.metadata ? `data: ${fares.metadata.generated_at || "?"}` : "";
-      const skipped = (fares.metadata || {}).skipped_days || [];
-      $("warn").textContent = skipped.length
-        ? `${skipped.length} date(s) missing from last scan (partial data)`
-        : "";
-
-      if (trips.length === 0) {
-        $("table").innerHTML = '<p class="empty">No trips match these filters.</p>';
-        return;
-      }
-      const rows = trips.slice(0, TOP).map((c) => {
-        const price = `${c.score.toFixed(0)} €`;
-        const leg = (f) =>
-          `<td><div>${dateLabel(f.date)} · ${f.departure} → ${f.arrival}</div>` +
-          `<div class="leg">${airlineLabel(f)}</div></td>`;
-        return `<tr><td class="price">${price}</td>${leg(c.out)}${leg(c.ret)}` +
-          `<td class="nights">${c.nights} nights</td></tr>`;
-      }).join("");
-      $("table").innerHTML = `<table><thead><tr>
-        <th>Price</th><th>Outbound</th><th>Return</th><th class="nights">Nights</th>
-      </tr></thead><tbody>${rows}</tbody></table>`;
-    } catch (err) {
-      $("table").innerHTML = `<p class="empty">Error while scoring trips: ${err}</p>`;
-    }
-  }
-  window.refresh = render;
-
-  function loadFailed(err) {
-    const msg = `Failed to load fares.json (${err.message || err}).`;
-    $("meta").textContent = msg;
-    $("table").innerHTML =
-      `<p class="empty">${msg}<br><button class="retry" id="retryBtn">Retry</button></p>`;
-    const retry = $("retryBtn");
-    if (retry) retry.addEventListener("click", load);
-  }
-
-  function load() {
-    $("ver").textContent = "v" + VERSION;
-    $("h1").textContent = `${PROFILES[profile].from} ⇄ ${PROFILES[profile].to} · flight search`;
-    Promise.all([
-      fetch("fares.json", { cache: "no-cache" })
-        .then((r) => (r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))),
-      fetch(PROFILES[profile].file, { cache: "no-cache" })
-        .then((r) => (r.ok ? r.json() : Promise.resolve(null)))
-        .catch(() => null),
-    ]).then(([d, cfg]) => {
-      fares = d;
-      remoteFilters = cfg && cfg.filters ? cfg.filters : null;
-      restoreFilters(remoteFilters);
-      $("meta").textContent =
-        `data from ${(d.metadata || {}).source || "?"} · updated ${(d.metadata || {}).generated_at || "?"}`;
-      $("ver").textContent = "v" + VERSION;
-      render();
-    })
-      .catch(loadFailed);
   }
 
   function syncedFilters(opts) {
