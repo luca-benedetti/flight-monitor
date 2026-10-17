@@ -9,9 +9,9 @@
     "earliestDeparture": "",
     "depWeekdays": [],
     "depAfterHour": 0,
-    "searchFrom": "",
-    "searchTo": "",
-    "includeFrom": "",
-    "includeTo": ""
+    "tripWithinFrom": "",
+    "tripWithinTo": "",
+    "tripContainsFrom": "",
+    "tripContainsTo": ""
   }
 }

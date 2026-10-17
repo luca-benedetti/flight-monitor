@@ -87,9 +87,9 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 `https://luca-benedetti.github.io/flight-monitor/` and you get:
 
 - Trip shape: min/max nights, Saturday-in, nonstop, airlines, earliest departure.
-- "Leave" filters: allowed weekdays (Sun–Sat), depart-at/after hour,
-  departure date window.
-- "Trip must span": leave on/before X and return on/after Y.
+- "Leave" filters: allowed weekdays (Sun–Sat), depart-at/after hour.
+- Two date intervals: **trip must be within** a range (whole trip inside) and/or
+  **trip must contain** a range (trip covers these dates).
 - **Export widget config** button: copies your current filters as a
   ready-to-paste `CONFIG` block for the widget script, so the widget scores
   with exactly the web app's filters.
@@ -106,8 +106,8 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 
 `widget/flight-widget.js` (Scriptable). Edit the `CONFIG` block at the top to
 set the same knobs (min/max nights, Saturday-in, nonstop, `depWeekdays` /
-`depAfterHour` for "Monday/Thursday evening", `searchFrom/searchTo`,
-`includeFrom/includeTo`), save in the Scriptable app, add as a home-screen widget.
+`depAfterHour` for "Monday/Thursday evening", `tripWithinFrom/To`,
+`tripContainsFrom/To`), save in the Scriptable app, add as a home-screen widget.
 The widget fetches `fares.json`, the shared `web/filter.js` engine, **and**
 `web/config.json` — if `remoteConfigUrl` is set, the published filter values
 override the local knobs on every run, so "Save filters to web" in the web app

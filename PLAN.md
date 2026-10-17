@@ -44,7 +44,8 @@ filters, no profiles, no config server-side.
 
 | Knob | Meaning |
 |---|---|
-| `searchFrom` / `searchTo` | outbound departure window ("" = whole horizon) |
+| `tripWithinFrom` / `tripWithinTo` | entire trip must fall inside this range: outbound ≥ from AND return ≤ to ("" = off) |
+| `tripContainsFrom` / `tripContainsTo` | trip must cover this range: outbound ≤ from AND return ≥ to ("" = off) |
 | `minNights` / `maxNights` | trip length range |
 | `nonstopOnly` | direct flights only |
 | `airlines` | comma-separated name substrings (e.g. "SN") |
@@ -52,7 +53,6 @@ filters, no profiles, no config server-side.
 | `earliestDeparture` | drop any leg leaving before HH:MM |
 | `depWeekdays` | outbound only: leave on these weekdays (0=Sun..6=Sat) |
 | `depAfterHour` | outbound only: leave at/after this hour (24h) |
-| `includeFrom` / `includeTo` | trip must span the range: leave on/before `includeFrom`, return on/after `includeTo` |
 
 ## Data pipeline (server)
 
@@ -90,7 +90,7 @@ filters, no profiles, no config server-side.
 - One script `widget/flight-widget.js`: edit `CONFIG` at the top, save in the
   Scriptable app, add as a home-screen widget. Konfig: min/max nights,
   saturday-in, nonstop, earliest departure, depWeekdays/depAfterHour
-  ("Monday/Thursday evening"), searchFrom/searchTo, includeFrom/includeTo.
+  ("Monday/Thursday evening"), tripWithinFrom/To, tripContainsFrom/To.
 - The widget fetches the shared engine from the Pages URL (`engineUrl` →
   `filter.js`), `fares.json`, and optionally `web/config.json`; if
   `remoteConfigUrl` is set, published filters override the local knob block on

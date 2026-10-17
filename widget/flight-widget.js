@@ -28,14 +28,15 @@ const CONFIG = {
   depAfterHour: 0,          // only leave at/after this hour (24h); combine with depWeekdays
                             // for "Monday/Thursday evening". 0 = any time.
 
-  // Outbound departure window ("" = any date in the scrape horizon)
-  searchFrom: "",           // e.g. "2026-09-07"
-  searchTo: "",             // e.g. "2026-10-31"
-
-  // Force every shown trip to span a date range ("" = off): the trip must
-  // leave on/before includeFrom AND return on/after includeTo.
-  includeFrom: "",           // e.g. "2026-12-24"
-  includeTo: "",             // e.g. "2027-01-02"
+  // Date intervals ("" = off). Both are independent and can be combined:
+  //   tripWithin*:  the whole trip must fit inside this range
+  //                 (outbound >= from AND return <= to)
+  //   tripContains*: the trip must cover this range
+  //                 (outbound <= from AND return >= to)
+  tripWithinFrom: "",       // e.g. "2026-12-17"
+  tripWithinTo: "",         // e.g. "2026-12-31"
+  tripContainsFrom: "",     // e.g. "2026-12-24"
+  tripContainsTo: "",       // e.g. "2027-01-02"
 
   // When set, this URL's filter values override all the knobs above on every
   // run. Edit them in the web app ("Save filters to web") instead of here.
@@ -71,10 +72,10 @@ function activeFilterLabels(cfg) {
   if (cfg.airlines) labels.push(cfg.airlines);
   if (cfg.minNights !== 4 || cfg.maxNights !== 10)
     labels.push(`${cfg.minNights}–${cfg.maxNights}n`);
-  if (cfg.searchFrom || cfg.searchTo)
-    labels.push(`${cfg.searchFrom || "…"}..${cfg.searchTo || "…"}`);
-  if (cfg.includeFrom || cfg.includeTo)
-    labels.push(`span ${cfg.includeFrom || "…"}–${cfg.includeTo || "…"}`);
+  if (cfg.tripWithinFrom || cfg.tripWithinTo)
+    labels.push(`within ${cfg.tripWithinFrom || "…"}–${cfg.tripWithinTo || "…"}`);
+  if (cfg.tripContainsFrom || cfg.tripContainsTo)
+    labels.push(`covers ${cfg.tripContainsFrom || "…"}–${cfg.tripContainsTo || "…"}`);
   return labels.join(" · ");
 }
 

@@ -9,9 +9,9 @@
     "earliestDeparture": "08:37",
     "depWeekdays": [],
     "depAfterHour": 9,
-    "searchFrom": "2027-02-01",
-    "searchTo": "2027-02-21",
-    "includeFrom": "2027-02-05",
-    "includeTo": "2027-02-07"
+    "tripWithinFrom": "2027-02-01",
+    "tripWithinTo": "",
+    "tripContainsFrom": "2027-02-05",
+    "tripContainsTo": "2027-02-07"
   }
 }
