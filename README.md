@@ -83,13 +83,19 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
 
 ## Web app
 
-`web/index.html` + `web/filter.js`, served on the same Pages site. Open
-`https://luca-benedetti.github.io/flight-monitor/` and you get:
+`web/index.html` + `web/filter.js` + `web/daterange.js`, served on the same
+Pages site. Open `https://luca-benedetti.github.io/flight-monitor/` and you get:
 
-- Trip shape: min/max nights, Saturday-in, nonstop, airlines, earliest departure.
-- "Leave" filters: allowed weekdays (Sun–Sat), depart-at/after hour.
-- Two date intervals: **trip must be within** a range (whole trip inside) and/or
-  **trip must contain** a range (trip covers these dates).
+- Direction tabs: BRU→VCE or VCE→BRU round trips (each with its own saved
+  filters and config file).
+- Mobile-first layout: results up front, filters in a bottom sheet on phones.
+- Trip shape: min/max nights, Saturday-in, nonstop; technical knobs (airlines,
+  earliest departure, weekdays, depart-at/after hour) under **Advanced**.
+- Two date intervals, each with quick presets (Any, This weekend, Next 2 weeks,
+  Next 30 days) and a dual-month range calendar: **travel window** (whole trip
+  inside) and **must be away** (trip covers these dates).
+- Active-filter chips summarise what's applied; tap a chip (or **Reset**) to
+  clear it. Result cards show price, per-leg date + times, airline and nights.
 - **Export widget config** button: copies your current filters as a
   ready-to-paste `CONFIG` block for the widget script, so the widget scores
   with exactly the web app's filters.
@@ -97,8 +103,6 @@ Flags: `--min-nights/--max-nights`, `--saturday-in/--no-saturday-in`,
   filters to `web/config.json` via the GitHub API → auto-deploys (~10 s) → and
   the widget picks it up automatically (see below).
 - Filters persist in the browser (localStorage) across visits.
-- Live result table (price, per-leg date + times, nights) — updates as you
-  change filters, or via the explicit **Search** button.
 - Freshness + skipped-days warning. The widget footer echoes your active
   filters ("filters: …") so a config edit is visibly confirmed.
 
