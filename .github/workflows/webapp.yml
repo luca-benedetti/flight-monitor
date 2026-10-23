@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Stage web files
-        run: cp -R web /tmp/webapp
+        run: cp -R web "$RUNNER_TEMP/webapp"
 
       - name: Fetch current published site
         run: git fetch origin gh-pages --depth=1
@@ -33,16 +33,20 @@ jobs:
         run: git checkout gh-pages
 
       - name: Overlay web app files
-        run: cp -R /tmp/webapp/. .
+        run: cp -R "$RUNNER_TEMP/webapp/." .
 
       - name: Commit and push with rebase retry
         run: |
           git -c user.name=github-actions -c user.email=actions@github.com \
               add -A
+          git status --porcelain | grep -q . || { echo "no changes"; exit 0; }
+          git -c user.name=github-actions -c user.email=actions@github.com \
+              commit -m "webapp: deploy at $(git rev-parse --short HEAD)"
+          # Commit once; only the rebase+push is retried. Failing the push
+          # (or the rebase) fails the step instead of exiting green.
           for i in 1 2 3; do
-            git status --porcelain | grep -q . || { echo "no changes"; exit 0; }
-            git -c user.name=github-actions -c user.email=actions@github.com \
-                commit -m "webapp: deploy at $(git rev-parse --short HEAD)"
-            git pull --rebase origin gh-pages && break || sleep 3
+            git push origin gh-pages && exit 0
+            git pull --rebase origin gh-pages || exit 1
+            sleep 3
           done
-          git push origin gh-pages
+          echo "push failed after retries" && exit 1
