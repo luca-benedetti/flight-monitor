@@ -455,6 +455,10 @@
   const REPO = "luca-benedetti/flight-monitor";
   const DEFAULTS = { minNights: 4, maxNights: 10 };
 
+  // Escape text before it goes into innerHTML (airline names and user input).
+  const esc = (s) => String(s).replace(/[&<>"']/g, (ch) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]);
+
   let fares = null;
   let remoteFilters = null;
   let profile = "me";
@@ -616,7 +620,7 @@
       const el = document.createElement("button");
       el.type = "button";
       el.className = "chip";
-      el.innerHTML = `${label}<span class="chip-x">✕</span>`;
+      el.innerHTML = `${esc(label)}<span class="chip-x">✕</span>`;
       el.addEventListener("click", () => { clear(); refresh(); });
       box.appendChild(el);
     };
@@ -675,18 +679,18 @@
           <div class="trip-leg">
             <div class="trip-leg-head"><span class="dot out"></span>Outbound</div>
             <div class="trip-leg-main">${dateLabel(c.out.date)}</div>
-            <div class="trip-leg-sub">${c.out.departure} → ${c.out.arrival} · ${airlineLabel(c.out)}</div>
+            <div class="trip-leg-sub">${c.out.departure} → ${c.out.arrival} · ${esc(airlineLabel(c.out))}</div>
           </div>
           <div class="trip-leg">
             <div class="trip-leg-head"><span class="dot ret"></span>Return</div>
             <div class="trip-leg-main">${dateLabel(c.ret.date)}</div>
-            <div class="trip-leg-sub">${c.ret.departure} → ${c.ret.arrival} · ${airlineLabel(c.ret)}</div>
+            <div class="trip-leg-sub">${c.ret.departure} → ${c.ret.arrival} · ${esc(airlineLabel(c.ret))}</div>
           </div>
           <div class="trip-nights">${c.nights}<span>nights</span></div>
         </li>`).join("");
       $("results").innerHTML = `<ul class="trips">${rows}</ul>`;
     } catch (err) {
-      $("results").innerHTML = `<p class="empty">Error while scoring trips: ${err}</p>`;
+      $("results").innerHTML = `<p class="empty">Error while scoring trips: ${esc(err)}</p>`;
     }
   }
   window.refresh = render;
@@ -696,7 +700,7 @@
     const msg = `Failed to load fares.json (${err.message || err}).`;
     $("meta").textContent = msg;
     $("results").innerHTML =
-      `<p class="empty">${msg}<br><button class="ghost" id="retryBtn">Retry</button></p>`;
+      `<p class="empty">${esc(msg)}<br><button class="ghost" id="retryBtn">Retry</button></p>`;
     const retry = $("retryBtn");
     if (retry) retry.addEventListener("click", load);
   }
