@@ -3,176 +3,11 @@
     "schema_version": "1.0",
     "currency": "EUR",
     "source": "scraper_google_flights",
-    "generated_at": "2026-10-26T11:00:12Z"
+    "generated_at": "2026-11-02T13:07:07Z"
   },
   "flights": [
     {
-      "flight_id": "BRU-VCE-2026-10-27-001",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-10-27",
-      "airline": "Brussels Airlines",
-      "departure": "09:35",
-      "arrival": "11:15",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 281.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "BRU-VCE-2026-10-28-002",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-10-28",
-      "airline": "Brussels Airlines",
-      "departure": "09:35",
-      "arrival": "11:15",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 187.0,
-      "currency": "EUR",
-      "is_best": false
-    },
-    {
-      "flight_id": "BRU-VCE-2026-10-28-003",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-10-28",
-      "airline": "Brussels Airlines",
-      "departure": "20:55",
-      "arrival": "22:30",
-      "arrival_day_offset": 0,
-      "duration_min": 95,
-      "stops": 0,
-      "price": 153.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "BRU-VCE-2026-10-29-004",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-10-29",
-      "airline": "Brussels Airlines",
-      "departure": "09:35",
-      "arrival": "11:15",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 197.0,
-      "currency": "EUR",
-      "is_best": false
-    },
-    {
-      "flight_id": "BRU-VCE-2026-10-29-005",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-10-29",
-      "airline": "Brussels Airlines",
-      "departure": "20:55",
-      "arrival": "22:30",
-      "arrival_day_offset": 0,
-      "duration_min": 95,
-      "stops": 0,
-      "price": 153.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "BRU-VCE-2026-10-30-006",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-10-30",
-      "airline": "Brussels Airlines",
-      "departure": "09:35",
-      "arrival": "11:15",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 242.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "BRU-VCE-2026-10-30-007",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-10-30",
-      "airline": "Brussels Airlines",
-      "departure": "20:55",
-      "arrival": "22:30",
-      "arrival_day_offset": 0,
-      "duration_min": 95,
-      "stops": 0,
-      "price": 365.0,
-      "currency": "EUR",
-      "is_best": false
-    },
-    {
-      "flight_id": "BRU-VCE-2026-10-31-008",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-10-31",
-      "airline": "Brussels Airlines",
-      "departure": "09:35",
-      "arrival": "11:15",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 286.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "BRU-VCE-2026-11-01-009",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-11-01",
-      "airline": "Brussels Airlines",
-      "departure": "09:35",
-      "arrival": "11:15",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 190.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "BRU-VCE-2026-11-01-010",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-11-01",
-      "airline": "Brussels Airlines",
-      "departure": "20:55",
-      "arrival": "22:30",
-      "arrival_day_offset": 0,
-      "duration_min": 95,
-      "stops": 0,
-      "price": 197.0,
-      "currency": "EUR",
-      "is_best": false
-    },
-    {
-      "flight_id": "BRU-VCE-2026-11-02-011",
-      "origin": "BRU",
-      "destination": "VCE",
-      "date": "2026-11-02",
-      "airline": "Brussels Airlines",
-      "departure": "09:35",
-      "arrival": "11:15",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 368.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "BRU-VCE-2026-11-03-012",
+      "flight_id": "BRU-VCE-2026-11-03-001",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-03",
@@ -187,7 +22,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-04-013",
+      "flight_id": "BRU-VCE-2026-11-04-002",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-04",
@@ -202,7 +37,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-04-014",
+      "flight_id": "BRU-VCE-2026-11-04-003",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-04",
@@ -217,7 +52,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-05-015",
+      "flight_id": "BRU-VCE-2026-11-05-004",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-05",
@@ -232,7 +67,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-05-016",
+      "flight_id": "BRU-VCE-2026-11-05-005",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-05",
@@ -247,7 +82,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-06-017",
+      "flight_id": "BRU-VCE-2026-11-06-006",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-06",
@@ -262,7 +97,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-06-018",
+      "flight_id": "BRU-VCE-2026-11-06-007",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-06",
@@ -277,7 +112,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-07-019",
+      "flight_id": "BRU-VCE-2026-11-07-008",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-07",
@@ -292,7 +127,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-08-020",
+      "flight_id": "BRU-VCE-2026-11-08-009",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-08",
@@ -307,7 +142,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-08-021",
+      "flight_id": "BRU-VCE-2026-11-08-010",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-08",
@@ -322,7 +157,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-09-022",
+      "flight_id": "BRU-VCE-2026-11-09-011",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-09",
@@ -337,7 +172,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-10-023",
+      "flight_id": "BRU-VCE-2026-11-10-012",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-10",
@@ -352,7 +187,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-11-024",
+      "flight_id": "BRU-VCE-2026-11-11-013",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-11",
@@ -367,7 +202,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-12-025",
+      "flight_id": "BRU-VCE-2026-11-12-014",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-12",
@@ -382,7 +217,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-12-026",
+      "flight_id": "BRU-VCE-2026-11-12-015",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-12",
@@ -397,7 +232,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-13-027",
+      "flight_id": "BRU-VCE-2026-11-13-016",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-13",
@@ -412,7 +247,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-13-028",
+      "flight_id": "BRU-VCE-2026-11-13-017",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-13",
@@ -427,7 +262,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-14-029",
+      "flight_id": "BRU-VCE-2026-11-14-018",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-14",
@@ -442,7 +277,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-15-030",
+      "flight_id": "BRU-VCE-2026-11-15-019",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-15",
@@ -457,7 +292,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-15-031",
+      "flight_id": "BRU-VCE-2026-11-15-020",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-15",
@@ -472,7 +307,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-16-032",
+      "flight_id": "BRU-VCE-2026-11-16-021",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-16",
@@ -487,7 +322,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-17-033",
+      "flight_id": "BRU-VCE-2026-11-17-022",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-17",
@@ -502,7 +337,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-18-034",
+      "flight_id": "BRU-VCE-2026-11-18-023",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-18",
@@ -517,7 +352,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-18-035",
+      "flight_id": "BRU-VCE-2026-11-18-024",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-18",
@@ -532,7 +367,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-19-036",
+      "flight_id": "BRU-VCE-2026-11-19-025",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-19",
@@ -547,7 +382,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-19-037",
+      "flight_id": "BRU-VCE-2026-11-19-026",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-19",
@@ -562,7 +397,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-20-038",
+      "flight_id": "BRU-VCE-2026-11-20-027",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-20",
@@ -577,7 +412,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-20-039",
+      "flight_id": "BRU-VCE-2026-11-20-028",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-20",
@@ -592,7 +427,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-21-040",
+      "flight_id": "BRU-VCE-2026-11-21-029",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-21",
@@ -607,7 +442,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-22-041",
+      "flight_id": "BRU-VCE-2026-11-22-030",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-22",
@@ -622,7 +457,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-22-042",
+      "flight_id": "BRU-VCE-2026-11-22-031",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-22",
@@ -637,7 +472,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-23-043",
+      "flight_id": "BRU-VCE-2026-11-23-032",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-23",
@@ -652,7 +487,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-24-044",
+      "flight_id": "BRU-VCE-2026-11-24-033",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-24",
@@ -667,7 +502,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-25-045",
+      "flight_id": "BRU-VCE-2026-11-25-034",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-25",
@@ -682,7 +517,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-25-046",
+      "flight_id": "BRU-VCE-2026-11-25-035",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-25",
@@ -697,7 +532,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-26-047",
+      "flight_id": "BRU-VCE-2026-11-26-036",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-26",
@@ -712,7 +547,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-26-048",
+      "flight_id": "BRU-VCE-2026-11-26-037",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-26",
@@ -727,7 +562,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-27-049",
+      "flight_id": "BRU-VCE-2026-11-27-038",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-27",
@@ -742,7 +577,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-28-050",
+      "flight_id": "BRU-VCE-2026-11-28-039",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-28",
@@ -757,7 +592,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-29-051",
+      "flight_id": "BRU-VCE-2026-11-29-040",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-29",
@@ -772,7 +607,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-11-29-052",
+      "flight_id": "BRU-VCE-2026-11-29-041",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-29",
@@ -787,7 +622,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-11-30-053",
+      "flight_id": "BRU-VCE-2026-11-30-042",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-11-30",
@@ -802,7 +637,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-01-054",
+      "flight_id": "BRU-VCE-2026-12-01-043",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-01",
@@ -817,7 +652,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-02-055",
+      "flight_id": "BRU-VCE-2026-12-02-044",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-02",
@@ -832,7 +667,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-02-056",
+      "flight_id": "BRU-VCE-2026-12-02-045",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-02",
@@ -847,7 +682,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-03-057",
+      "flight_id": "BRU-VCE-2026-12-03-046",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-03",
@@ -862,7 +697,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-03-058",
+      "flight_id": "BRU-VCE-2026-12-03-047",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-03",
@@ -877,7 +712,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-04-059",
+      "flight_id": "BRU-VCE-2026-12-04-048",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-04",
@@ -892,7 +727,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-04-060",
+      "flight_id": "BRU-VCE-2026-12-04-049",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-04",
@@ -907,7 +742,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-05-061",
+      "flight_id": "BRU-VCE-2026-12-05-050",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-05",
@@ -922,7 +757,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-06-062",
+      "flight_id": "BRU-VCE-2026-12-06-051",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-06",
@@ -937,7 +772,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-06-063",
+      "flight_id": "BRU-VCE-2026-12-06-052",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-06",
@@ -952,7 +787,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-07-064",
+      "flight_id": "BRU-VCE-2026-12-07-053",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-07",
@@ -967,7 +802,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-08-065",
+      "flight_id": "BRU-VCE-2026-12-08-054",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-08",
@@ -982,7 +817,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-09-066",
+      "flight_id": "BRU-VCE-2026-12-09-055",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-09",
@@ -997,7 +832,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-09-067",
+      "flight_id": "BRU-VCE-2026-12-09-056",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-09",
@@ -1012,7 +847,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-10-068",
+      "flight_id": "BRU-VCE-2026-12-10-057",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-10",
@@ -1027,7 +862,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-10-069",
+      "flight_id": "BRU-VCE-2026-12-10-058",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-10",
@@ -1042,7 +877,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-11-070",
+      "flight_id": "BRU-VCE-2026-12-11-059",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-11",
@@ -1057,7 +892,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-12-071",
+      "flight_id": "BRU-VCE-2026-12-12-060",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-12",
@@ -1072,7 +907,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-13-072",
+      "flight_id": "BRU-VCE-2026-12-13-061",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-13",
@@ -1087,7 +922,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-13-073",
+      "flight_id": "BRU-VCE-2026-12-13-062",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-13",
@@ -1102,7 +937,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-14-074",
+      "flight_id": "BRU-VCE-2026-12-14-063",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-14",
@@ -1117,7 +952,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-15-075",
+      "flight_id": "BRU-VCE-2026-12-15-064",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-15",
@@ -1132,7 +967,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-16-076",
+      "flight_id": "BRU-VCE-2026-12-16-065",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-16",
@@ -1147,7 +982,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-17-077",
+      "flight_id": "BRU-VCE-2026-12-17-066",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-17",
@@ -1162,7 +997,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-17-078",
+      "flight_id": "BRU-VCE-2026-12-17-067",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-17",
@@ -1177,7 +1012,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-18-079",
+      "flight_id": "BRU-VCE-2026-12-18-068",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-18",
@@ -1192,7 +1027,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-18-080",
+      "flight_id": "BRU-VCE-2026-12-18-069",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-18",
@@ -1207,7 +1042,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-19-081",
+      "flight_id": "BRU-VCE-2026-12-19-070",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-19",
@@ -1222,7 +1057,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-20-082",
+      "flight_id": "BRU-VCE-2026-12-20-071",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-20",
@@ -1237,7 +1072,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-20-083",
+      "flight_id": "BRU-VCE-2026-12-20-072",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-20",
@@ -1252,7 +1087,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-21-084",
+      "flight_id": "BRU-VCE-2026-12-21-073",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-21",
@@ -1267,7 +1102,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-22-085",
+      "flight_id": "BRU-VCE-2026-12-22-074",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-22",
@@ -1282,7 +1117,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-23-086",
+      "flight_id": "BRU-VCE-2026-12-23-075",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-23",
@@ -1297,7 +1132,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-23-087",
+      "flight_id": "BRU-VCE-2026-12-23-076",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-23",
@@ -1312,7 +1147,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-24-088",
+      "flight_id": "BRU-VCE-2026-12-24-077",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-24",
@@ -1327,7 +1162,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-24-089",
+      "flight_id": "BRU-VCE-2026-12-24-078",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-24",
@@ -1342,7 +1177,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-25-090",
+      "flight_id": "BRU-VCE-2026-12-25-079",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-25",
@@ -1357,7 +1192,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-25-091",
+      "flight_id": "BRU-VCE-2026-12-25-080",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-25",
@@ -1372,7 +1207,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-26-092",
+      "flight_id": "BRU-VCE-2026-12-26-081",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-26",
@@ -1387,7 +1222,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-27-093",
+      "flight_id": "BRU-VCE-2026-12-27-082",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-27",
@@ -1402,7 +1237,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-27-094",
+      "flight_id": "BRU-VCE-2026-12-27-083",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-27",
@@ -1417,7 +1252,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-28-095",
+      "flight_id": "BRU-VCE-2026-12-28-084",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-28",
@@ -1432,7 +1267,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-29-096",
+      "flight_id": "BRU-VCE-2026-12-29-085",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-29",
@@ -1447,7 +1282,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-30-097",
+      "flight_id": "BRU-VCE-2026-12-30-086",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-30",
@@ -1462,7 +1297,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-30-098",
+      "flight_id": "BRU-VCE-2026-12-30-087",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-30",
@@ -1477,7 +1312,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2026-12-31-099",
+      "flight_id": "BRU-VCE-2026-12-31-088",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-31",
@@ -1492,7 +1327,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2026-12-31-100",
+      "flight_id": "BRU-VCE-2026-12-31-089",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2026-12-31",
@@ -1507,7 +1342,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-01-01-101",
+      "flight_id": "BRU-VCE-2027-01-01-090",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-01",
@@ -1522,7 +1357,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-01-102",
+      "flight_id": "BRU-VCE-2027-01-01-091",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-01",
@@ -1537,7 +1372,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-01-02-103",
+      "flight_id": "BRU-VCE-2027-01-02-092",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-02",
@@ -1552,7 +1387,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-03-104",
+      "flight_id": "BRU-VCE-2027-01-03-093",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-03",
@@ -1567,7 +1402,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-03-105",
+      "flight_id": "BRU-VCE-2027-01-03-094",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-03",
@@ -1582,7 +1417,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-01-04-106",
+      "flight_id": "BRU-VCE-2027-01-04-095",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-04",
@@ -1597,7 +1432,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-05-107",
+      "flight_id": "BRU-VCE-2027-01-05-096",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-05",
@@ -1612,7 +1447,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-06-108",
+      "flight_id": "BRU-VCE-2027-01-06-097",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-06",
@@ -1627,7 +1462,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-07-109",
+      "flight_id": "BRU-VCE-2027-01-07-098",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-07",
@@ -1642,7 +1477,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-08-110",
+      "flight_id": "BRU-VCE-2027-01-08-099",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-08",
@@ -1657,7 +1492,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-09-111",
+      "flight_id": "BRU-VCE-2027-01-09-100",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-09",
@@ -1672,7 +1507,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-10-112",
+      "flight_id": "BRU-VCE-2027-01-10-101",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-10",
@@ -1687,7 +1522,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-11-113",
+      "flight_id": "BRU-VCE-2027-01-11-102",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-11",
@@ -1702,7 +1537,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-12-114",
+      "flight_id": "BRU-VCE-2027-01-12-103",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-12",
@@ -1717,7 +1552,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-13-115",
+      "flight_id": "BRU-VCE-2027-01-13-104",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-13",
@@ -1732,7 +1567,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-14-116",
+      "flight_id": "BRU-VCE-2027-01-14-105",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-14",
@@ -1747,7 +1582,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-15-117",
+      "flight_id": "BRU-VCE-2027-01-15-106",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-15",
@@ -1762,7 +1597,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-16-118",
+      "flight_id": "BRU-VCE-2027-01-16-107",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-16",
@@ -1777,7 +1612,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-17-119",
+      "flight_id": "BRU-VCE-2027-01-17-108",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-17",
@@ -1792,7 +1627,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-18-120",
+      "flight_id": "BRU-VCE-2027-01-18-109",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-18",
@@ -1807,7 +1642,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-19-121",
+      "flight_id": "BRU-VCE-2027-01-19-110",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-19",
@@ -1822,7 +1657,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-20-122",
+      "flight_id": "BRU-VCE-2027-01-20-111",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-20",
@@ -1837,7 +1672,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-21-123",
+      "flight_id": "BRU-VCE-2027-01-21-112",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-21",
@@ -1852,7 +1687,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-22-124",
+      "flight_id": "BRU-VCE-2027-01-22-113",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-22",
@@ -1867,7 +1702,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-23-125",
+      "flight_id": "BRU-VCE-2027-01-23-114",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-23",
@@ -1882,7 +1717,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-24-126",
+      "flight_id": "BRU-VCE-2027-01-24-115",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-24",
@@ -1897,7 +1732,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-25-127",
+      "flight_id": "BRU-VCE-2027-01-25-116",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-25",
@@ -1912,7 +1747,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-26-128",
+      "flight_id": "BRU-VCE-2027-01-26-117",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-26",
@@ -1927,7 +1762,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-27-129",
+      "flight_id": "BRU-VCE-2027-01-27-118",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-27",
@@ -1942,7 +1777,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-27-130",
+      "flight_id": "BRU-VCE-2027-01-27-119",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-27",
@@ -1957,7 +1792,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-01-28-131",
+      "flight_id": "BRU-VCE-2027-01-28-120",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-28",
@@ -1972,7 +1807,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-28-132",
+      "flight_id": "BRU-VCE-2027-01-28-121",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-28",
@@ -1987,7 +1822,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-01-29-133",
+      "flight_id": "BRU-VCE-2027-01-29-122",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-29",
@@ -2002,7 +1837,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-01-29-134",
+      "flight_id": "BRU-VCE-2027-01-29-123",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-29",
@@ -2017,7 +1852,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-30-135",
+      "flight_id": "BRU-VCE-2027-01-30-124",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-30",
@@ -2032,7 +1867,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-01-31-136",
+      "flight_id": "BRU-VCE-2027-01-31-125",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-31",
@@ -2047,7 +1882,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-01-31-137",
+      "flight_id": "BRU-VCE-2027-01-31-126",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-01-31",
@@ -2062,7 +1897,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-01-138",
+      "flight_id": "BRU-VCE-2027-02-01-127",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-01",
@@ -2077,7 +1912,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-02-139",
+      "flight_id": "BRU-VCE-2027-02-02-128",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-02",
@@ -2092,7 +1927,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-03-140",
+      "flight_id": "BRU-VCE-2027-02-03-129",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-03",
@@ -2107,7 +1942,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-03-141",
+      "flight_id": "BRU-VCE-2027-02-03-130",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-03",
@@ -2122,7 +1957,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-04-142",
+      "flight_id": "BRU-VCE-2027-02-04-131",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-04",
@@ -2137,7 +1972,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-04-143",
+      "flight_id": "BRU-VCE-2027-02-04-132",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-04",
@@ -2152,7 +1987,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-05-144",
+      "flight_id": "BRU-VCE-2027-02-05-133",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-05",
@@ -2167,7 +2002,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-05-145",
+      "flight_id": "BRU-VCE-2027-02-05-134",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-05",
@@ -2182,7 +2017,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-06-146",
+      "flight_id": "BRU-VCE-2027-02-06-135",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-06",
@@ -2197,7 +2032,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-07-147",
+      "flight_id": "BRU-VCE-2027-02-07-136",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-07",
@@ -2212,7 +2047,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-07-148",
+      "flight_id": "BRU-VCE-2027-02-07-137",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-07",
@@ -2227,7 +2062,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-08-149",
+      "flight_id": "BRU-VCE-2027-02-08-138",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-08",
@@ -2242,7 +2077,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-09-150",
+      "flight_id": "BRU-VCE-2027-02-09-139",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-09",
@@ -2257,7 +2092,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-10-151",
+      "flight_id": "BRU-VCE-2027-02-10-140",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-10",
@@ -2272,7 +2107,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-10-152",
+      "flight_id": "BRU-VCE-2027-02-10-141",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-10",
@@ -2287,7 +2122,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-11-153",
+      "flight_id": "BRU-VCE-2027-02-11-142",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-11",
@@ -2302,7 +2137,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-11-154",
+      "flight_id": "BRU-VCE-2027-02-11-143",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-11",
@@ -2317,7 +2152,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-12-155",
+      "flight_id": "BRU-VCE-2027-02-12-144",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-12",
@@ -2332,7 +2167,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-12-156",
+      "flight_id": "BRU-VCE-2027-02-12-145",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-12",
@@ -2347,7 +2182,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-13-157",
+      "flight_id": "BRU-VCE-2027-02-13-146",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-13",
@@ -2362,7 +2197,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-14-158",
+      "flight_id": "BRU-VCE-2027-02-14-147",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-14",
@@ -2377,7 +2212,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-14-159",
+      "flight_id": "BRU-VCE-2027-02-14-148",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-14",
@@ -2392,7 +2227,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-15-160",
+      "flight_id": "BRU-VCE-2027-02-15-149",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-15",
@@ -2407,7 +2242,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-16-161",
+      "flight_id": "BRU-VCE-2027-02-16-150",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-16",
@@ -2422,7 +2257,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-17-162",
+      "flight_id": "BRU-VCE-2027-02-17-151",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-17",
@@ -2437,7 +2272,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-17-163",
+      "flight_id": "BRU-VCE-2027-02-17-152",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-17",
@@ -2452,7 +2287,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-18-164",
+      "flight_id": "BRU-VCE-2027-02-18-153",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-18",
@@ -2467,7 +2302,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-18-165",
+      "flight_id": "BRU-VCE-2027-02-18-154",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-18",
@@ -2482,7 +2317,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-19-166",
+      "flight_id": "BRU-VCE-2027-02-19-155",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-19",
@@ -2497,7 +2332,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-19-167",
+      "flight_id": "BRU-VCE-2027-02-19-156",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-19",
@@ -2512,7 +2347,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-20-168",
+      "flight_id": "BRU-VCE-2027-02-20-157",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-20",
@@ -2527,7 +2362,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-21-169",
+      "flight_id": "BRU-VCE-2027-02-21-158",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-21",
@@ -2542,7 +2377,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-21-170",
+      "flight_id": "BRU-VCE-2027-02-21-159",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-21",
@@ -2557,7 +2392,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-22-171",
+      "flight_id": "BRU-VCE-2027-02-22-160",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-22",
@@ -2572,7 +2407,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-23-172",
+      "flight_id": "BRU-VCE-2027-02-23-161",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-23",
@@ -2587,7 +2422,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-24-173",
+      "flight_id": "BRU-VCE-2027-02-24-162",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-24",
@@ -2602,7 +2437,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-24-174",
+      "flight_id": "BRU-VCE-2027-02-24-163",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-24",
@@ -2617,7 +2452,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-25-175",
+      "flight_id": "BRU-VCE-2027-02-25-164",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-25",
@@ -2632,7 +2467,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-25-176",
+      "flight_id": "BRU-VCE-2027-02-25-165",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-25",
@@ -2647,7 +2482,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-26-177",
+      "flight_id": "BRU-VCE-2027-02-26-166",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-26",
@@ -2662,7 +2497,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-26-178",
+      "flight_id": "BRU-VCE-2027-02-26-167",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-26",
@@ -2677,7 +2512,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-27-179",
+      "flight_id": "BRU-VCE-2027-02-27-168",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-27",
@@ -2692,7 +2527,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-02-28-180",
+      "flight_id": "BRU-VCE-2027-02-28-169",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-28",
@@ -2707,7 +2542,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-02-28-181",
+      "flight_id": "BRU-VCE-2027-02-28-170",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-02-28",
@@ -2722,7 +2557,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-01-182",
+      "flight_id": "BRU-VCE-2027-03-01-171",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-01",
@@ -2737,7 +2572,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-02-183",
+      "flight_id": "BRU-VCE-2027-03-02-172",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-02",
@@ -2752,7 +2587,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-03-184",
+      "flight_id": "BRU-VCE-2027-03-03-173",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-03",
@@ -2767,7 +2602,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-03-185",
+      "flight_id": "BRU-VCE-2027-03-03-174",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-03",
@@ -2782,7 +2617,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-04-186",
+      "flight_id": "BRU-VCE-2027-03-04-175",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-04",
@@ -2797,7 +2632,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-04-187",
+      "flight_id": "BRU-VCE-2027-03-04-176",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-04",
@@ -2812,7 +2647,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-05-188",
+      "flight_id": "BRU-VCE-2027-03-05-177",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-05",
@@ -2827,7 +2662,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-05-189",
+      "flight_id": "BRU-VCE-2027-03-05-178",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-05",
@@ -2842,7 +2677,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-06-190",
+      "flight_id": "BRU-VCE-2027-03-06-179",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-06",
@@ -2857,7 +2692,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-07-191",
+      "flight_id": "BRU-VCE-2027-03-07-180",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-07",
@@ -2872,7 +2707,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-07-192",
+      "flight_id": "BRU-VCE-2027-03-07-181",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-07",
@@ -2887,7 +2722,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-08-193",
+      "flight_id": "BRU-VCE-2027-03-08-182",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-08",
@@ -2902,7 +2737,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-09-194",
+      "flight_id": "BRU-VCE-2027-03-09-183",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-09",
@@ -2917,7 +2752,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-10-195",
+      "flight_id": "BRU-VCE-2027-03-10-184",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-10",
@@ -2932,7 +2767,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-10-196",
+      "flight_id": "BRU-VCE-2027-03-10-185",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-10",
@@ -2947,7 +2782,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-11-197",
+      "flight_id": "BRU-VCE-2027-03-11-186",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-11",
@@ -2962,7 +2797,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-11-198",
+      "flight_id": "BRU-VCE-2027-03-11-187",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-11",
@@ -2977,7 +2812,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-12-199",
+      "flight_id": "BRU-VCE-2027-03-12-188",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-12",
@@ -2992,7 +2827,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-12-200",
+      "flight_id": "BRU-VCE-2027-03-12-189",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-12",
@@ -3007,7 +2842,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-13-201",
+      "flight_id": "BRU-VCE-2027-03-13-190",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-13",
@@ -3022,7 +2857,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-14-202",
+      "flight_id": "BRU-VCE-2027-03-14-191",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-14",
@@ -3037,7 +2872,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-14-203",
+      "flight_id": "BRU-VCE-2027-03-14-192",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-14",
@@ -3052,7 +2887,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-15-204",
+      "flight_id": "BRU-VCE-2027-03-15-193",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-15",
@@ -3067,7 +2902,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-16-205",
+      "flight_id": "BRU-VCE-2027-03-16-194",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-16",
@@ -3082,7 +2917,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-17-206",
+      "flight_id": "BRU-VCE-2027-03-17-195",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-17",
@@ -3097,7 +2932,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-17-207",
+      "flight_id": "BRU-VCE-2027-03-17-196",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-17",
@@ -3112,7 +2947,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-18-208",
+      "flight_id": "BRU-VCE-2027-03-18-197",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-18",
@@ -3127,7 +2962,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-18-209",
+      "flight_id": "BRU-VCE-2027-03-18-198",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-18",
@@ -3142,7 +2977,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-19-210",
+      "flight_id": "BRU-VCE-2027-03-19-199",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-19",
@@ -3157,7 +2992,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-19-211",
+      "flight_id": "BRU-VCE-2027-03-19-200",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-19",
@@ -3172,7 +3007,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-20-212",
+      "flight_id": "BRU-VCE-2027-03-20-201",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-20",
@@ -3187,7 +3022,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-21-213",
+      "flight_id": "BRU-VCE-2027-03-21-202",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-21",
@@ -3202,7 +3037,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-21-214",
+      "flight_id": "BRU-VCE-2027-03-21-203",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-21",
@@ -3217,7 +3052,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-22-215",
+      "flight_id": "BRU-VCE-2027-03-22-204",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-22",
@@ -3232,7 +3067,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-23-216",
+      "flight_id": "BRU-VCE-2027-03-23-205",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-23",
@@ -3247,7 +3082,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-24-217",
+      "flight_id": "BRU-VCE-2027-03-24-206",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-24",
@@ -3262,7 +3097,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-24-218",
+      "flight_id": "BRU-VCE-2027-03-24-207",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-24",
@@ -3277,7 +3112,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-25-219",
+      "flight_id": "BRU-VCE-2027-03-25-208",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-25",
@@ -3292,7 +3127,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-25-220",
+      "flight_id": "BRU-VCE-2027-03-25-209",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-25",
@@ -3307,7 +3142,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-26-221",
+      "flight_id": "BRU-VCE-2027-03-26-210",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-26",
@@ -3322,7 +3157,7 @@
       "is_best": false
     },
     {
-      "flight_id": "BRU-VCE-2027-03-26-222",
+      "flight_id": "BRU-VCE-2027-03-26-211",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-26",
@@ -3337,7 +3172,7 @@
       "is_best": true
     },
     {
-      "flight_id": "BRU-VCE-2027-03-27-223",
+      "flight_id": "BRU-VCE-2027-03-27-212",
       "origin": "BRU",
       "destination": "VCE",
       "date": "2027-03-27",
@@ -3352,172 +3187,187 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-10-27-001",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-10-27",
+      "flight_id": "BRU-VCE-2027-03-28-213",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-03-28",
       "airline": "Brussels Airlines",
-      "departure": "12:05",
-      "arrival": "13:45",
+      "departure": "09:55",
+      "arrival": "11:40",
       "arrival_day_offset": 0,
-      "duration_min": 100,
+      "duration_min": 105,
       "stops": 0,
-      "price": 273.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "VCE-BRU-2026-10-28-002",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-10-28",
-      "airline": "Brussels Airlines",
-      "departure": "12:05",
-      "arrival": "13:45",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 186.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "VCE-BRU-2026-10-29-003",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-10-29",
-      "airline": "Brussels Airlines",
-      "departure": "06:40",
-      "arrival": "08:30",
-      "arrival_day_offset": 0,
-      "duration_min": 110,
-      "stops": 0,
-      "price": 223.0,
+      "price": 230.0,
       "currency": "EUR",
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-10-29-004",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-10-29",
+      "flight_id": "BRU-VCE-2027-03-28-214",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-03-28",
       "airline": "Brussels Airlines",
-      "departure": "12:05",
-      "arrival": "13:45",
+      "departure": "21:20",
+      "arrival": "23:00",
       "arrival_day_offset": 0,
       "duration_min": 100,
       "stops": 0,
-      "price": 186.0,
+      "price": 160.0,
       "currency": "EUR",
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-10-30-005",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-10-30",
+      "flight_id": "BRU-VCE-2027-03-29-215",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-03-29",
       "airline": "Brussels Airlines",
-      "departure": "06:40",
-      "arrival": "08:30",
+      "departure": "09:55",
+      "arrival": "11:40",
       "arrival_day_offset": 0,
-      "duration_min": 110,
+      "duration_min": 105,
       "stops": 0,
-      "price": 322.0,
+      "price": 191.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "BRU-VCE-2027-03-30-216",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-03-30",
+      "airline": "Brussels Airlines",
+      "departure": "09:55",
+      "arrival": "11:40",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 125.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "BRU-VCE-2027-03-31-217",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-03-31",
+      "airline": "Brussels Airlines",
+      "departure": "09:55",
+      "arrival": "11:40",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 106.0,
       "currency": "EUR",
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-10-30-006",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-10-30",
+      "flight_id": "BRU-VCE-2027-03-31-218",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-03-31",
       "airline": "Brussels Airlines",
-      "departure": "12:05",
-      "arrival": "13:45",
+      "departure": "21:20",
+      "arrival": "23:00",
       "arrival_day_offset": 0,
       "duration_min": 100,
       "stops": 0,
-      "price": 268.0,
+      "price": 81.0,
       "currency": "EUR",
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-10-31-007",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-10-31",
+      "flight_id": "BRU-VCE-2027-04-01-219",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-04-01",
       "airline": "Brussels Airlines",
-      "departure": "06:40",
-      "arrival": "08:30",
+      "departure": "09:55",
+      "arrival": "11:40",
       "arrival_day_offset": 0,
-      "duration_min": 110,
+      "duration_min": 105,
       "stops": 0,
-      "price": 273.0,
+      "price": 125.0,
       "currency": "EUR",
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-10-31-008",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-10-31",
+      "flight_id": "BRU-VCE-2027-04-01-220",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-04-01",
       "airline": "Brussels Airlines",
-      "departure": "12:05",
-      "arrival": "13:45",
+      "departure": "21:20",
+      "arrival": "23:00",
       "arrival_day_offset": 0,
       "duration_min": 100,
       "stops": 0,
-      "price": 186.0,
+      "price": 81.0,
       "currency": "EUR",
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-01-009",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-11-01",
+      "flight_id": "BRU-VCE-2027-04-02-221",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-04-02",
       "airline": "Brussels Airlines",
-      "departure": "12:05",
-      "arrival": "13:45",
+      "departure": "09:55",
+      "arrival": "11:40",
       "arrival_day_offset": 0,
-      "duration_min": 100,
+      "duration_min": 105,
       "stops": 0,
-      "price": 213.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "VCE-BRU-2026-11-02-010",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-11-02",
-      "airline": "Brussels Airlines",
-      "departure": "06:40",
-      "arrival": "08:30",
-      "arrival_day_offset": 0,
-      "duration_min": 110,
-      "stops": 0,
-      "price": 186.0,
-      "currency": "EUR",
-      "is_best": true
-    },
-    {
-      "flight_id": "VCE-BRU-2026-11-02-011",
-      "origin": "VCE",
-      "destination": "BRU",
-      "date": "2026-11-02",
-      "airline": "Brussels Airlines",
-      "departure": "12:05",
-      "arrival": "13:45",
-      "arrival_day_offset": 0,
-      "duration_min": 100,
-      "stops": 0,
-      "price": 254.0,
+      "price": 160.0,
       "currency": "EUR",
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-03-012",
+      "flight_id": "BRU-VCE-2027-04-02-222",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-04-02",
+      "airline": "Brussels Airlines",
+      "departure": "15:30",
+      "arrival": "17:15",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 160.0,
+      "currency": "EUR",
+      "is_best": false
+    },
+    {
+      "flight_id": "BRU-VCE-2027-04-02-223",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-04-02",
+      "airline": "Brussels Airlines",
+      "departure": "21:20",
+      "arrival": "23:00",
+      "arrival_day_offset": 0,
+      "duration_min": 100,
+      "stops": 0,
+      "price": 125.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "BRU-VCE-2027-04-03-224",
+      "origin": "BRU",
+      "destination": "VCE",
+      "date": "2027-04-03",
+      "airline": "Brussels Airlines",
+      "departure": "09:55",
+      "arrival": "11:40",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 204.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "VCE-BRU-2026-11-03-001",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-03",
@@ -3532,7 +3382,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-04-013",
+      "flight_id": "VCE-BRU-2026-11-04-002",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-04",
@@ -3547,7 +3397,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-05-014",
+      "flight_id": "VCE-BRU-2026-11-05-003",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-05",
@@ -3562,7 +3412,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-05-015",
+      "flight_id": "VCE-BRU-2026-11-05-004",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-05",
@@ -3577,7 +3427,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-06-016",
+      "flight_id": "VCE-BRU-2026-11-06-005",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-06",
@@ -3592,7 +3442,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-06-017",
+      "flight_id": "VCE-BRU-2026-11-06-006",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-06",
@@ -3607,7 +3457,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-07-018",
+      "flight_id": "VCE-BRU-2026-11-07-007",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-07",
@@ -3622,7 +3472,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-07-019",
+      "flight_id": "VCE-BRU-2026-11-07-008",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-07",
@@ -3637,7 +3487,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-08-020",
+      "flight_id": "VCE-BRU-2026-11-08-009",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-08",
@@ -3652,7 +3502,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-09-021",
+      "flight_id": "VCE-BRU-2026-11-09-010",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-09",
@@ -3667,7 +3517,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-09-022",
+      "flight_id": "VCE-BRU-2026-11-09-011",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-09",
@@ -3682,7 +3532,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-10-023",
+      "flight_id": "VCE-BRU-2026-11-10-012",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-10",
@@ -3697,7 +3547,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-11-024",
+      "flight_id": "VCE-BRU-2026-11-11-013",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-11",
@@ -3712,7 +3562,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-12-025",
+      "flight_id": "VCE-BRU-2026-11-12-014",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-12",
@@ -3727,7 +3577,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-13-026",
+      "flight_id": "VCE-BRU-2026-11-13-015",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-13",
@@ -3742,7 +3592,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-13-027",
+      "flight_id": "VCE-BRU-2026-11-13-016",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-13",
@@ -3757,7 +3607,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-14-028",
+      "flight_id": "VCE-BRU-2026-11-14-017",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-14",
@@ -3772,7 +3622,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-14-029",
+      "flight_id": "VCE-BRU-2026-11-14-018",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-14",
@@ -3787,7 +3637,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-15-030",
+      "flight_id": "VCE-BRU-2026-11-15-019",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-15",
@@ -3802,7 +3652,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-16-031",
+      "flight_id": "VCE-BRU-2026-11-16-020",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-16",
@@ -3817,7 +3667,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-16-032",
+      "flight_id": "VCE-BRU-2026-11-16-021",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-16",
@@ -3832,7 +3682,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-17-033",
+      "flight_id": "VCE-BRU-2026-11-17-022",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-17",
@@ -3847,7 +3697,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-18-034",
+      "flight_id": "VCE-BRU-2026-11-18-023",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-18",
@@ -3862,7 +3712,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-19-035",
+      "flight_id": "VCE-BRU-2026-11-19-024",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-19",
@@ -3877,7 +3727,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-19-036",
+      "flight_id": "VCE-BRU-2026-11-19-025",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-19",
@@ -3892,7 +3742,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-20-037",
+      "flight_id": "VCE-BRU-2026-11-20-026",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-20",
@@ -3907,7 +3757,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-20-038",
+      "flight_id": "VCE-BRU-2026-11-20-027",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-20",
@@ -3922,7 +3772,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-21-039",
+      "flight_id": "VCE-BRU-2026-11-21-028",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-21",
@@ -3937,7 +3787,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-21-040",
+      "flight_id": "VCE-BRU-2026-11-21-029",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-21",
@@ -3952,7 +3802,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-22-041",
+      "flight_id": "VCE-BRU-2026-11-22-030",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-22",
@@ -3967,7 +3817,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-23-042",
+      "flight_id": "VCE-BRU-2026-11-23-031",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-23",
@@ -3982,7 +3832,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-23-043",
+      "flight_id": "VCE-BRU-2026-11-23-032",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-23",
@@ -3997,7 +3847,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-24-044",
+      "flight_id": "VCE-BRU-2026-11-24-033",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-24",
@@ -4012,7 +3862,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-25-045",
+      "flight_id": "VCE-BRU-2026-11-25-034",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-25",
@@ -4027,7 +3877,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-26-046",
+      "flight_id": "VCE-BRU-2026-11-26-035",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-26",
@@ -4042,7 +3892,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-26-047",
+      "flight_id": "VCE-BRU-2026-11-26-036",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-26",
@@ -4057,7 +3907,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-27-048",
+      "flight_id": "VCE-BRU-2026-11-27-037",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-27",
@@ -4072,7 +3922,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-27-049",
+      "flight_id": "VCE-BRU-2026-11-27-038",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-27",
@@ -4087,7 +3937,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-11-28-050",
+      "flight_id": "VCE-BRU-2026-11-28-039",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-28",
@@ -4102,7 +3952,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-29-051",
+      "flight_id": "VCE-BRU-2026-11-29-040",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-29",
@@ -4117,7 +3967,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-30-052",
+      "flight_id": "VCE-BRU-2026-11-30-041",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-30",
@@ -4132,7 +3982,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-11-30-053",
+      "flight_id": "VCE-BRU-2026-11-30-042",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-11-30",
@@ -4147,7 +3997,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-01-054",
+      "flight_id": "VCE-BRU-2026-12-01-043",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-01",
@@ -4162,7 +4012,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-02-055",
+      "flight_id": "VCE-BRU-2026-12-02-044",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-02",
@@ -4177,7 +4027,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-03-056",
+      "flight_id": "VCE-BRU-2026-12-03-045",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-03",
@@ -4192,7 +4042,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-03-057",
+      "flight_id": "VCE-BRU-2026-12-03-046",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-03",
@@ -4207,7 +4057,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-04-058",
+      "flight_id": "VCE-BRU-2026-12-04-047",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-04",
@@ -4222,7 +4072,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-04-059",
+      "flight_id": "VCE-BRU-2026-12-04-048",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-04",
@@ -4237,7 +4087,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-05-060",
+      "flight_id": "VCE-BRU-2026-12-05-049",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-05",
@@ -4252,7 +4102,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-05-061",
+      "flight_id": "VCE-BRU-2026-12-05-050",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-05",
@@ -4267,7 +4117,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-06-062",
+      "flight_id": "VCE-BRU-2026-12-06-051",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-06",
@@ -4282,7 +4132,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-07-063",
+      "flight_id": "VCE-BRU-2026-12-07-052",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-07",
@@ -4297,7 +4147,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-07-064",
+      "flight_id": "VCE-BRU-2026-12-07-053",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-07",
@@ -4312,7 +4162,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-08-065",
+      "flight_id": "VCE-BRU-2026-12-08-054",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-08",
@@ -4327,7 +4177,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-09-066",
+      "flight_id": "VCE-BRU-2026-12-09-055",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-09",
@@ -4342,7 +4192,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-10-067",
+      "flight_id": "VCE-BRU-2026-12-10-056",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-10",
@@ -4357,7 +4207,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-10-068",
+      "flight_id": "VCE-BRU-2026-12-10-057",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-10",
@@ -4372,7 +4222,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-11-069",
+      "flight_id": "VCE-BRU-2026-12-11-058",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-11",
@@ -4387,7 +4237,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-11-070",
+      "flight_id": "VCE-BRU-2026-12-11-059",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-11",
@@ -4402,7 +4252,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-12-071",
+      "flight_id": "VCE-BRU-2026-12-12-060",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-12",
@@ -4417,7 +4267,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-13-072",
+      "flight_id": "VCE-BRU-2026-12-13-061",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-13",
@@ -4432,7 +4282,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-14-073",
+      "flight_id": "VCE-BRU-2026-12-14-062",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-14",
@@ -4447,7 +4297,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-14-074",
+      "flight_id": "VCE-BRU-2026-12-14-063",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-14",
@@ -4462,7 +4312,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-15-075",
+      "flight_id": "VCE-BRU-2026-12-15-064",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-15",
@@ -4477,7 +4327,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-16-076",
+      "flight_id": "VCE-BRU-2026-12-16-065",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-16",
@@ -4492,7 +4342,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-17-077",
+      "flight_id": "VCE-BRU-2026-12-17-066",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-17",
@@ -4507,7 +4357,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-18-078",
+      "flight_id": "VCE-BRU-2026-12-18-067",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-18",
@@ -4522,7 +4372,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-18-079",
+      "flight_id": "VCE-BRU-2026-12-18-068",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-18",
@@ -4537,7 +4387,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-19-080",
+      "flight_id": "VCE-BRU-2026-12-19-069",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-19",
@@ -4552,7 +4402,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-19-081",
+      "flight_id": "VCE-BRU-2026-12-19-070",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-19",
@@ -4567,7 +4417,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-20-082",
+      "flight_id": "VCE-BRU-2026-12-20-071",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-20",
@@ -4582,7 +4432,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-21-083",
+      "flight_id": "VCE-BRU-2026-12-21-072",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-21",
@@ -4597,7 +4447,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-21-084",
+      "flight_id": "VCE-BRU-2026-12-21-073",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-21",
@@ -4612,7 +4462,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-22-085",
+      "flight_id": "VCE-BRU-2026-12-22-074",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-22",
@@ -4627,7 +4477,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-23-086",
+      "flight_id": "VCE-BRU-2026-12-23-075",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-23",
@@ -4642,7 +4492,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-24-087",
+      "flight_id": "VCE-BRU-2026-12-24-076",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-24",
@@ -4657,7 +4507,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-24-088",
+      "flight_id": "VCE-BRU-2026-12-24-077",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-24",
@@ -4672,7 +4522,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-25-089",
+      "flight_id": "VCE-BRU-2026-12-25-078",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-25",
@@ -4687,7 +4537,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-25-090",
+      "flight_id": "VCE-BRU-2026-12-25-079",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-25",
@@ -4702,7 +4552,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-26-091",
+      "flight_id": "VCE-BRU-2026-12-26-080",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-26",
@@ -4717,7 +4567,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-26-092",
+      "flight_id": "VCE-BRU-2026-12-26-081",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-26",
@@ -4732,7 +4582,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-27-093",
+      "flight_id": "VCE-BRU-2026-12-27-082",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-27",
@@ -4747,7 +4597,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-28-094",
+      "flight_id": "VCE-BRU-2026-12-28-083",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-28",
@@ -4762,7 +4612,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-28-095",
+      "flight_id": "VCE-BRU-2026-12-28-084",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-28",
@@ -4777,7 +4627,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2026-12-29-096",
+      "flight_id": "VCE-BRU-2026-12-29-085",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-29",
@@ -4792,7 +4642,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-30-097",
+      "flight_id": "VCE-BRU-2026-12-30-086",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-30",
@@ -4807,7 +4657,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-31-098",
+      "flight_id": "VCE-BRU-2026-12-31-087",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-31",
@@ -4822,7 +4672,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2026-12-31-099",
+      "flight_id": "VCE-BRU-2026-12-31-088",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2026-12-31",
@@ -4837,7 +4687,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-01-01-100",
+      "flight_id": "VCE-BRU-2027-01-01-089",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-01",
@@ -4852,7 +4702,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-01-01-101",
+      "flight_id": "VCE-BRU-2027-01-01-090",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-01",
@@ -4867,7 +4717,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-02-102",
+      "flight_id": "VCE-BRU-2027-01-02-091",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-02",
@@ -4882,7 +4732,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-02-103",
+      "flight_id": "VCE-BRU-2027-01-02-092",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-02",
@@ -4897,7 +4747,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-01-03-104",
+      "flight_id": "VCE-BRU-2027-01-03-093",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-03",
@@ -4912,7 +4762,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-04-105",
+      "flight_id": "VCE-BRU-2027-01-04-094",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-04",
@@ -4927,7 +4777,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-04-106",
+      "flight_id": "VCE-BRU-2027-01-04-095",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-04",
@@ -4942,7 +4792,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-01-05-107",
+      "flight_id": "VCE-BRU-2027-01-05-096",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-05",
@@ -4957,7 +4807,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-06-108",
+      "flight_id": "VCE-BRU-2027-01-06-097",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-06",
@@ -4972,7 +4822,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-07-109",
+      "flight_id": "VCE-BRU-2027-01-07-098",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-07",
@@ -4987,7 +4837,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-08-110",
+      "flight_id": "VCE-BRU-2027-01-08-099",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-08",
@@ -5002,7 +4852,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-09-111",
+      "flight_id": "VCE-BRU-2027-01-09-100",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-09",
@@ -5017,7 +4867,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-10-112",
+      "flight_id": "VCE-BRU-2027-01-10-101",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-10",
@@ -5032,7 +4882,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-11-113",
+      "flight_id": "VCE-BRU-2027-01-11-102",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-11",
@@ -5047,7 +4897,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-12-114",
+      "flight_id": "VCE-BRU-2027-01-12-103",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-12",
@@ -5062,7 +4912,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-13-115",
+      "flight_id": "VCE-BRU-2027-01-13-104",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-13",
@@ -5077,7 +4927,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-14-116",
+      "flight_id": "VCE-BRU-2027-01-14-105",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-14",
@@ -5092,7 +4942,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-15-117",
+      "flight_id": "VCE-BRU-2027-01-15-106",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-15",
@@ -5107,7 +4957,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-16-118",
+      "flight_id": "VCE-BRU-2027-01-16-107",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-16",
@@ -5122,7 +4972,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-17-119",
+      "flight_id": "VCE-BRU-2027-01-17-108",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-17",
@@ -5137,7 +4987,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-18-120",
+      "flight_id": "VCE-BRU-2027-01-18-109",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-18",
@@ -5152,7 +5002,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-19-121",
+      "flight_id": "VCE-BRU-2027-01-19-110",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-19",
@@ -5167,7 +5017,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-20-122",
+      "flight_id": "VCE-BRU-2027-01-20-111",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-20",
@@ -5182,7 +5032,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-21-123",
+      "flight_id": "VCE-BRU-2027-01-21-112",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-21",
@@ -5197,7 +5047,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-22-124",
+      "flight_id": "VCE-BRU-2027-01-22-113",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-22",
@@ -5212,7 +5062,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-23-125",
+      "flight_id": "VCE-BRU-2027-01-23-114",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-23",
@@ -5227,7 +5077,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-24-126",
+      "flight_id": "VCE-BRU-2027-01-24-115",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-24",
@@ -5242,7 +5092,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-25-127",
+      "flight_id": "VCE-BRU-2027-01-25-116",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-25",
@@ -5257,7 +5107,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-26-128",
+      "flight_id": "VCE-BRU-2027-01-26-117",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-26",
@@ -5272,7 +5122,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-27-129",
+      "flight_id": "VCE-BRU-2027-01-27-118",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-27",
@@ -5287,7 +5137,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-28-130",
+      "flight_id": "VCE-BRU-2027-01-28-119",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-28",
@@ -5302,7 +5152,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-28-131",
+      "flight_id": "VCE-BRU-2027-01-28-120",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-28",
@@ -5317,7 +5167,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-01-29-132",
+      "flight_id": "VCE-BRU-2027-01-29-121",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-29",
@@ -5332,7 +5182,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-29-133",
+      "flight_id": "VCE-BRU-2027-01-29-122",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-29",
@@ -5347,7 +5197,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-01-30-134",
+      "flight_id": "VCE-BRU-2027-01-30-123",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-30",
@@ -5362,7 +5212,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-01-30-135",
+      "flight_id": "VCE-BRU-2027-01-30-124",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-30",
@@ -5377,7 +5227,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-01-31-136",
+      "flight_id": "VCE-BRU-2027-01-31-125",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-01-31",
@@ -5392,7 +5242,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-01-137",
+      "flight_id": "VCE-BRU-2027-02-01-126",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-01",
@@ -5407,7 +5257,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-01-138",
+      "flight_id": "VCE-BRU-2027-02-01-127",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-01",
@@ -5422,7 +5272,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-02-139",
+      "flight_id": "VCE-BRU-2027-02-02-128",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-02",
@@ -5437,7 +5287,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-03-140",
+      "flight_id": "VCE-BRU-2027-02-03-129",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-03",
@@ -5452,7 +5302,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-04-141",
+      "flight_id": "VCE-BRU-2027-02-04-130",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-04",
@@ -5467,7 +5317,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-04-142",
+      "flight_id": "VCE-BRU-2027-02-04-131",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-04",
@@ -5482,7 +5332,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-05-143",
+      "flight_id": "VCE-BRU-2027-02-05-132",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-05",
@@ -5497,7 +5347,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-05-144",
+      "flight_id": "VCE-BRU-2027-02-05-133",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-05",
@@ -5512,7 +5362,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-06-145",
+      "flight_id": "VCE-BRU-2027-02-06-134",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-06",
@@ -5527,7 +5377,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-06-146",
+      "flight_id": "VCE-BRU-2027-02-06-135",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-06",
@@ -5542,7 +5392,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-07-147",
+      "flight_id": "VCE-BRU-2027-02-07-136",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-07",
@@ -5557,7 +5407,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-08-148",
+      "flight_id": "VCE-BRU-2027-02-08-137",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-08",
@@ -5572,7 +5422,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-08-149",
+      "flight_id": "VCE-BRU-2027-02-08-138",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-08",
@@ -5587,7 +5437,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-09-150",
+      "flight_id": "VCE-BRU-2027-02-09-139",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-09",
@@ -5602,7 +5452,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-10-151",
+      "flight_id": "VCE-BRU-2027-02-10-140",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-10",
@@ -5617,7 +5467,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-11-152",
+      "flight_id": "VCE-BRU-2027-02-11-141",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-11",
@@ -5632,7 +5482,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-11-153",
+      "flight_id": "VCE-BRU-2027-02-11-142",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-11",
@@ -5647,7 +5497,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-12-154",
+      "flight_id": "VCE-BRU-2027-02-12-143",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-12",
@@ -5662,7 +5512,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-12-155",
+      "flight_id": "VCE-BRU-2027-02-12-144",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-12",
@@ -5677,7 +5527,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-13-156",
+      "flight_id": "VCE-BRU-2027-02-13-145",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-13",
@@ -5692,7 +5542,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-13-157",
+      "flight_id": "VCE-BRU-2027-02-13-146",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-13",
@@ -5707,7 +5557,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-14-158",
+      "flight_id": "VCE-BRU-2027-02-14-147",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-14",
@@ -5722,7 +5572,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-15-159",
+      "flight_id": "VCE-BRU-2027-02-15-148",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-15",
@@ -5737,7 +5587,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-15-160",
+      "flight_id": "VCE-BRU-2027-02-15-149",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-15",
@@ -5752,7 +5602,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-16-161",
+      "flight_id": "VCE-BRU-2027-02-16-150",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-16",
@@ -5767,7 +5617,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-17-162",
+      "flight_id": "VCE-BRU-2027-02-17-151",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-17",
@@ -5782,7 +5632,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-18-163",
+      "flight_id": "VCE-BRU-2027-02-18-152",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-18",
@@ -5797,7 +5647,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-18-164",
+      "flight_id": "VCE-BRU-2027-02-18-153",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-18",
@@ -5812,7 +5662,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-19-165",
+      "flight_id": "VCE-BRU-2027-02-19-154",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-19",
@@ -5827,7 +5677,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-19-166",
+      "flight_id": "VCE-BRU-2027-02-19-155",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-19",
@@ -5842,7 +5692,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-20-167",
+      "flight_id": "VCE-BRU-2027-02-20-156",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-20",
@@ -5857,7 +5707,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-20-168",
+      "flight_id": "VCE-BRU-2027-02-20-157",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-20",
@@ -5872,7 +5722,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-21-169",
+      "flight_id": "VCE-BRU-2027-02-21-158",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-21",
@@ -5887,7 +5737,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-22-170",
+      "flight_id": "VCE-BRU-2027-02-22-159",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-22",
@@ -5902,7 +5752,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-22-171",
+      "flight_id": "VCE-BRU-2027-02-22-160",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-22",
@@ -5917,7 +5767,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-23-172",
+      "flight_id": "VCE-BRU-2027-02-23-161",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-23",
@@ -5932,7 +5782,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-24-173",
+      "flight_id": "VCE-BRU-2027-02-24-162",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-24",
@@ -5947,7 +5797,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-25-174",
+      "flight_id": "VCE-BRU-2027-02-25-163",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-25",
@@ -5962,7 +5812,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-25-175",
+      "flight_id": "VCE-BRU-2027-02-25-164",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-25",
@@ -5977,7 +5827,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-26-176",
+      "flight_id": "VCE-BRU-2027-02-26-165",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-26",
@@ -5992,7 +5842,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-26-177",
+      "flight_id": "VCE-BRU-2027-02-26-166",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-26",
@@ -6007,7 +5857,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-27-178",
+      "flight_id": "VCE-BRU-2027-02-27-167",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-27",
@@ -6022,7 +5872,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-02-27-179",
+      "flight_id": "VCE-BRU-2027-02-27-168",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-27",
@@ -6037,7 +5887,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-02-28-180",
+      "flight_id": "VCE-BRU-2027-02-28-169",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-02-28",
@@ -6052,7 +5902,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-01-181",
+      "flight_id": "VCE-BRU-2027-03-01-170",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-01",
@@ -6067,7 +5917,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-01-182",
+      "flight_id": "VCE-BRU-2027-03-01-171",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-01",
@@ -6082,7 +5932,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-02-183",
+      "flight_id": "VCE-BRU-2027-03-02-172",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-02",
@@ -6097,7 +5947,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-03-184",
+      "flight_id": "VCE-BRU-2027-03-03-173",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-03",
@@ -6112,7 +5962,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-04-185",
+      "flight_id": "VCE-BRU-2027-03-04-174",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-04",
@@ -6127,7 +5977,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-04-186",
+      "flight_id": "VCE-BRU-2027-03-04-175",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-04",
@@ -6142,7 +5992,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-05-187",
+      "flight_id": "VCE-BRU-2027-03-05-176",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-05",
@@ -6157,7 +6007,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-05-188",
+      "flight_id": "VCE-BRU-2027-03-05-177",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-05",
@@ -6172,7 +6022,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-06-189",
+      "flight_id": "VCE-BRU-2027-03-06-178",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-06",
@@ -6187,7 +6037,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-06-190",
+      "flight_id": "VCE-BRU-2027-03-06-179",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-06",
@@ -6202,7 +6052,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-07-191",
+      "flight_id": "VCE-BRU-2027-03-07-180",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-07",
@@ -6217,7 +6067,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-08-192",
+      "flight_id": "VCE-BRU-2027-03-08-181",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-08",
@@ -6232,7 +6082,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-08-193",
+      "flight_id": "VCE-BRU-2027-03-08-182",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-08",
@@ -6247,7 +6097,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-09-194",
+      "flight_id": "VCE-BRU-2027-03-09-183",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-09",
@@ -6262,7 +6112,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-10-195",
+      "flight_id": "VCE-BRU-2027-03-10-184",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-10",
@@ -6277,7 +6127,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-11-196",
+      "flight_id": "VCE-BRU-2027-03-11-185",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-11",
@@ -6292,7 +6142,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-11-197",
+      "flight_id": "VCE-BRU-2027-03-11-186",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-11",
@@ -6307,7 +6157,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-12-198",
+      "flight_id": "VCE-BRU-2027-03-12-187",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-12",
@@ -6322,7 +6172,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-12-199",
+      "flight_id": "VCE-BRU-2027-03-12-188",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-12",
@@ -6337,7 +6187,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-13-200",
+      "flight_id": "VCE-BRU-2027-03-13-189",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-13",
@@ -6352,7 +6202,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-13-201",
+      "flight_id": "VCE-BRU-2027-03-13-190",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-13",
@@ -6367,7 +6217,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-14-202",
+      "flight_id": "VCE-BRU-2027-03-14-191",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-14",
@@ -6382,7 +6232,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-15-203",
+      "flight_id": "VCE-BRU-2027-03-15-192",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-15",
@@ -6397,7 +6247,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-15-204",
+      "flight_id": "VCE-BRU-2027-03-15-193",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-15",
@@ -6412,7 +6262,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-16-205",
+      "flight_id": "VCE-BRU-2027-03-16-194",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-16",
@@ -6427,7 +6277,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-17-206",
+      "flight_id": "VCE-BRU-2027-03-17-195",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-17",
@@ -6442,7 +6292,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-18-207",
+      "flight_id": "VCE-BRU-2027-03-18-196",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-18",
@@ -6457,7 +6307,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-18-208",
+      "flight_id": "VCE-BRU-2027-03-18-197",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-18",
@@ -6472,7 +6322,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-19-209",
+      "flight_id": "VCE-BRU-2027-03-19-198",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-19",
@@ -6487,7 +6337,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-19-210",
+      "flight_id": "VCE-BRU-2027-03-19-199",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-19",
@@ -6502,7 +6352,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-20-211",
+      "flight_id": "VCE-BRU-2027-03-20-200",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-20",
@@ -6517,7 +6367,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-20-212",
+      "flight_id": "VCE-BRU-2027-03-20-201",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-20",
@@ -6532,7 +6382,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-21-213",
+      "flight_id": "VCE-BRU-2027-03-21-202",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-21",
@@ -6547,7 +6397,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-22-214",
+      "flight_id": "VCE-BRU-2027-03-22-203",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-22",
@@ -6562,7 +6412,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-22-215",
+      "flight_id": "VCE-BRU-2027-03-22-204",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-22",
@@ -6577,7 +6427,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-23-216",
+      "flight_id": "VCE-BRU-2027-03-23-205",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-23",
@@ -6592,7 +6442,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-24-217",
+      "flight_id": "VCE-BRU-2027-03-24-206",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-24",
@@ -6607,7 +6457,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-25-218",
+      "flight_id": "VCE-BRU-2027-03-25-207",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-25",
@@ -6622,7 +6472,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-25-219",
+      "flight_id": "VCE-BRU-2027-03-25-208",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-25",
@@ -6637,7 +6487,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-26-220",
+      "flight_id": "VCE-BRU-2027-03-26-209",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-26",
@@ -6652,7 +6502,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-26-221",
+      "flight_id": "VCE-BRU-2027-03-26-210",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-26",
@@ -6667,7 +6517,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-27-222",
+      "flight_id": "VCE-BRU-2027-03-27-211",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-27",
@@ -6682,7 +6532,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-27-223",
+      "flight_id": "VCE-BRU-2027-03-27-212",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-27",
@@ -6697,7 +6547,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-28-224",
+      "flight_id": "VCE-BRU-2027-03-28-213",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-28",
@@ -6712,7 +6562,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-29-225",
+      "flight_id": "VCE-BRU-2027-03-29-214",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-29",
@@ -6727,7 +6577,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-29-226",
+      "flight_id": "VCE-BRU-2027-03-29-215",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-29",
@@ -6742,7 +6592,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-03-30-227",
+      "flight_id": "VCE-BRU-2027-03-30-216",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-30",
@@ -6757,7 +6607,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-03-31-228",
+      "flight_id": "VCE-BRU-2027-03-31-217",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-03-31",
@@ -6772,7 +6622,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-01-229",
+      "flight_id": "VCE-BRU-2027-04-01-218",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-01",
@@ -6787,7 +6637,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-01-230",
+      "flight_id": "VCE-BRU-2027-04-01-219",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-01",
@@ -6802,7 +6652,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-02-231",
+      "flight_id": "VCE-BRU-2027-04-02-220",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-02",
@@ -6817,7 +6667,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-02-232",
+      "flight_id": "VCE-BRU-2027-04-02-221",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-02",
@@ -6832,7 +6682,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-02-233",
+      "flight_id": "VCE-BRU-2027-04-02-222",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-02",
@@ -6847,7 +6697,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-03-234",
+      "flight_id": "VCE-BRU-2027-04-03-223",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-03",
@@ -6862,7 +6712,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-03-235",
+      "flight_id": "VCE-BRU-2027-04-03-224",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-03",
@@ -6877,7 +6727,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-04-236",
+      "flight_id": "VCE-BRU-2027-04-04-225",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-04",
@@ -6892,7 +6742,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-04-237",
+      "flight_id": "VCE-BRU-2027-04-04-226",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-04",
@@ -6907,7 +6757,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-05-238",
+      "flight_id": "VCE-BRU-2027-04-05-227",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-05",
@@ -6922,7 +6772,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-05-239",
+      "flight_id": "VCE-BRU-2027-04-05-228",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-05",
@@ -6937,7 +6787,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-06-240",
+      "flight_id": "VCE-BRU-2027-04-06-229",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-06",
@@ -6952,7 +6802,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-07-241",
+      "flight_id": "VCE-BRU-2027-04-07-230",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-07",
@@ -6967,7 +6817,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-08-242",
+      "flight_id": "VCE-BRU-2027-04-08-231",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-08",
@@ -6982,7 +6832,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-08-243",
+      "flight_id": "VCE-BRU-2027-04-08-232",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-08",
@@ -6997,7 +6847,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-09-244",
+      "flight_id": "VCE-BRU-2027-04-09-233",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-09",
@@ -7012,7 +6862,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-09-245",
+      "flight_id": "VCE-BRU-2027-04-09-234",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-09",
@@ -7027,7 +6877,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-09-246",
+      "flight_id": "VCE-BRU-2027-04-09-235",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-09",
@@ -7042,7 +6892,7 @@
       "is_best": false
     },
     {
-      "flight_id": "VCE-BRU-2027-04-10-247",
+      "flight_id": "VCE-BRU-2027-04-10-236",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-10",
@@ -7057,7 +6907,7 @@
       "is_best": true
     },
     {
-      "flight_id": "VCE-BRU-2027-04-10-248",
+      "flight_id": "VCE-BRU-2027-04-10-237",
       "origin": "VCE",
       "destination": "BRU",
       "date": "2027-04-10",
@@ -7068,6 +6918,186 @@
       "duration_min": 110,
       "stops": 0,
       "price": 152.0,
+      "currency": "EUR",
+      "is_best": false
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-11-238",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-11",
+      "airline": "Brussels Airlines",
+      "departure": "12:30",
+      "arrival": "14:20",
+      "arrival_day_offset": 0,
+      "duration_min": 110,
+      "stops": 0,
+      "price": 211.0,
+      "currency": "EUR",
+      "is_best": false
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-11-239",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-11",
+      "airline": "Brussels Airlines",
+      "departure": "18:10",
+      "arrival": "20:00",
+      "arrival_day_offset": 0,
+      "duration_min": 110,
+      "stops": 0,
+      "price": 191.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-12-240",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-12",
+      "airline": "Brussels Airlines",
+      "departure": "06:55",
+      "arrival": "08:40",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 64.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-12-241",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-12",
+      "airline": "Brussels Airlines",
+      "departure": "12:30",
+      "arrival": "14:20",
+      "arrival_day_offset": 0,
+      "duration_min": 110,
+      "stops": 0,
+      "price": 95.0,
+      "currency": "EUR",
+      "is_best": false
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-13-242",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-13",
+      "airline": "Brussels Airlines",
+      "departure": "12:30",
+      "arrival": "14:20",
+      "arrival_day_offset": 0,
+      "duration_min": 110,
+      "stops": 0,
+      "price": 64.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-14-243",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-14",
+      "airline": "Brussels Airlines",
+      "departure": "12:30",
+      "arrival": "14:20",
+      "arrival_day_offset": 0,
+      "duration_min": 110,
+      "stops": 0,
+      "price": 64.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-15-244",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-15",
+      "airline": "Brussels Airlines",
+      "departure": "06:55",
+      "arrival": "08:40",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 64.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-15-245",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-15",
+      "airline": "Brussels Airlines",
+      "departure": "12:30",
+      "arrival": "14:20",
+      "arrival_day_offset": 0,
+      "duration_min": 110,
+      "stops": 0,
+      "price": 64.0,
+      "currency": "EUR",
+      "is_best": false
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-16-246",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-16",
+      "airline": "Brussels Airlines",
+      "departure": "06:55",
+      "arrival": "08:40",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 64.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-16-247",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-16",
+      "airline": "Brussels Airlines",
+      "departure": "12:30",
+      "arrival": "14:20",
+      "arrival_day_offset": 0,
+      "duration_min": 110,
+      "stops": 0,
+      "price": 95.0,
+      "currency": "EUR",
+      "is_best": false
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-17-248",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-17",
+      "airline": "Brussels Airlines",
+      "departure": "06:55",
+      "arrival": "08:40",
+      "arrival_day_offset": 0,
+      "duration_min": 105,
+      "stops": 0,
+      "price": 64.0,
+      "currency": "EUR",
+      "is_best": true
+    },
+    {
+      "flight_id": "VCE-BRU-2027-04-17-249",
+      "origin": "VCE",
+      "destination": "BRU",
+      "date": "2027-04-17",
+      "airline": "Brussels Airlines",
+      "departure": "12:30",
+      "arrival": "14:20",
+      "arrival_day_offset": 0,
+      "duration_min": 110,
+      "stops": 0,
+      "price": 95.0,
       "currency": "EUR",
       "is_best": false
     }
